@@ -1,6 +1,17 @@
 defmodule TenanteeWeb.PropertyView do
   use TenanteeWeb, :view
 
+  def render("show.json", %{properties: properties}) do
+    IO.inspect(properties)
+
+    %{
+      properties:
+        Enum.map(properties, fn property ->
+          render("show.json", %{property: property}) |> Map.get(:property)
+        end)
+    }
+  end
+
   def render("show.json", %{property: property}) do
     %{
       property: %{

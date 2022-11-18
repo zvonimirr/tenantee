@@ -12,6 +12,8 @@ defmodule TenanteeWeb.Router do
 
     scope "/properties" do
       post "/", PropertyController, :add
+      get "/", PropertyController, :list
+      get "/:id", PropertyController, :get
     end
   end
 end
