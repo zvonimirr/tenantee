@@ -7,5 +7,7 @@ defmodule TenanteeWeb.Router do
 
   scope "/api", TenanteeWeb do
     pipe_through :api
+
+    get "/health-check", HealthCheckController, :index
   end
 end
