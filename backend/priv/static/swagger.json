@@ -1,0 +1,76 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "definitions": {
+    "HealthCheck": {
+      "description": "Health check response",
+      "example": {
+        "message": "Tenantee is up and running!"
+      },
+      "properties": {
+        "message": {
+          "description": "Should be 'Tenantee is up and running!'",
+          "type": "string"
+        }
+      },
+      "required": [
+        "message"
+      ],
+      "title": "Health Check",
+      "type": "object"
+    }
+  },
+  "host": "localhost:4000",
+  "info": {
+    "description": "API for the Tenantee platform",
+    "title": "Tenantee API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/health-check": {
+      "get": {
+        "description": "Returns a 200 OK if the service is up and running",
+        "operationId": "TenanteeWeb.HealthCheckController.index",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/HealthCheck"
+            }
+          }
+        },
+        "summary": "Health check",
+        "tags": [
+          "General"
+        ]
+      }
+    }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "tags": [
+    {
+      "description": "General API information",
+      "name": "General"
+    },
+    {
+      "description": "Property management",
+      "name": "Properties"
+    },
+    {
+      "description": "Tenant management",
+      "name": "Tenants"
+    }
+  ]
+}

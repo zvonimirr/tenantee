@@ -7,7 +7,7 @@ defmodule Tenantee.MixProject do
       version: "0.1.0",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: Mix.compilers(),
+      compilers: Mix.compilers() ++ [:phoenix_swagger],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -52,7 +52,9 @@ defmodule Tenantee.MixProject do
       {:cors_plug, "~> 3.0"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.11.1", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.15.0", only: [:test], runtime: false}
+      {:excoveralls, "~> 0.15.0", only: [:test], runtime: false},
+      {:phoenix_swagger, "~> 0.8"},
+      {:ex_json_schema, "~> 0.5"}
     ]
   end
 

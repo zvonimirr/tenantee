@@ -16,7 +16,7 @@ defmodule TenanteeWeb.TenantController do
     |> render("error.json", %{message: "Invalid params"})
   end
 
-  def get(conn, %{"id" => id}) do
+  def find(conn, %{"id" => id}) do
     with tenant <- Tenant.get_tenant_by_id(id) do
       if tenant do
         render(conn, "show.json", %{tenant: tenant})
@@ -28,7 +28,7 @@ defmodule TenanteeWeb.TenantController do
     end
   end
 
-  def get(conn, _params) do
+  def find(conn, _params) do
     conn
     |> put_status(:bad_request)
     |> render("error.json", %{message: "Invalid params"})
