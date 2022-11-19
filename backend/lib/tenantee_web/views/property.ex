@@ -27,6 +27,12 @@ defmodule TenanteeWeb.PropertyView do
     }
   end
 
+  def render("delete.json", %{affected_rows: _affected_rows}) do
+    %{
+      message: "Property deleted"
+    }
+  end
+
   def render("error.json", %{message: message}) do
     %{error: message}
   end

@@ -1,6 +1,7 @@
 defmodule Tenantee.Property do
   alias Tenantee.Repo
   alias Tenantee.Property.Schema
+  import Ecto.Query
 
   def create_property(attrs) do
     %Schema{}
@@ -20,5 +21,10 @@ defmodule Tenantee.Property do
     get_property(id)
     |> Schema.changeset(attrs)
     |> Repo.update()
+  end
+
+  def delete_property(id) do
+    from(p in Schema, where: p.id == ^id)
+    |> Repo.delete_all()
   end
 end

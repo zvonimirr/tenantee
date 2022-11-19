@@ -13,7 +13,9 @@ defmodule TenanteeWeb.PropertyController do
       })
       when is_number(price) do
     with {:ok, property} <- Property.create_property(params) do
-      render(conn, "show.json", %{property: property})
+      conn
+      |> put_status(:created)
+      |> render("show.json", %{property: property})
     end
   end
 
@@ -60,5 +62,17 @@ defmodule TenanteeWeb.PropertyController do
     conn
     |> put_status(:bad_request)
     |> render("error.json", %{message: "Invalid params"})
+  end
+
+  def delete(conn, %{"id" => id}) do
+    with {affected_rows, nil} <- Property.delete_property(id) do
+      if affected_rows < 1 do
+        conn
+        |> put_status(:not_found)
+        |> render("error.json", %{message: "Property not found"})
+      else
+        render(conn, "delete.json", %{affected_rows: affected_rows})
+      end
+    end
   end
 end
