@@ -37,8 +37,9 @@ defmodule TenanteeWeb.Endpoint do
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
 
-  # TODO: Change this to the actual/more secure origin
-  plug CORSPlug, origin: "*"
+  plug CORSPlug,
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
 
   plug Plug.MethodOverride
   plug Plug.Head
