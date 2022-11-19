@@ -19,6 +19,52 @@
       ],
       "title": "Health Check",
       "type": "object"
+    },
+    "TenantResponse": {
+      "description": "Tenant response",
+      "properties": {
+        "tenant": {
+          "$ref": "#/definitions/TenantResponseObject",
+          "description": "Tenant"
+        }
+      },
+      "required": [
+        "tenant"
+      ],
+      "title": "Tenant response",
+      "type": "object"
+    },
+    "TenantResponseObject": {
+      "description": "Tenant response object",
+      "properties": {
+        "description": {
+          "description": "Description of tenant",
+          "type": "string"
+        },
+        "email": {
+          "description": "Email of tenant",
+          "type": "string"
+        },
+        "id": {
+          "description": "ID of tenant",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Name of tenant",
+          "type": "string"
+        },
+        "phone": {
+          "description": "Phone number of tenant",
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "name",
+        "id"
+      ],
+      "title": "Tenant response object",
+      "type": "object"
     }
   },
   "host": "localhost:4000",
@@ -47,6 +93,36 @@
         "summary": "Health check",
         "tags": [
           "General"
+        ]
+      }
+    },
+    "/api/tenants/{id}": {
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.TenantController.find",
+        "parameters": [
+          {
+            "description": "ID of tenant to fetch",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant found",
+            "schema": {
+              "$ref": "#/definitions/TenantResponse"
+            }
+          },
+          "404": {
+            "description": "Tenant not found"
+          }
+        },
+        "summary": "Find a tenant by ID",
+        "tags": [
+          "Tenant"
         ]
       }
     }

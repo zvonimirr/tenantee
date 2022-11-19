@@ -1,6 +1,19 @@
 defmodule TenanteeWeb.TenantController do
   use TenanteeWeb, :controller
   alias Tenantee.Tenant
+  use PhoenixSwagger
+
+  swagger_path :find do
+    get("/api/tenants/{id}")
+    summary("Find a tenant by ID")
+
+    parameters do
+      id(:path, :integer, "ID of tenant to fetch", required: true)
+    end
+
+    response(200, "Tenant found", Schema.ref(:TenantResponse))
+    response(404, "Tenant not found")
+  end
 
   def add(conn, %{"tenant" => params}) do
     with {:ok, tenant} <- Tenant.create_tenant(params) do
@@ -65,5 +78,32 @@ defmodule TenanteeWeb.TenantController do
         render(conn, "delete.json", %{})
       end
     end
+  end
+
+  def swagger_definitions do
+    %{
+      TenantResponseObject:
+        swagger_schema do
+          title("Tenant response object")
+          description("Tenant response object")
+
+          properties do
+            id(:integer, "ID of tenant", required: true)
+            name(:string, "Name of tenant", required: true)
+            phone(:string, "Phone number of tenant")
+            email(:string, "Email of tenant")
+            description(:string, "Description of tenant", required: true)
+          end
+        end,
+      TenantResponse:
+        swagger_schema do
+          title("Tenant response")
+          description("Tenant response")
+
+          properties do
+            tenant(Schema.ref(:TenantResponseObject), "Tenant", required: true)
+          end
+        end
+    }
   end
 end
