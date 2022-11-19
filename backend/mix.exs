@@ -10,7 +10,14 @@ defmodule Tenantee.MixProject do
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -44,7 +51,8 @@ defmodule Tenantee.MixProject do
       {:money, "~> 1.12"},
       {:cors_plug, "~> 3.0"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
-      {:sobelow, "~> 0.11.1", only: [:dev, :test], runtime: false}
+      {:sobelow, "~> 0.11.1", only: [:dev, :test], runtime: false},
+      {:excoveralls, "~> 0.15.0", only: [:test], runtime: false}
     ]
   end
 
