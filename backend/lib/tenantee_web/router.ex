@@ -14,6 +14,7 @@ defmodule TenanteeWeb.Router do
       post "/", PropertyController, :add
       get "/", PropertyController, :list
       get "/:id", PropertyController, :get
+      patch "/:id", PropertyController, :update
     end
   end
 end

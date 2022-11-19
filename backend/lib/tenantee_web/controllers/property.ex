@@ -46,4 +46,19 @@ defmodule TenanteeWeb.PropertyController do
       render(conn, "show.json", %{properties: properties})
     end
   end
+
+  def update(conn, %{
+        "id" => id,
+        "property" => params
+      }) do
+    with {:ok, property} <- Property.update_property(id, params) do
+      render(conn, "show.json", %{property: property})
+    end
+  end
+
+  def update(conn, _) do
+    conn
+    |> put_status(:bad_request)
+    |> render("error.json", %{message: "Invalid params"})
+  end
 end

@@ -15,4 +15,10 @@ defmodule Tenantee.Property do
   def get_all_properties do
     Repo.all(Schema)
   end
+
+  def update_property(id, attrs) do
+    get_property(id)
+    |> Schema.changeset(attrs)
+    |> Repo.update()
+  end
 end
