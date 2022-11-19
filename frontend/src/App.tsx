@@ -1,34 +1,64 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+
+interface Tenant {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+}
+
+interface Property {
+  name: string;
+  description?: string;
+  location: string;
+  price: {
+    amount: number;
+    currency: string;
+  };
+  tenants: Tenant[];
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [properties, setProperties] = useState<Property[]>([]);
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/properties`).then((res) =>
+      res.json().then((data) => setProperties(data.properties))
+    );
+  }, []);
 
   return (
     <div className="App">
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <img src="/vite.svg" className="logo" alt="Vite logo" />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Tenantee</h1>
+      <p>List of properties:</p>
+      <ul>
+        {properties.map((property) => (
+          <li key={property.name}>
+            <h2>{property.name}</h2>
+            <p>{property.description}</p>
+            <p>{property.location}</p>
+            <p>
+              {property.price.amount} {property.price.currency}
+            </p>
+            <ul>
+              {property.tenants.map((tenant) => (
+                <li key={tenant.email}>
+                  <p>{tenant.first_name}</p>
+                  <p>{tenant.last_name}</p>
+                  <p>{tenant.email}</p>
+                  <p>{tenant.phone}</p>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
