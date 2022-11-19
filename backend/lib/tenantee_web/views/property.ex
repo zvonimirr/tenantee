@@ -3,8 +3,6 @@ defmodule TenanteeWeb.PropertyView do
   alias TenanteeWeb.TenantView
 
   def render("show.json", %{properties: properties}) do
-    IO.inspect(properties)
-
     %{
       properties:
         Enum.map(properties, fn property ->
@@ -20,8 +18,10 @@ defmodule TenanteeWeb.PropertyView do
         name: property.name,
         description: property.description,
         location: property.location,
-        price: property.price,
-        currency: property.currency,
+        price: %{
+          amount: property.price.amount,
+          currency: property.price.currency
+        },
         inserted_at: property.inserted_at,
         updated_at: property.updated_at,
         tenants:

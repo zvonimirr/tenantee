@@ -7,8 +7,7 @@ defmodule Tenantee.Property.Schema do
     field :name, :string
     field :description, :string, default: ""
     field :location, :string
-    field :price, :float
-    field :currency, :string
+    field :price, Money.Ecto.Composite.Type
 
     many_to_many :tenants, Tenant,
       join_through: "property_tenants",
@@ -32,8 +31,8 @@ defmodule Tenantee.Property.Schema do
 
   def changeset(property, attrs) do
     property
-    |> cast(attrs, [:name, :description, :location, :price, :currency])
+    |> cast(attrs, [:name, :description, :location, :price])
     |> cast_assoc(:tenants)
-    |> validate_required([:name, :location, :price, :currency])
+    |> validate_required([:name, :location, :price])
   end
 end
