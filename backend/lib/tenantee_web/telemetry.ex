@@ -1,4 +1,8 @@
 defmodule TenanteeWeb.Telemetry do
+  @moduledoc """
+  This module is responsible for handling telemetry events.
+  """
+
   use Supervisor
   import Telemetry.Metrics
 
