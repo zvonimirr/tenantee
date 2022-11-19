@@ -7,8 +7,7 @@ defmodule TenanteeWeb.PropertyController do
           %{
             "name" => _name,
             "location" => _location,
-            "price" => price,
-            "currency" => _currency
+            "price" => price
           } = params
       })
       when is_integer(price) do

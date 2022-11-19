@@ -17,7 +17,7 @@ defmodule TenanteeWeb.TenantView do
         name: tenant.first_name <> " " <> tenant.last_name,
         phone: tenant.phone,
         email: tenant.email,
-        created_at: tenant.inserted_at,
+        inserted_at: tenant.inserted_at,
         updated_at: tenant.updated_at
       }
     }
