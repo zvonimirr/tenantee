@@ -71,7 +71,7 @@ defmodule TenanteeWeb.PropertyController do
         |> put_status(:not_found)
         |> render("error.json", %{message: "Property not found"})
       else
-        render(conn, "delete.json", %{affected_rows: affected_rows})
+        render(conn, "delete.json", %{})
       end
     end
   end
