@@ -1,4 +1,8 @@
 defmodule Tenantee.Tenant.Schema do
+  @moduledoc """
+  This module defines the schema for the tenants table.
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
   alias Tenantee.Property.Schema, as: Property
