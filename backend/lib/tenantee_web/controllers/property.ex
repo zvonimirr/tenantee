@@ -75,4 +75,10 @@ defmodule TenanteeWeb.PropertyController do
       end
     end
   end
+
+  def add_tenant(conn, %{"id" => id, "tenant" => tenant_id}) do
+    with {:ok, property} <- Property.add_tenant(id, tenant_id) do
+      render(conn, "show.json", %{property: property})
+    end
+  end
 end

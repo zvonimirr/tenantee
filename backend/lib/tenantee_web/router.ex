@@ -16,6 +16,7 @@ defmodule TenanteeWeb.Router do
       get "/:id", PropertyController, :get
       patch "/:id", PropertyController, :update
       delete "/:id", PropertyController, :delete
+      put "/:id/tenants/:tenant", PropertyController, :add_tenant
     end
 
     scope "/tenants" do
