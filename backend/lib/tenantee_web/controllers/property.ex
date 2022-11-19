@@ -11,8 +11,10 @@ defmodule TenanteeWeb.PropertyController do
             "currency" => _currency
           } = params
       })
-      when is_number(price) do
-    with {:ok, property} <- Property.create_property(params) do
+      when is_integer(price) do
+    with property_params <- Map.replace(params, "price", Money.new(price, :EUR)),
+         {:ok, property} <-
+           Property.create_property(property_params) do
       conn
       |> put_status(:created)
       |> render("show.json", %{property: property})
@@ -53,7 +55,9 @@ defmodule TenanteeWeb.PropertyController do
         "id" => id,
         "property" => params
       }) do
-    with {:ok, property} <- Property.update_property(id, params) do
+    with property_params <-
+           Map.replace_lazy(params, "price", fn price -> Money.new(price, :EUR) end),
+         {:ok, property} <- Property.update_property(id, property_params) do
       render(conn, "show.json", %{property: property})
     end
   end

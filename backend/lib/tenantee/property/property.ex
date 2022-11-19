@@ -6,9 +6,12 @@ defmodule Tenantee.Property do
   import Ecto.Query
 
   def create_property(attrs) do
-    %Schema{}
-    |> Schema.changeset(attrs)
-    |> Repo.insert()
+    with {:ok, property} <-
+           %Schema{}
+           |> Schema.changeset(attrs)
+           |> Repo.insert() do
+      {:ok, Repo.preload(property, :tenants)}
+    end
   end
 
   def get_property(id) do
@@ -18,12 +21,16 @@ defmodule Tenantee.Property do
 
   def get_all_properties do
     Repo.all(Schema)
+    |> Repo.preload([:tenants])
   end
 
   def update_property(id, attrs) do
-    get_property(id)
-    |> Schema.changeset(attrs)
-    |> Repo.update()
+    with {:ok, property} <-
+           get_property(id)
+           |> Schema.changeset(attrs)
+           |> Repo.update() do
+      {:ok, Repo.preload(property, :tenants)}
+    end
   end
 
   def delete_property(id) do
