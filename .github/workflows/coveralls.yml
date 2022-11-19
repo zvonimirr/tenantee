@@ -14,11 +14,11 @@ jobs:
 
     services:
       postgres:
-        image: postgres:14-2-alpine
+        image: postgres
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: tenantee_dev
+          POSTGRES_DB: tenantee_test
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
