@@ -12,7 +12,8 @@ defmodule Tenantee.Property.Schema do
 
     many_to_many :tenants, Tenant,
       join_through: "property_tenants",
-      join_keys: [property_id: :id, tenant_id: :id]
+      join_keys: [property_id: :id, tenant_id: :id],
+      on_replace: :delete
 
     timestamps()
   end
@@ -21,6 +22,12 @@ defmodule Tenantee.Property.Schema do
     property
     |> change()
     |> put_assoc(:tenants, [tenant | property.tenants])
+  end
+
+  def remove_tenant(property, tenant) do
+    property
+    |> change()
+    |> put_assoc(:tenants, property.tenants -- [tenant])
   end
 
   def changeset(property, attrs) do

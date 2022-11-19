@@ -38,4 +38,12 @@ defmodule Tenantee.Property do
       |> Repo.update()
     end
   end
+
+  def remove_tenant(property_id, tenant_id) do
+    with %Schema{} = property <- get_property(property_id),
+         %TenantSchema{} = tenant <- Tenant.get_tenant_by_id(tenant_id) do
+      Schema.remove_tenant(property, tenant)
+      |> Repo.update()
+    end
+  end
 end

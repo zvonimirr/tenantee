@@ -81,4 +81,10 @@ defmodule TenanteeWeb.PropertyController do
       render(conn, "show.json", %{property: property})
     end
   end
+
+  def remove_tenant(conn, %{"id" => id, "tenant" => tenant_id}) do
+    with {:ok, property} <- Property.remove_tenant(id, tenant_id) do
+      render(conn, "show.json", %{property: property})
+    end
+  end
 end
