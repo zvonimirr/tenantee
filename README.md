@@ -5,7 +5,7 @@
 
 ![GitHub contributors](https://img.shields.io/github/contributors/zvonimirr/tenantee)
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/zvonimirr/tenantee/dev)
-![GitHub last commit (branch)](https://img.shields.io/github/last-commit/zvonimirr/tenantee/dev)
+![GitHub](https://img.shields.io/github/license/zvonimirr/tenantee)
 
 Tenantee (pronounced "tenant-e") is a free and open-source management software aimed at landlords.
 
