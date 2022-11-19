@@ -1,0 +1,29 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "zvonimirr",
+      "name": "Zvonimir Rudinski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18758022?v=4",
+      "profile": "http://zvonimirr.github.io",
+      "contributions": [
+        "ideas",
+        "doc",
+        "projectManagement",
+        "test",
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "tenantee",
+  "projectOwner": "zvonimirr"
+}
