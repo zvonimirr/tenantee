@@ -17,7 +17,7 @@ defmodule Tenantee.Tenant do
   end
 
   @doc """
-  Gets a tenant by ID.
+  Gets a single tenant.
   """
   def get_tenant_by_id(id) do
     Repo.get(Schema, id)
