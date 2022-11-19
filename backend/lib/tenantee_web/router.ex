@@ -9,5 +9,13 @@ defmodule TenanteeWeb.Router do
     pipe_through :api
 
     get "/health-check", HealthCheckController, :index
+
+    scope "/properties" do
+      post "/", PropertyController, :add
+      get "/", PropertyController, :list
+      get "/:id", PropertyController, :get
+      patch "/:id", PropertyController, :update
+      delete "/:id", PropertyController, :delete
+    end
   end
 end
