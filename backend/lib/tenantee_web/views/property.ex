@@ -1,5 +1,6 @@
 defmodule TenanteeWeb.PropertyView do
   use TenanteeWeb, :view
+  alias TenanteeWeb.TenantView
 
   def render("show.json", %{properties: properties}) do
     IO.inspect(properties)
@@ -22,7 +23,9 @@ defmodule TenanteeWeb.PropertyView do
         price: property.price,
         currency: property.currency,
         inserted_at: property.inserted_at,
-        updated_at: property.updated_at
+        updated_at: property.updated_at,
+        tenants:
+          render(TenantView, "show.json", %{tenants: property.tenants}) |> Map.get(:tenants)
       }
     }
   end
