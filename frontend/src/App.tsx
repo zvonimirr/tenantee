@@ -1,30 +1,13 @@
 import { useEffect, useState } from 'react';
+import { Property } from './types/property';
 import './App.css';
-
-interface Tenant {
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone: string;
-}
-
-interface Property {
-  name: string;
-  description?: string;
-  location: string;
-  price: {
-    amount: number;
-    currency: string;
-  };
-  tenants: Tenant[];
-}
 
 function App() {
     const [properties, setProperties] = useState<Property[]>([]);
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/api/properties`).then((res) =>
-            res.json().then((data) => setProperties(data.properties))
+            res.json().then((data) => setProperties(data.properties)),
         );
     }, []);
 
