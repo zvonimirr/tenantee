@@ -20,6 +20,47 @@
       "title": "Health Check",
       "type": "object"
     },
+    "TenantDto": {
+      "description": "Tenant DTO used for creating and updating tenants",
+      "properties": {
+        "email": {
+          "description": "Tenant email address",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "Tenant first name",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "Tenant last name",
+          "type": "string"
+        },
+        "phone": {
+          "description": "Tenant phone number",
+          "type": "string"
+        }
+      },
+      "required": [
+        "last_name",
+        "first_name"
+      ],
+      "title": "Tenant DTO",
+      "type": "object"
+    },
+    "TenantRequest": {
+      "description": "Tenant request used for creating and updating tenants",
+      "properties": {
+        "tenant": {
+          "$ref": "#/definitions/TenantDto",
+          "description": "Tenant to create or update"
+        }
+      },
+      "required": [
+        "tenant"
+      ],
+      "title": "Tenant Request",
+      "type": "object"
+    },
     "TenantResponse": {
       "description": "Tenant response",
       "properties": {
@@ -32,6 +73,23 @@
         "tenant"
       ],
       "title": "Tenant response",
+      "type": "object"
+    },
+    "TenantResponseList": {
+      "description": "Tenant response list",
+      "properties": {
+        "tenants": {
+          "description": "Tenants",
+          "items": {
+            "$ref": "#/definitions/TenantResponseObject"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "tenants"
+      ],
+      "title": "Tenant response list",
       "type": "object"
     },
     "TenantResponseObject": {
@@ -96,7 +154,81 @@
         ]
       }
     },
+    "/api/tenants": {
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.TenantController.list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Tenants found",
+            "schema": {
+              "$ref": "#/definitions/TenantResponseList"
+            }
+          }
+        },
+        "summary": "List all tenants",
+        "tags": [
+          "Tenant"
+        ]
+      },
+      "post": {
+        "description": "",
+        "operationId": "TenanteeWeb.TenantController.add",
+        "parameters": [
+          {
+            "description": "Tenant to add",
+            "in": "body",
+            "name": "tenant",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TenantRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Tenant created",
+            "schema": {
+              "$ref": "#/definitions/TenantResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid params"
+          }
+        },
+        "summary": "Add a new tenant",
+        "tags": [
+          "Tenant"
+        ]
+      }
+    },
     "/api/tenants/{id}": {
+      "delete": {
+        "description": "",
+        "operationId": "TenanteeWeb.TenantController.delete_by_id",
+        "parameters": [
+          {
+            "description": "ID of tenant to delete",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant deleted"
+          },
+          "404": {
+            "description": "Tenant not found"
+          }
+        },
+        "summary": "Delete a tenant by ID",
+        "tags": [
+          "Tenant"
+        ]
+      },
       "get": {
         "description": "",
         "operationId": "TenanteeWeb.TenantController.find",
@@ -121,6 +253,43 @@
           }
         },
         "summary": "Find a tenant by ID",
+        "tags": [
+          "Tenant"
+        ]
+      },
+      "patch": {
+        "description": "",
+        "operationId": "TenanteeWeb.TenantController.update",
+        "parameters": [
+          {
+            "description": "ID of tenant to update",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Tenant to update",
+            "in": "body",
+            "name": "tenant",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TenantRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant updated",
+            "schema": {
+              "$ref": "#/definitions/TenantResponse"
+            }
+          },
+          "404": {
+            "description": "Tenant not found"
+          }
+        },
+        "summary": "Update a tenant by ID",
         "tags": [
           "Tenant"
         ]

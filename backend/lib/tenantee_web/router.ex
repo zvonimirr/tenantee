@@ -31,7 +31,7 @@ defmodule TenanteeWeb.Router do
       get "/", TenantController, :list
       get "/:id", TenantController, :find
       patch "/:id", TenantController, :update
-      delete "/:id", TenantController, :delete
+      delete "/:id", TenantController, :delete_by_id
     end
   end
 
