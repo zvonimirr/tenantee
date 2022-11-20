@@ -1,5 +1,6 @@
 defmodule TenanteeWeb.TenantController do
   use TenanteeWeb, :controller
+  use TenanteeWeb.Swagger.Tenant
   alias Tenantee.Tenant
 
   def add(conn, %{"tenant" => params}) do
@@ -16,7 +17,7 @@ defmodule TenanteeWeb.TenantController do
     |> render("error.json", %{message: "Invalid params"})
   end
 
-  def get(conn, %{"id" => id}) do
+  def find(conn, %{"id" => id}) do
     with tenant <- Tenant.get_tenant_by_id(id) do
       if tenant do
         render(conn, "show.json", %{tenant: tenant})
@@ -28,7 +29,7 @@ defmodule TenanteeWeb.TenantController do
     end
   end
 
-  def get(conn, _params) do
+  def find(conn, _params) do
     conn
     |> put_status(:bad_request)
     |> render("error.json", %{message: "Invalid params"})
@@ -55,7 +56,7 @@ defmodule TenanteeWeb.TenantController do
     |> render("error.json", %{message: "Invalid params"})
   end
 
-  def delete(conn, %{"id" => id}) do
+  def delete_by_id(conn, %{"id" => id}) do
     with {affected_rows, nil} <- Tenant.delete_tenant(id) do
       if affected_rows < 1 do
         conn
@@ -65,5 +66,11 @@ defmodule TenanteeWeb.TenantController do
         render(conn, "delete.json", %{})
       end
     end
+  end
+
+  def delete_by_id(conn, _params) do
+    conn
+    |> put_status(:bad_request)
+    |> render("error.json", %{message: "Invalid params"})
   end
 end

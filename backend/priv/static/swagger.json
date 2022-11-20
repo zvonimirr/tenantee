@@ -1,0 +1,670 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "definitions": {
+    "HealthCheck": {
+      "description": "Health check response",
+      "example": {
+        "message": "Tenantee is up and running!"
+      },
+      "properties": {
+        "message": {
+          "description": "Should be 'Tenantee is up and running!'",
+          "type": "string"
+        }
+      },
+      "required": [
+        "message"
+      ],
+      "title": "Health Check",
+      "type": "object"
+    },
+    "Price": {
+      "description": "Price of a property",
+      "properties": {
+        "amount": {
+          "description": "Amount",
+          "type": "integer"
+        },
+        "currency": {
+          "description": "Currency",
+          "type": "string"
+        }
+      },
+      "required": [
+        "currency",
+        "amount"
+      ],
+      "title": "Price",
+      "type": "object"
+    },
+    "PropertyDto": {
+      "description": "Property DTO used for creating and updating properties",
+      "properties": {
+        "currency": {
+          "description": "Currency of the property price",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of the property",
+          "type": "string"
+        },
+        "id": {
+          "description": "ID of the property",
+          "type": "integer"
+        },
+        "location": {
+          "description": "Location of the property",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the property",
+          "type": "string"
+        },
+        "price": {
+          "description": "Price of the property",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "currency",
+        "price",
+        "location",
+        "name",
+        "id"
+      ],
+      "title": "Property DTO",
+      "type": "object"
+    },
+    "PropertyRequest": {
+      "description": "Property Request used for creating and updating properties",
+      "properties": {
+        "property": {
+          "$ref": "#/definitions/PropertyDto",
+          "description": "Property"
+        }
+      },
+      "required": [
+        "property"
+      ],
+      "title": "Property request",
+      "type": "object"
+    },
+    "PropertyResponse": {
+      "description": "Property response",
+      "properties": {
+        "property": {
+          "$ref": "#/definitions/PropertyResponseObject",
+          "description": "Property"
+        }
+      },
+      "required": [
+        "property"
+      ],
+      "title": "Property response",
+      "type": "object"
+    },
+    "PropertyResponseList": {
+      "description": "Property response list",
+      "properties": {
+        "properties": {
+          "description": "Properties",
+          "items": {
+            "$ref": "#/definitions/PropertyResponseObject"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Property response list",
+      "type": "object"
+    },
+    "PropertyResponseObject": {
+      "description": "Property response object",
+      "properties": {
+        "description": {
+          "description": "Description of the property",
+          "type": "string"
+        },
+        "id": {
+          "description": "ID of the property",
+          "type": "integer"
+        },
+        "location": {
+          "description": "Location of the property",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of the property",
+          "type": "string"
+        },
+        "price": {
+          "$ref": "#/definitions/Price",
+          "description": "Price of the property"
+        },
+        "tenants": {
+          "description": "Tenants of the property",
+          "items": {
+            "$ref": "#/definitions/TenantResponseObject"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "price",
+        "location",
+        "name",
+        "id"
+      ],
+      "title": "Property response object",
+      "type": "object"
+    },
+    "TenantDto": {
+      "description": "Tenant DTO used for creating and updating tenants",
+      "properties": {
+        "email": {
+          "description": "Tenant email address",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "Tenant first name",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "Tenant last name",
+          "type": "string"
+        },
+        "phone": {
+          "description": "Tenant phone number",
+          "type": "string"
+        }
+      },
+      "required": [
+        "last_name",
+        "first_name"
+      ],
+      "title": "Tenant DTO",
+      "type": "object"
+    },
+    "TenantRequest": {
+      "description": "Tenant request used for creating and updating tenants",
+      "properties": {
+        "tenant": {
+          "$ref": "#/definitions/TenantDto",
+          "description": "Tenant to create or update"
+        }
+      },
+      "required": [
+        "tenant"
+      ],
+      "title": "Tenant request",
+      "type": "object"
+    },
+    "TenantResponse": {
+      "description": "Tenant response",
+      "properties": {
+        "tenant": {
+          "$ref": "#/definitions/TenantResponseObject",
+          "description": "Tenant"
+        }
+      },
+      "required": [
+        "tenant"
+      ],
+      "title": "Tenant response",
+      "type": "object"
+    },
+    "TenantResponseList": {
+      "description": "Tenant response list",
+      "properties": {
+        "tenants": {
+          "description": "Tenants",
+          "items": {
+            "$ref": "#/definitions/TenantResponseObject"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "tenants"
+      ],
+      "title": "Tenant response list",
+      "type": "object"
+    },
+    "TenantResponseObject": {
+      "description": "Tenant response object",
+      "properties": {
+        "email": {
+          "description": "Email of tenant",
+          "type": "string"
+        },
+        "id": {
+          "description": "ID of tenant",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Name of tenant",
+          "type": "string"
+        },
+        "phone": {
+          "description": "Phone number of tenant",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "id"
+      ],
+      "title": "Tenant response object",
+      "type": "object"
+    }
+  },
+  "host": "localhost:4000",
+  "info": {
+    "description": "API for the Tenantee platform",
+    "title": "Tenantee API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/health-check": {
+      "get": {
+        "description": "Returns a 200 OK if the service is up and running",
+        "operationId": "TenanteeWeb.HealthCheckController.index",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/HealthCheck"
+            }
+          }
+        },
+        "summary": "Health check",
+        "tags": [
+          "General"
+        ]
+      }
+    },
+    "/api/properties": {
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.PropertyController.list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Properties found",
+            "schema": {
+              "$ref": "#/definitions/PropertyResponseList"
+            }
+          }
+        },
+        "summary": "List all properties",
+        "tags": [
+          "Property"
+        ]
+      }
+    },
+    "/api/properties/{id}": {
+      "delete": {
+        "description": "",
+        "operationId": "TenanteeWeb.PropertyController.delete_by_id",
+        "parameters": [
+          {
+            "description": "ID of property to delete",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Property deleted"
+          },
+          "404": {
+            "description": "Property not found"
+          }
+        },
+        "summary": "Delete a property",
+        "tags": [
+          "Property"
+        ]
+      },
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.PropertyController.find",
+        "parameters": [
+          {
+            "description": "ID of property to fetch",
+            "in": "path",
+            "name": "property",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Property found",
+            "schema": {
+              "$ref": "#/definitions/PropertyResponse"
+            }
+          },
+          "404": {
+            "description": "Property not found"
+          }
+        },
+        "summary": "Find a property by ID",
+        "tags": [
+          "Property"
+        ]
+      },
+      "patch": {
+        "description": "",
+        "operationId": "TenanteeWeb.PropertyController.update",
+        "parameters": [
+          {
+            "description": "ID of property to update",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Property to update",
+            "in": "body",
+            "name": "property",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PropertyRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Property updated",
+            "schema": {
+              "$ref": "#/definitions/PropertyResponse"
+            }
+          },
+          "404": {
+            "description": "Property not found"
+          }
+        },
+        "summary": "Update a property",
+        "tags": [
+          "Property"
+        ]
+      }
+    },
+    "/api/properties/{id}/tenants/{tenant}": {
+      "delete": {
+        "description": "",
+        "operationId": "TenanteeWeb.PropertyController.remove_tenant",
+        "parameters": [
+          {
+            "description": "ID of property to remove tenant from",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "ID of tenant to remove",
+            "in": "path",
+            "name": "tenant",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant removed from property",
+            "schema": {
+              "$ref": "#/definitions/PropertyResponse"
+            }
+          },
+          "404": {
+            "description": "Property or tenant not found"
+          }
+        },
+        "summary": "Remove a tenant from a property",
+        "tags": [
+          "Property"
+        ]
+      },
+      "put": {
+        "description": "",
+        "operationId": "TenanteeWeb.PropertyController.add_tenant",
+        "parameters": [
+          {
+            "description": "ID of property to add tenant to",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "ID of tenant to add",
+            "in": "path",
+            "name": "tenant",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant added to property",
+            "schema": {
+              "$ref": "#/definitions/PropertyResponse"
+            }
+          },
+          "404": {
+            "description": "Property or tenant not found"
+          }
+        },
+        "summary": "Add a tenant to a property",
+        "tags": [
+          "Property"
+        ]
+      }
+    },
+    "/api/tenants": {
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.TenantController.list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Tenants found",
+            "schema": {
+              "$ref": "#/definitions/TenantResponseList"
+            }
+          }
+        },
+        "summary": "List all tenants",
+        "tags": [
+          "Tenant"
+        ]
+      },
+      "post": {
+        "description": "",
+        "operationId": "TenanteeWeb.TenantController.add",
+        "parameters": [
+          {
+            "description": "Tenant to add",
+            "in": "body",
+            "name": "tenant",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TenantRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Tenant created",
+            "schema": {
+              "$ref": "#/definitions/TenantResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid params"
+          }
+        },
+        "summary": "Add a new tenant",
+        "tags": [
+          "Tenant"
+        ]
+      }
+    },
+    "/api/tenants/{id}": {
+      "delete": {
+        "description": "",
+        "operationId": "TenanteeWeb.TenantController.delete_by_id",
+        "parameters": [
+          {
+            "description": "ID of tenant to delete",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant deleted"
+          },
+          "404": {
+            "description": "Tenant not found"
+          }
+        },
+        "summary": "Delete a tenant by ID",
+        "tags": [
+          "Tenant"
+        ]
+      },
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.TenantController.find",
+        "parameters": [
+          {
+            "description": "ID of tenant to fetch",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant found",
+            "schema": {
+              "$ref": "#/definitions/TenantResponse"
+            }
+          },
+          "404": {
+            "description": "Tenant not found"
+          }
+        },
+        "summary": "Find a tenant by ID",
+        "tags": [
+          "Tenant"
+        ]
+      },
+      "patch": {
+        "description": "",
+        "operationId": "TenanteeWeb.TenantController.update",
+        "parameters": [
+          {
+            "description": "ID of tenant to update",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Tenant to update",
+            "in": "body",
+            "name": "tenant",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TenantRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant updated",
+            "schema": {
+              "$ref": "#/definitions/TenantResponse"
+            }
+          },
+          "404": {
+            "description": "Tenant not found"
+          }
+        },
+        "summary": "Update a tenant by ID",
+        "tags": [
+          "Tenant"
+        ]
+      }
+    },
+    "/properties": {
+      "post": {
+        "description": "",
+        "operationId": "TenanteeWeb.PropertyController.add",
+        "parameters": [
+          {
+            "description": "Property to add",
+            "in": "body",
+            "name": "property",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PropertyRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Property added",
+            "schema": {
+              "$ref": "#/definitions/PropertyResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid params"
+          }
+        },
+        "summary": "Add a new property",
+        "tags": [
+          "Property"
+        ]
+      }
+    }
+  },
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "tags": [
+    {
+      "description": "General API information",
+      "name": "General"
+    },
+    {
+      "description": "Property management",
+      "name": "Property"
+    },
+    {
+      "description": "Tenant management",
+      "name": "Tenant"
+    }
+  ]
+}
