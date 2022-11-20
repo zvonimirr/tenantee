@@ -1,7 +1,6 @@
 defmodule TenanteeWeb.TenantController do
   use TenanteeWeb, :controller
   use TenanteeWeb.Swagger.Tenant
-
   alias Tenantee.Tenant
 
   def add(conn, %{"tenant" => params}) do

@@ -1,5 +1,6 @@
 defmodule TenanteeWeb.PropertyController do
   use TenanteeWeb, :controller
+  use TenanteeWeb.Swagger.Property
   alias Tenantee.Property
 
   def add(conn, %{
@@ -26,7 +27,7 @@ defmodule TenanteeWeb.PropertyController do
     |> render("error.json", %{message: "Invalid params"})
   end
 
-  def get(conn, %{"id" => id}) do
+  def find(conn, %{"id" => id}) do
     with property <- Property.get_property(id) do
       if property do
         render(conn, "show.json", %{property: property})
@@ -38,7 +39,7 @@ defmodule TenanteeWeb.PropertyController do
     end
   end
 
-  def get(conn, _) do
+  def find(conn, _) do
     conn
     |> put_status(:bad_request)
     |> render("error.json", %{message: "Invalid params"})
@@ -67,7 +68,7 @@ defmodule TenanteeWeb.PropertyController do
     |> render("error.json", %{message: "Invalid params"})
   end
 
-  def delete(conn, %{"id" => id}) do
+  def delete_by_id(conn, %{"id" => id}) do
     with {affected_rows, nil} <- Property.delete_property(id) do
       if affected_rows < 1 do
         conn
@@ -79,15 +80,33 @@ defmodule TenanteeWeb.PropertyController do
     end
   end
 
+  def delete_by_id(conn, _) do
+    conn
+    |> put_status(:bad_request)
+    |> render("error.json", %{message: "Invalid params"})
+  end
+
   def add_tenant(conn, %{"id" => id, "tenant" => tenant_id}) do
     with {:ok, property} <- Property.add_tenant(id, tenant_id) do
       render(conn, "show.json", %{property: property})
     end
   end
 
+  def add_tenant(conn, _) do
+    conn
+    |> put_status(:bad_request)
+    |> render("error.json", %{message: "Invalid params"})
+  end
+
   def remove_tenant(conn, %{"id" => id, "tenant" => tenant_id}) do
     with {:ok, property} <- Property.remove_tenant(id, tenant_id) do
       render(conn, "show.json", %{property: property})
     end
+  end
+
+  def remove_tenant(conn, _) do
+    conn
+    |> put_status(:bad_request)
+    |> render("error.json", %{message: "Invalid params"})
   end
 end

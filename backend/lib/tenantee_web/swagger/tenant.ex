@@ -77,7 +77,7 @@ defmodule TenanteeWeb.Swagger.Tenant do
             end,
           TenantRequest:
             swagger_schema do
-              title("Tenant Request")
+              title("Tenant request")
               description("Tenant request used for creating and updating tenants")
 
               properties do
@@ -94,7 +94,6 @@ defmodule TenanteeWeb.Swagger.Tenant do
                 name(:string, "Name of tenant", required: true)
                 phone(:string, "Phone number of tenant")
                 email(:string, "Email of tenant")
-                description(:string, "Description of tenant", required: true)
               end
             end,
           TenantResponse:

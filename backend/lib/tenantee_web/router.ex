@@ -19,9 +19,9 @@ defmodule TenanteeWeb.Router do
     scope "/properties" do
       post "/", PropertyController, :add
       get "/", PropertyController, :list
-      get "/:id", PropertyController, :get
+      get "/:id", PropertyController, :find
       patch "/:id", PropertyController, :update
-      delete "/:id", PropertyController, :delete
+      delete "/:id", PropertyController, :delete_by_id
       put "/:id/tenants/:tenant", PropertyController, :add_tenant
       delete "/:id/tenants/:tenant", PropertyController, :remove_tenant
     end
@@ -51,11 +51,11 @@ defmodule TenanteeWeb.Router do
           description: "General API information"
         },
         %{
-          name: "Properties",
+          name: "Property",
           description: "Property management"
         },
         %{
-          name: "Tenants",
+          name: "Tenant",
           description: "Tenant management"
         }
       ]
