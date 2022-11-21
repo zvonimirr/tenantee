@@ -8,7 +8,6 @@ import {
     DrawerOverlay,
     Link,
     Stack,
-    useDisclosure,
 } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { useDrawer } from '../../hooks/useDrawer';
