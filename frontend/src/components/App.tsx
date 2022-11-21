@@ -5,6 +5,8 @@ import Home from '../pages/Home';
 import DrawerProvider from '../hooks/useDrawer';
 import { IconKey, IconUsers } from '@tabler/icons';
 import Label from './Navigation/Label';
+import { SWRConfig } from 'swr';
+import Properties from '../pages/Properties';
 
 const links = [
     {
@@ -22,6 +24,10 @@ const router = createBrowserRouter([
         path: '/',
         element: <Home />,
     },
+    {
+        path: '/properties',
+        element: <Properties />,
+    },
 ]);
 
 function App() {
@@ -29,7 +35,12 @@ function App() {
         <ChakraProvider>
             <DrawerProvider>
                 <Navigation links={links} />
-                <RouterProvider router={router} />
+                <SWRConfig
+                    value={{
+                        revalidateOnFocus: false,
+                    }}>
+                    <RouterProvider router={router} />
+                </SWRConfig>
             </DrawerProvider>
         </ChakraProvider>
     );
