@@ -7,6 +7,7 @@ import { IconKey, IconUsers } from '@tabler/icons';
 import Label from './Navigation/Label';
 import { SWRConfig } from 'swr';
 import Properties from '../pages/Properties';
+import Tenants from '../pages/Tenants';
 
 const links = [
     {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
     {
         path: '/properties',
         element: <Properties />,
+    },
+    {
+        path: '/tenants',
+        element: <Tenants />,
     },
 ]);
 
