@@ -121,13 +121,8 @@ function Properties() {
                 isOpen={isConfirmModalOpen}
                 title="Delete Property"
                 message={`Are you sure you want to delete ${propertyToDelete?.name}?`}
-                onConfirm={() => {
-                    openConfirmModal();
-                    onPropertyDeleteClick();
-                }}
-                onCancel={() => {
-                    closeConfirmModal();
-                }}
+                onConfirm={onPropertyDeleteClick}
+                onCancel={closeConfirmModal}
             />
             <AddPropertyModal
                 isOpen={isAddNewPropertyModalOpen}

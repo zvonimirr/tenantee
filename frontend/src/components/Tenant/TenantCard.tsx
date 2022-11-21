@@ -1,15 +1,21 @@
 import { Card, CardBody, Center, Flex, Stack, Text } from '@chakra-ui/react';
-import { IconUser } from '@tabler/icons';
+import { IconTrash, IconUser } from '@tabler/icons';
 import { Tenant } from '../../types/tenant';
 
 interface TenantCardProps {
     tenant: Tenant;
+    onDeleteClick: (tenant: Tenant) => void;
 }
 
-function TenantCard({ tenant }: TenantCardProps) {
+function TenantCard({ tenant, onDeleteClick }: TenantCardProps) {
     return (
         <Card>
             <CardBody>
+                <IconTrash
+                    color="red"
+                    cursor="pointer"
+                    onClick={() => onDeleteClick(tenant)}
+                />
                 <Center>
                     <Flex direction="column">
                         <IconUser size={128} />
