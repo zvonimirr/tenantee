@@ -19,9 +19,10 @@ import {
 import { Property, PropertyDto, PropertyList } from '../types/property';
 import PropertyCard from '../components/Property/PropertyCard';
 import { useNavigate } from 'react-router-dom';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import AddPropertyModal from '../components/Property/Modals/AddPropertyModal';
 import ConfirmModal from '../components/Modals/ConfirmModal';
+import { useToast } from '@chakra-ui/react';
 
 function Properties() {
     const { data, error, isValidating, mutate } = useSWR<PropertyList>(
@@ -29,13 +30,20 @@ function Properties() {
         propertyApiService.getProperties,
     );
     const navigate = useNavigate();
-    const [deleteModalId, setDeleteModalId] = useState<number | null>(null);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [propertyToDelete, setPropertyToDelete] = useState<Property | null>(
+        null,
+    );
+    const {
+        isOpen: isAddNewPropertyModalOpen,
+        onOpen: openAddNewPropertyModal,
+        onClose: closeAddNewPropertyModal,
+    } = useDisclosure();
     const {
         isOpen: isConfirmModalOpen,
-        onOpen: onConfirmModalOpen,
-        onClose: onConfirmModalClose,
+        onOpen: openConfirmModal,
+        onClose: closeConfirmModal,
     } = useDisclosure();
+    const toast = useToast();
 
     const isLoading = useMemo(
         () => data === undefined || (isValidating && error !== undefined),
@@ -46,12 +54,32 @@ function Properties() {
 
     const onSubmit = useCallback(
         async (property: PropertyDto) => {
-            await propertyApiService.addNewProperty(
-                PropertyApiService.addNewPropertyPath(),
-                property,
-            );
-            mutate();
-            onClose();
+            try {
+                await propertyApiService.addNewProperty(
+                    PropertyApiService.addNewPropertyPath(),
+                    property,
+                );
+
+                toast({
+                    title: 'Property added',
+                    description: 'New property has been added successfully',
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                });
+            } catch (e) {
+                toast({
+                    title: 'Error',
+                    description:
+                        'An error occurred while trying to add new property',
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                });
+            } finally {
+                mutate();
+                closeAddNewPropertyModal();
+            }
         },
         [mutate],
     );
@@ -62,32 +90,65 @@ function Properties() {
     );
 
     const onPropertyDeleteClick = useCallback(async () => {
-        if (deleteModalId) {
-            await propertyApiService.deleteProperty(
-                PropertyApiService.deletePropertyPath(deleteModalId),
-            );
-            setDeleteModalId(null);
-            mutate();
+        if (propertyToDelete) {
+            try {
+                await propertyApiService.deleteProperty(
+                    PropertyApiService.deletePropertyPath(propertyToDelete.id),
+                );
+
+                toast({
+                    title: 'Property deleted',
+                    description: `Successfully deleted property ${propertyToDelete.name}`,
+                    status: 'success',
+                    duration: 5000,
+                    isClosable: true,
+                });
+            } catch (e) {
+                toast({
+                    title: 'Error',
+                    description: `An error occurred while trying to delete the property ${propertyToDelete.name}`,
+                    status: 'error',
+                    duration: 5000,
+                    isClosable: true,
+                });
+            } finally {
+                setPropertyToDelete(null);
+                mutate();
+                closeConfirmModal();
+            }
         }
-    }, [mutate, deleteModalId]);
+    }, [mutate, propertyToDelete]);
+
+    useEffect(() => {
+        if (isError) {
+            toast({
+                title: 'Error',
+                description:
+                    'An error occurred while trying to load your properties',
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            });
+        }
+    }, [isError]);
 
     return (
         <Box>
             <ConfirmModal
                 isOpen={isConfirmModalOpen}
                 title="Delete Property"
-                message="Are you sure you want to delete this property?"
+                message={`Are you sure you want to delete ${propertyToDelete?.name}?`}
                 onConfirm={() => {
-                    onConfirmModalClose();
+                    openConfirmModal();
                     onPropertyDeleteClick();
                 }}
                 onCancel={() => {
-                    onConfirmModalClose();
+                    closeConfirmModal();
                 }}
             />
             <AddPropertyModal
-                isOpen={isOpen}
-                onClose={onClose}
+                isOpen={isAddNewPropertyModalOpen}
+                onClose={closeAddNewPropertyModal}
                 onSubmit={onSubmit}
             />
             <Breadcrumbs
@@ -104,33 +165,31 @@ function Properties() {
                                 </Center>
                             </GridItem>
                         )}
-                        {isError && (
-                            <GridItem colSpan={3}>
-                                <Center>
-                                    <Text>
-                                        There was an error loading your
-                                        properties.
-                                    </Text>
-                                </Center>
-                            </GridItem>
-                        )}
-                        {data &&
+                        {!isError &&
+                            !isLoading &&
+                            data &&
                             data.properties.map((property) => (
                                 <GridItem key={property.id}>
                                     <PropertyCard
                                         property={property}
                                         onClick={onPropertyCardClick}
                                         onDeleteClick={(property) => {
-                                            setDeleteModalId(property.id);
-                                            onConfirmModalOpen();
+                                            setPropertyToDelete(property);
+                                            openConfirmModal();
                                         }}
                                     />
                                 </GridItem>
                             ))}
                     </Grid>
-                    <Button onClick={onOpen} disabled={isLoading}>
-                        Add New Property
-                    </Button>
+                    <Center>
+                        <Button
+                            colorScheme="teal"
+                            width="sm"
+                            onClick={openAddNewPropertyModal}
+                            disabled={isLoading}>
+                            Add New Property
+                        </Button>
+                    </Center>
                 </Stack>
             </PageContainer>
         </Box>
