@@ -19,8 +19,9 @@ import {
 import { Property, PropertyDto, PropertyList } from '../types/property';
 import PropertyCard from '../components/Property/PropertyCard';
 import { useNavigate } from 'react-router-dom';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import AddPropertyModal from '../components/Property/Modals/AddPropertyModal';
+import ConfirmModal from '../components/Modals/ConfirmModal';
 
 function Properties() {
     const { data, error, isValidating, mutate } = useSWR<PropertyList>(
@@ -28,7 +29,13 @@ function Properties() {
         propertyApiService.getProperties,
     );
     const navigate = useNavigate();
+    const [deleteModalId, setDeleteModalId] = useState<number | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: isConfirmModalOpen,
+        onOpen: onConfirmModalOpen,
+        onClose: onConfirmModalClose,
+    } = useDisclosure();
 
     const isLoading = useMemo(
         () => data === undefined || (isValidating && error !== undefined),
@@ -54,8 +61,30 @@ function Properties() {
         [navigate],
     );
 
+    const onPropertyDeleteClick = useCallback(async () => {
+        if (deleteModalId) {
+            await propertyApiService.deleteProperty(
+                PropertyApiService.deletePropertyPath(deleteModalId),
+            );
+            setDeleteModalId(null);
+            mutate();
+        }
+    }, [mutate, deleteModalId]);
+
     return (
         <Box>
+            <ConfirmModal
+                isOpen={isConfirmModalOpen}
+                title="Delete Property"
+                message="Are you sure you want to delete this property?"
+                onConfirm={() => {
+                    onConfirmModalClose();
+                    onPropertyDeleteClick();
+                }}
+                onCancel={() => {
+                    onConfirmModalClose();
+                }}
+            />
             <AddPropertyModal
                 isOpen={isOpen}
                 onClose={onClose}
@@ -91,6 +120,10 @@ function Properties() {
                                     <PropertyCard
                                         property={property}
                                         onClick={onPropertyCardClick}
+                                        onDeleteClick={(property) => {
+                                            setDeleteModalId(property.id);
+                                            onConfirmModalOpen();
+                                        }}
                                     />
                                 </GridItem>
                             ))}

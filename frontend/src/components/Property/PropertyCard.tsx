@@ -1,23 +1,32 @@
-import { Card, CardBody, Center, Stack, Text } from '@chakra-ui/react';
+import { Card, CardBody, Center, Flex, Stack, Text } from '@chakra-ui/react';
 import { Property } from '../../types/property';
-import { IconHome } from '@tabler/icons';
+import { IconHome, IconTrash } from '@tabler/icons';
 
 interface PropertyCardProps {
     property: Property;
     onClick: (property: Property) => void;
+    onDeleteClick: (property: Property) => void;
 }
 
-function PropertyCard({ property, onClick }: PropertyCardProps) {
+function PropertyCard({ property, onClick, onDeleteClick }: PropertyCardProps) {
     return (
-        <Card cursor="pointer" onClick={() => onClick(property)}>
+        <Card>
             <CardBody>
-                <Center>
-                    <Stack spacing={2}>
+                <IconTrash
+                    color="red"
+                    cursor="pointer"
+                    onClick={() => onDeleteClick(property)}
+                />
+
+                <Center cursor="pointer" onClick={() => onClick(property)}>
+                    <Flex direction="column">
                         <IconHome size={128} />
-                        <Text align="center" fontWeight="bold">
-                            {property.name}
-                        </Text>
-                    </Stack>
+                        <Stack spacing={2}>
+                            <Text align="center" fontWeight="bold">
+                                {property.name}{' '}
+                            </Text>
+                        </Stack>
+                    </Flex>
                 </Center>
             </CardBody>
         </Card>
