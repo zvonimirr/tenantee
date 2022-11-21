@@ -15,12 +15,4 @@ defmodule TenanteeWeb.PropertyCase do
       end
     end
   end
-
-  setup_all do
-    :ok
-  end
-
-  setup do
-    :ok
-  end
 end

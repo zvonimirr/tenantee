@@ -5,8 +5,10 @@ defmodule TenanteeWeb.PropertyControllerTest do
 
   test "POST /api/properties", %{conn: conn} do
     conn = insert_property(conn)
+    failure_conn = post conn, "/api/properties", property: %{name: "Test Property 2"}
 
     assert json_response(conn, 201)["property"]["name"] == "Test Property"
+    assert json_response(failure_conn, 400) == %{"error" => "Invalid params"}
   end
 
   test "GET /api/properties/:id", %{conn: conn} do
@@ -14,6 +16,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
     id = json_response(conn, 201)["property"]["id"]
 
     conn = get(conn, "/api/properties/#{id}")
+
     assert json_response(conn, 200)["property"]["name"] == "Test Property"
   end
 
@@ -31,11 +34,16 @@ defmodule TenanteeWeb.PropertyControllerTest do
     conn =
       patch conn, "/api/properties/#{id}", %{
         property: %{
-          name: "Test Property 2"
+          name: "Test Property 2",
+          price: 1000
         }
       }
 
+    failure_conn = patch(conn, "/api/properties/#{id}")
+
     assert json_response(conn, 200)["property"]["name"] == "Test Property 2"
+    assert json_response(conn, 200)["property"]["price"]["amount"] == 1000
+    assert json_response(failure_conn, 400) == %{"error" => "Invalid params"}
   end
 
   test "DELETE /api/properties/:id", %{conn: conn} do
