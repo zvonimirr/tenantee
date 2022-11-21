@@ -6,25 +6,33 @@ import {
     Spinner,
     Stack,
     Text,
+    useDisclosure,
 } from '@chakra-ui/react';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
 import useSWR from 'swr';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNotification } from '../hooks/useNotification';
-import { TenantList } from '../types/tenant';
+import { Tenant, TenantList } from '../types/tenant';
 import {
     tenantApiService,
     TenantApiService,
 } from '../services/api/TenantApiService';
 import TenantCard from '../components/Tenant/TenantCard';
+import ConfirmModal from '../components/Modals/ConfirmModal';
 
 function Tenants() {
-    const { data, error, isValidating } = useSWR<TenantList>(
+    const { data, error, isValidating, mutate } = useSWR<TenantList>(
         TenantApiService.listTenantsPath,
         tenantApiService.getTenants,
     );
-    const { showError } = useNotification();
+    const [tenantToDelete, setTenantToDelete] = useState<Tenant | null>(null);
+    const {
+        isOpen: isConfirmModalOpen,
+        onOpen: openConfirmModal,
+        onClose: closeConfirmModal,
+    } = useDisclosure();
+    const { showError, showSuccess } = useNotification();
 
     const isLoading = useMemo(
         () => data === undefined || (isValidating && error !== undefined),
@@ -32,6 +40,30 @@ function Tenants() {
     );
 
     const isError = useMemo(() => error !== undefined, [error]);
+
+    const onTenantDeleteClick = useCallback(async () => {
+        if (tenantToDelete) {
+            try {
+                await tenantApiService.deleteTenant(
+                    TenantApiService.deleteTenantPath(tenantToDelete.id),
+                );
+
+                showSuccess(
+                    'Tenant deleted',
+                    `${tenantToDelete.name} was deleted successfully`,
+                );
+            } catch (e) {
+                showError(
+                    'Error',
+                    `An error occurred while trying to delete ${tenantToDelete.name}`,
+                );
+            } finally {
+                setTenantToDelete(null);
+                mutate();
+                closeConfirmModal();
+            }
+        }
+    }, [tenantToDelete, showError, mutate, closeConfirmModal]);
 
     useEffect(() => {
         if (isError) {
@@ -44,6 +76,14 @@ function Tenants() {
 
     return (
         <Box>
+            <ConfirmModal
+                isOpen={isConfirmModalOpen}
+                title="Delete Tenant"
+                message={`Are you sure you want to delete ${tenantToDelete?.name}?`}
+                onConfirm={onTenantDeleteClick}
+                onCancel={closeConfirmModal}
+            />
+
             <Breadcrumbs items={[{ href: '/tenants', label: 'Tenants' }]} />
             <PageContainer>
                 <Text fontSize="2xl">Your Tenants</Text>
@@ -61,7 +101,13 @@ function Tenants() {
                             data &&
                             data.tenants.map((tenant) => (
                                 <GridItem key={tenant.id}>
-                                    <TenantCard tenant={tenant} />
+                                    <TenantCard
+                                        tenant={tenant}
+                                        onDeleteClick={(tenant) => {
+                                            setTenantToDelete(tenant);
+                                            openConfirmModal();
+                                        }}
+                                    />
                                 </GridItem>
                             ))}
                     </Grid>
