@@ -29,12 +29,6 @@ defmodule TenanteeWeb.TenantController do
     end
   end
 
-  def find(conn, _params) do
-    conn
-    |> put_status(:bad_request)
-    |> render("error.json", %{message: "Invalid params"})
-  end
-
   def list(conn, _params) do
     with tenants <- Tenant.get_all_tenants() do
       render(conn, "show.json", %{tenants: tenants})
@@ -66,11 +60,5 @@ defmodule TenanteeWeb.TenantController do
         render(conn, "delete.json", %{})
       end
     end
-  end
-
-  def delete_by_id(conn, _params) do
-    conn
-    |> put_status(:bad_request)
-    |> render("error.json", %{message: "Invalid params"})
   end
 end

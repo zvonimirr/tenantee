@@ -1,23 +1,17 @@
 defmodule TenanteeWeb.TenantControllerTest do
   use TenanteeWeb.ConnCase
-
-  defp insert(conn) do
-    post conn, "/api/tenants", %{
-      tenant: %{
-        first_name: "Test",
-        last_name: "Tenant"
-      }
-    }
-  end
+  use TenanteeWeb.TenantCase
 
   test "POST /api/tenants", %{conn: conn} do
-    conn = insert(conn)
+    conn = insert_tenant(conn)
+    failure_conn = post(conn, "/api/tenants")
 
     assert json_response(conn, 201)["tenant"]["id"] != nil
+    assert json_response(failure_conn, 400) == %{"error" => "Invalid params"}
   end
 
   test "GET /api/tenants/:id", %{conn: conn} do
-    conn = insert(conn)
+    conn = insert_tenant(conn)
     id = json_response(conn, 201)["tenant"]["id"]
 
     conn = get(conn, "/api/tenants/#{id}")
@@ -26,7 +20,7 @@ defmodule TenanteeWeb.TenantControllerTest do
   end
 
   test "GET /api/tenants", %{conn: conn} do
-    insert(conn)
+    insert_tenant(conn)
 
     conn = get(conn, "/api/tenants")
 
@@ -34,7 +28,7 @@ defmodule TenanteeWeb.TenantControllerTest do
   end
 
   test "PATCH /api/tenants/:id", %{conn: conn} do
-    conn = insert(conn)
+    conn = insert_tenant(conn)
     id = json_response(conn, 201)["tenant"]["id"]
 
     conn =
@@ -44,11 +38,14 @@ defmodule TenanteeWeb.TenantControllerTest do
         }
       })
 
+    failure_conn = patch(conn, "/api/tenants/#{id}", %{})
+
     assert json_response(conn, 200)["tenant"]["name"] == "Updated Tenant"
+    assert json_response(failure_conn, 400) == %{"error" => "Invalid params"}
   end
 
   test "DELETE /api/tenants/:id", %{conn: conn} do
-    conn = insert(conn)
+    conn = insert_tenant(conn)
     id = json_response(conn, 201)["tenant"]["id"]
 
     conn = delete(conn, "/api/tenants/#{id}")
