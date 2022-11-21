@@ -7,6 +7,7 @@ import {
     Spinner,
     Stack,
     Text,
+    useDisclosure,
 } from '@chakra-ui/react';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
@@ -15,17 +16,19 @@ import {
     propertyApiService,
     PropertyApiService,
 } from '../services/api/PropertyApiService';
-import { Property, PropertyList } from '../types/property';
+import { Property, PropertyDto, PropertyList } from '../types/property';
 import PropertyCard from '../components/Property/PropertyCard';
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useMemo } from 'react';
+import AddPropertyModal from '../components/Property/Modals/AddPropertyModal';
 
 function Properties() {
-    const { data, error, isValidating } = useSWR<PropertyList>(
+    const { data, error, isValidating, mutate } = useSWR<PropertyList>(
         PropertyApiService.listPropertiesPath,
         propertyApiService.getProperties,
     );
     const navigate = useNavigate();
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const isLoading = useMemo(
         () => data === undefined || (isValidating && error !== undefined),
@@ -34,9 +37,16 @@ function Properties() {
 
     const isError = useMemo(() => error !== undefined, [error]);
 
-    const onAddNewPropertyClick = useCallback(
-        () => navigate('/properties/new'),
-        [navigate],
+    const onSubmit = useCallback(
+        async (property: PropertyDto) => {
+            await propertyApiService.addNewProperty(
+                PropertyApiService.addNewPropertyPath(),
+                property,
+            );
+            mutate();
+            onClose();
+        },
+        [mutate],
     );
 
     const onPropertyCardClick = useCallback(
@@ -46,6 +56,11 @@ function Properties() {
 
     return (
         <Box>
+            <AddPropertyModal
+                isOpen={isOpen}
+                onClose={onClose}
+                onSubmit={onSubmit}
+            />
             <Breadcrumbs
                 items={[{ href: '/properties', label: 'Properties' }]}
             />
@@ -80,9 +95,7 @@ function Properties() {
                                 </GridItem>
                             ))}
                     </Grid>
-                    <Button
-                        onClick={onAddNewPropertyClick}
-                        disabled={isLoading}>
+                    <Button onClick={onOpen} disabled={isLoading}>
                         Add New Property
                     </Button>
                 </Stack>
