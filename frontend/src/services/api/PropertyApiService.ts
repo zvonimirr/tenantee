@@ -4,7 +4,7 @@ import { HttpService } from './HttpService';
 export class PropertyApiService extends HttpService {
     public static readonly listPropertiesPath = () => '/api/properties';
     public static readonly addNewPropertyPath = () => '/api/properties';
-    public static readonly deletePropertyPath = (id: string | number) =>
+    public static readonly deletePropertyPath = (id: number) =>
         `/api/properties/${id}`;
 
     async getProperties(path: string) {
