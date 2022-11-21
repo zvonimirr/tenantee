@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import AddPropertyModal from '../components/Property/Modals/AddPropertyModal';
 import ConfirmModal from '../components/Modals/ConfirmModal';
-import { useToast } from '@chakra-ui/react';
+import { useNotification } from '../hooks/useNotification';
 
 function Properties() {
     const { data, error, isValidating, mutate } = useSWR<PropertyList>(
@@ -43,7 +43,7 @@ function Properties() {
         onOpen: openConfirmModal,
         onClose: closeConfirmModal,
     } = useDisclosure();
-    const toast = useToast();
+    const { showError, showSuccess } = useNotification();
 
     const isLoading = useMemo(
         () => data === undefined || (isValidating && error !== undefined),
@@ -60,22 +60,15 @@ function Properties() {
                     property,
                 );
 
-                toast({
-                    title: 'Property added',
-                    description: 'New property has been added successfully',
-                    status: 'success',
-                    duration: 5000,
-                    isClosable: true,
-                });
+                showSuccess(
+                    'Property added',
+                    'New property has been added successfully',
+                );
             } catch (e) {
-                toast({
-                    title: 'Error',
-                    description:
-                        'An error occurred while trying to add new property',
-                    status: 'error',
-                    duration: 5000,
-                    isClosable: true,
-                });
+                showError(
+                    'Error',
+                    'An error occurred while trying to add new property',
+                );
             } finally {
                 mutate();
                 closeAddNewPropertyModal();
@@ -96,21 +89,15 @@ function Properties() {
                     PropertyApiService.deletePropertyPath(propertyToDelete.id),
                 );
 
-                toast({
-                    title: 'Property deleted',
-                    description: `Successfully deleted property ${propertyToDelete.name}`,
-                    status: 'success',
-                    duration: 5000,
-                    isClosable: true,
-                });
+                showSuccess(
+                    'Property deleted',
+                    `${propertyToDelete.name} has been deleted successfully`,
+                );
             } catch (e) {
-                toast({
-                    title: 'Error',
-                    description: `An error occurred while trying to delete the property ${propertyToDelete.name}`,
-                    status: 'error',
-                    duration: 5000,
-                    isClosable: true,
-                });
+                showError(
+                    'Error',
+                    `An error occurred while trying to delete ${propertyToDelete.name}`,
+                );
             } finally {
                 setPropertyToDelete(null);
                 mutate();
@@ -121,14 +108,10 @@ function Properties() {
 
     useEffect(() => {
         if (isError) {
-            toast({
-                title: 'Error',
-                description:
-                    'An error occurred while trying to load your properties',
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-            });
+            showError(
+                'Error',
+                'An error occurred while trying to load your properties',
+            );
         }
     }, [isError]);
 
