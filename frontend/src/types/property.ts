@@ -15,3 +15,9 @@ export interface Property {
 export interface PropertyList {
     properties: Property[];
 }
+
+export interface PropertyDto {
+    property: Omit<Property, 'id' | 'price' | 'tenants'> & {
+        price: number;
+    };
+}

@@ -3,4 +3,26 @@ export class HttpService {
         const response = await fetch(`${import.meta.env.VITE_API_URL}${url}`);
         return await response.json();
     }
+
+    static async post<T>(url: string, body: T): Promise<T> {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}${url}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        });
+        return await response.json();
+    }
+
+    static async put<T>(url: string, body: T): Promise<T> {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}${url}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        });
+        return await response.json();
+    }
 }

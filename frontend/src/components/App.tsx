@@ -1,5 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import Navigation from './Navigation';
+import Navigation from './Navigation/Navigation';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from '../pages/Home';
 import DrawerProvider from '../hooks/useDrawer';
