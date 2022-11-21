@@ -25,4 +25,10 @@ export class HttpService {
         });
         return await response.json();
     }
+
+    static async delete(url: string): Promise<void> {
+        await fetch(`${import.meta.env.VITE_API_URL}${url}`, {
+            method: 'DELETE',
+        });
+    }
 }
