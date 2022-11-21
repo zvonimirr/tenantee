@@ -12,8 +12,8 @@ interface DrawerContextProps {
 
 const DrawerContext = createContext<DrawerContextProps>({
     isOpen: false,
-    openDrawer: () => {},
-    closeDrawer: () => {},
+    openDrawer: () => null,
+    closeDrawer: () => null,
 });
 
 function DrawerProvider({ children }: DrawerProviderProps) {
