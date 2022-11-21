@@ -11,3 +11,7 @@ export interface Property {
     };
     tenants: Tenant[];
 }
+
+export interface PropertyList {
+    properties: Property[];
+}
