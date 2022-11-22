@@ -1,4 +1,4 @@
-import Label from '../../src/components/Navigation/Label';
+import Label from '../../../src/components/Navigation/Label';
 
 describe('Label.cy.tsx', () => {
     it('should render properly', () => {
