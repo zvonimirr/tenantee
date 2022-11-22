@@ -10,6 +10,7 @@ import {
     ModalOverlay,
     Stack,
 } from '@chakra-ui/react';
+import { IconHome, IconPencil } from '@tabler/icons';
 import { useForm } from 'react-hook-form';
 import { PropertyDto } from '../../../types/property';
 import GenericInput from '../../Form/GenericInput';
@@ -54,6 +55,7 @@ function AddPropertyModal({
                                 rules={{
                                     required: 'Name is required',
                                 }}
+                                leftAdornment={<IconPencil />}
                             />
                             <GenericInput
                                 name="description"
@@ -69,6 +71,7 @@ function AddPropertyModal({
                                 rules={{
                                     required: 'Location is required',
                                 }}
+                                leftAdornment={<IconHome />}
                             />
                             <GenericInput
                                 name="price"
@@ -80,9 +83,12 @@ function AddPropertyModal({
                                     required: 'Price is required',
                                     min: 1,
                                 }}
+                                leftAdornment="$"
                             />
-                            <Box>
+                            <Box w="100%">
                                 <Button
+                                    w="100%"
+                                    colorScheme="teal"
                                     disabled={
                                         !formState.isValid ||
                                         formState.isSubmitting

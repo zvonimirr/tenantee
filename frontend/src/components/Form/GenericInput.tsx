@@ -1,4 +1,12 @@
-import { Box, FormLabel, Input } from '@chakra-ui/react';
+import {
+    Box,
+    FormLabel,
+    Input,
+    InputGroup,
+    InputLeftElement,
+    InputRightElement,
+} from '@chakra-ui/react';
+import { ReactNode } from 'react';
 import { Control, Controller } from 'react-hook-form';
 
 interface GenericInputProps {
@@ -8,6 +16,8 @@ interface GenericInputProps {
     control: Control<any, any>;
     type?: 'text' | 'number' | 'email' | 'password';
     rules?: Record<string, any>;
+    rightAdornment?: ReactNode;
+    leftAdornment?: ReactNode;
 }
 
 function GenericInput({
@@ -16,6 +26,8 @@ function GenericInput({
     name,
     control,
     type,
+    leftAdornment,
+    rightAdornment,
     rules = {},
 }: GenericInputProps) {
     return (
@@ -31,13 +43,29 @@ function GenericInput({
                             <span style={{ color: 'red' }}>*</span>
                         )}
                     </FormLabel>
-                    <Input
-                        {...field}
-                        placeholder={fieldState.error?.message ?? placeholder}
-                        type={type}
-                        isInvalid={!!fieldState.error}
-                        errorBorderColor="crimson"
-                    />
+                    <InputGroup>
+                        {rightAdornment && (
+                            <InputRightElement
+                                pointerEvents="none"
+                                children={rightAdornment}
+                            />
+                        )}
+                        <Input
+                            {...field}
+                            placeholder={
+                                fieldState.error?.message ?? placeholder
+                            }
+                            type={type}
+                            isInvalid={!!fieldState.error}
+                            errorBorderColor="crimson"
+                        />
+                        {leftAdornment && (
+                            <InputLeftElement
+                                pointerEvents="none"
+                                children={leftAdornment}
+                            />
+                        )}
+                    </InputGroup>
                 </Box>
             )}
         />
