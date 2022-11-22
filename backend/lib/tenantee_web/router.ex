@@ -6,9 +6,12 @@ defmodule TenanteeWeb.Router do
   end
 
   scope "/api/swagger" do
+    # coveralls-ignore-start
     forward "/", PhoenixSwagger.Plug.SwaggerUI,
       otp_app: :tenantee,
       swagger_file: "swagger.json"
+
+    # coveralls-ignore-stop
   end
 
   scope "/api", TenanteeWeb do
@@ -35,6 +38,7 @@ defmodule TenanteeWeb.Router do
     end
   end
 
+  # coveralls-ignore-start
   def swagger_info do
     %{
       schemes: ["http", "https"],
@@ -61,4 +65,6 @@ defmodule TenanteeWeb.Router do
       ]
     }
   end
+
+  # coveralls-ignore-stop
 end
