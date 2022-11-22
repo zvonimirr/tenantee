@@ -57,12 +57,12 @@ defmodule TenanteeWeb.PropertyControllerTest do
     id = json_response(conn, 201)["property"]["id"]
 
     conn = delete(conn, "/api/properties/#{id}")
+    failure_conn = delete(conn, "/api/properties/#{id}")
+    failure_find_conn = get(conn, "/api/properties/#{id}")
 
     assert json_response(conn, 200) == %{"message" => "Property deleted"}
-
-    conn = get(conn, "/api/properties/#{id}")
-
-    assert json_response(conn, 404) == %{"error" => "Property not found"}
+    assert json_response(failure_conn, 404) == %{"error" => "Property not found"}
+    assert json_response(failure_find_conn, 404) == %{"error" => "Property not found"}
   end
 
   test "POST /api/properties/:id/tenants/:tenant", %{conn: conn} do

@@ -49,11 +49,11 @@ defmodule TenanteeWeb.TenantControllerTest do
     id = json_response(conn, 201)["tenant"]["id"]
 
     conn = delete(conn, "/api/tenants/#{id}")
+    failure_conn = delete(conn, "/api/tenants/#{id}")
+    failure_find_conn = get(conn, "/api/tenants/#{id}")
 
     assert json_response(conn, 200) == %{"message" => "Tenant deleted"}
-
-    conn = get(conn, "/api/tenants/#{id}")
-
-    assert json_response(conn, 404) == %{"error" => "Tenant not found"}
+    assert json_response(failure_conn, 404) == %{"error" => "Tenant not found"}
+    assert json_response(failure_find_conn, 404) == %{"error" => "Tenant not found"}
   end
 end
