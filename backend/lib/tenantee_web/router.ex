@@ -40,7 +40,7 @@ defmodule TenanteeWeb.Router do
       schemes: ["http", "https"],
       info: %{
         title: "Tenantee API",
-        version: "0.1.0",
+        version: Keyword.get(Tenantee.MixProject.project(), :version),
         description: "API for the Tenantee platform"
       },
       consumes: ["application/json"],
