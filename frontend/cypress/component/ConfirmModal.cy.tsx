@@ -1,6 +1,6 @@
 import ConfirmModal from '../../src/components/Modals/ConfirmModal';
 
-describe('ConfirmModal.cy.ts', () => {
+describe('ConfirmModal.cy.tsx', () => {
     it('should render properly', () => {
         cy.mount(
             <ConfirmModal
