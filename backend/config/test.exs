@@ -6,10 +6,10 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :tenantee, Tenantee.Repo,
-  username: System.get_env("DB_USERNAME"),
-  password: System.get_env("DB_PASSWORD"),
-  hostname:  System.get_env("DB_HOST"),
-  database: "#{System.get_env("DB_PREFIX")}_test#{System.get_env("MIX_TEST_PARTITION")}",
+  username: System.get_env("DB_USERNAME", "postgres"),
+  password: System.get_env("DB_PASSWORD", "postgres"),
+  hostname:  System.get_env("DB_HOST", "locahost"),
+  database: "#{System.get_env("DB_PREFIX", "tenantee")}_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
