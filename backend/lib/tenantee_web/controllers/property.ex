@@ -12,7 +12,9 @@ defmodule TenanteeWeb.PropertyController do
           } = params
       })
       when is_integer(price) do
-    with property_params <- Map.replace(params, "price", Money.new(price, :EUR)),
+    with currency <- Map.get(params, "currency", "USD"),
+         true <- Money.Currency.exists?(currency),
+         property_params <- Map.replace(params, "price", Money.new(price, currency)),
          {:ok, property} <-
            Property.create_property(property_params) do
       conn

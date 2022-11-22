@@ -9,7 +9,8 @@ defmodule TenanteeWeb.PropertyCase do
             name: "Test Property",
             location: "Test Location",
             description: "Test Description",
-            price: 100
+            price: 100,
+            currency: "USD"
           }
         }
       end
