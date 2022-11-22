@@ -20,6 +20,12 @@ services:
     depends_on:
       - db
 
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "80:80"
+
   db:
     image: postgres:14.2-alpine
     container_name: "tenantee_postgres"
