@@ -26,6 +26,7 @@ defmodule Tenantee.Application do
     Supervisor.start_link(children, opts)
   end
 
+  # coveralls-ignore-start
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   @impl true
@@ -33,4 +34,6 @@ defmodule Tenantee.Application do
     TenanteeWeb.Endpoint.config_change(changed, removed)
     :ok
   end
+
+  # coveralls-ignore-stop
 end

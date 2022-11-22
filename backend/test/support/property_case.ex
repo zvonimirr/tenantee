@@ -1,4 +1,8 @@
 defmodule TenanteeWeb.PropertyCase do
+  @moduledoc """
+  This module defines a test case that can be used with tests that require
+  a property to be set up.
+  """
   use ExUnit.CaseTemplate
 
   using do
@@ -9,7 +13,8 @@ defmodule TenanteeWeb.PropertyCase do
             name: "Test Property",
             location: "Test Location",
             description: "Test Description",
-            price: 100
+            price: 100,
+            currency: "USD"
           }
         }
       end

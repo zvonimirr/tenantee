@@ -35,14 +35,20 @@ defmodule TenanteeWeb.PropertyControllerTest do
       patch conn, "/api/properties/#{id}", %{
         property: %{
           name: "Test Property 2",
-          price: 1000
+          price: 1000,
+          currency: "PHP"
         }
       }
 
     failure_conn = patch(conn, "/api/properties/#{id}")
 
     assert json_response(conn, 200)["property"]["name"] == "Test Property 2"
-    assert json_response(conn, 200)["property"]["price"]["amount"] == 1000
+
+    assert json_response(conn, 200)["property"]["price"] == %{
+             "amount" => 1000,
+             "currency" => "PHP"
+           }
+
     assert json_response(failure_conn, 400) == %{"error" => "Invalid params"}
   end
 
@@ -51,12 +57,12 @@ defmodule TenanteeWeb.PropertyControllerTest do
     id = json_response(conn, 201)["property"]["id"]
 
     conn = delete(conn, "/api/properties/#{id}")
+    failure_conn = delete(conn, "/api/properties/#{id}")
+    failure_find_conn = get(conn, "/api/properties/#{id}")
 
     assert json_response(conn, 200) == %{"message" => "Property deleted"}
-
-    conn = get(conn, "/api/properties/#{id}")
-
-    assert json_response(conn, 404) == %{"error" => "Property not found"}
+    assert json_response(failure_conn, 404) == %{"error" => "Property not found"}
+    assert json_response(failure_find_conn, 404) == %{"error" => "Property not found"}
   end
 
   test "POST /api/properties/:id/tenants/:tenant", %{conn: conn} do

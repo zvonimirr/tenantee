@@ -1,5 +1,10 @@
 {
   "skip_files": [
-    "test"
+    "test",
+    "lib/tenantee_web.ex",
+    "lib/tenantee_web/views/error_helpers.ex"
+  ],
+  "custom_stop_words": [
+    "swagger"
   ]
 }

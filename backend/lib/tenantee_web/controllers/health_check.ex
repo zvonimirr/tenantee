@@ -15,6 +15,7 @@ defmodule TenanteeWeb.HealthCheckController do
     render(conn, "index.json", %{message: "Tenantee is up and running!"})
   end
 
+  # coveralls-ignore-start
   def swagger_definitions do
     %{
       HealthCheck:
@@ -32,4 +33,6 @@ defmodule TenanteeWeb.HealthCheckController do
         end
     }
   end
+
+  # coveralls-ignore-stop
 end

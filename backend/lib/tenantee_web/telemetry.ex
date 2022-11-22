@@ -23,6 +23,7 @@ defmodule TenanteeWeb.Telemetry do
     Supervisor.init(children, strategy: :one_for_one)
   end
 
+  # coveralls-ignore-start
   def metrics do
     [
       # Phoenix Metrics
@@ -72,4 +73,6 @@ defmodule TenanteeWeb.Telemetry do
       # {TenanteeWeb, :count_users, []}
     ]
   end
+
+  # coveralls-ignore-stop
 end
