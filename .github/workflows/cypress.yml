@@ -1,4 +1,16 @@
-on: push
+on:
+  push:
+    branches-ignore:
+      - dev
+      - master
+    paths:
+      - 'frontend/**'
+  pull_request:
+    branches:
+      - dev
+      - master
+    paths:
+      - 'frontend/**'
 
 jobs:
   test:

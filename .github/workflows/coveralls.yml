@@ -1,4 +1,13 @@
-on: push
+on:
+  push:
+    paths:
+      - 'backend/**'
+  pull_request:
+    branches:
+      - dev
+      - master
+    paths:
+      - 'backend/**'
 
 jobs:
   test:
