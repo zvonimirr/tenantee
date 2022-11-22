@@ -1,4 +1,8 @@
 defmodule TenanteeWeb.PropertyCase do
+  @moduledoc """
+  This module defines a test case that can be used with tests that require
+  a property to be set up.
+  """
   use ExUnit.CaseTemplate
 
   using do
