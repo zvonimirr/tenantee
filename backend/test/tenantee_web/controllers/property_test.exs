@@ -35,14 +35,20 @@ defmodule TenanteeWeb.PropertyControllerTest do
       patch conn, "/api/properties/#{id}", %{
         property: %{
           name: "Test Property 2",
-          price: 1000
+          price: 1000,
+          currency: "PHP"
         }
       }
 
     failure_conn = patch(conn, "/api/properties/#{id}")
 
     assert json_response(conn, 200)["property"]["name"] == "Test Property 2"
-    assert json_response(conn, 200)["property"]["price"]["amount"] == 1000
+
+    assert json_response(conn, 200)["property"]["price"] == %{
+             "amount" => 1000,
+             "currency" => "PHP"
+           }
+
     assert json_response(failure_conn, 400) == %{"error" => "Invalid params"}
   end
 
