@@ -51,8 +51,10 @@ defmodule TenanteeWeb.PropertyController do
         "id" => id,
         "property" => params
       }) do
-    with property_params <-
-           Map.replace_lazy(params, "price", fn price -> Money.new(price, :EUR) end),
+    with currency <- Map.get(params, "currency", "USD"),
+         true <- Money.Currency.exists?(currency),
+         property_params <-
+           Map.replace_lazy(params, "price", fn price -> Money.new(price, currency) end),
          {:ok, property} <- Property.update_property(id, property_params) do
       render(conn, "show.json", %{property: property})
     end
