@@ -8,7 +8,7 @@ import Config
 config :tenantee, Tenantee.Repo,
   username: System.get_env("DB_USERNAME", "postgres"),
   password: System.get_env("DB_PASSWORD", "postgres"),
-  hostname:  System.get_env("DB_HOST", "locahost"),
+  hostname:  System.get_env("DB_HOST", "localhost"),
   database: "#{System.get_env("DB_PREFIX", "tenantee")}_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
