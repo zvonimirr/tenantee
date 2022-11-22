@@ -20,6 +20,7 @@ import {
 } from '../services/api/TenantApiService';
 import TenantCard from '../components/Tenant/TenantCard';
 import ConfirmModal from '../components/Modals/ConfirmModal';
+import { isEmpty } from 'ramda';
 
 function Tenants() {
     const { data, error, isValidating, mutate } = useSWR<TenantList>(
@@ -110,6 +111,16 @@ function Tenants() {
                                     />
                                 </GridItem>
                             ))}
+                        {!isError &&
+                            !isLoading &&
+                            data &&
+                            isEmpty(data.tenants) && (
+                                <GridItem colSpan={3}>
+                                    <Text fontSize="lg" textAlign="center">
+                                        You don't have any tenants yet.
+                                    </Text>
+                                </GridItem>
+                            )}
                     </Grid>
                 </Stack>
             </PageContainer>
