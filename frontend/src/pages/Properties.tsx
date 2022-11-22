@@ -23,6 +23,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import AddPropertyModal from '../components/Property/Modals/AddPropertyModal';
 import ConfirmModal from '../components/Modals/ConfirmModal';
 import { useNotification } from '../hooks/useNotification';
+import { isEmpty, T } from 'ramda';
 
 function Properties() {
     const { data, error, isValidating, mutate } = useSWR<PropertyList>(
@@ -158,6 +159,17 @@ function Properties() {
                                     />
                                 </GridItem>
                             ))}
+                        {!isError &&
+                            !isLoading &&
+                            data &&
+                            isEmpty(data.properties) && (
+                                <GridItem colSpan={3}>
+                                    <Text fontSize="lg" textAlign="center">
+                                        You don't have any properties yet. Click
+                                        the button below to add one.
+                                    </Text>
+                                </GridItem>
+                            )}
                     </Grid>
                     <Center>
                         <Button

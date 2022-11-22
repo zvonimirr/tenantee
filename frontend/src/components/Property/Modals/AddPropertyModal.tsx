@@ -2,8 +2,6 @@ import {
     Box,
     Button,
     FormControl,
-    FormLabel,
-    Input,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -12,8 +10,10 @@ import {
     ModalOverlay,
     Stack,
 } from '@chakra-ui/react';
+import { IconHome, IconPencil } from '@tabler/icons';
 import { useForm } from 'react-hook-form';
 import { PropertyDto } from '../../../types/property';
+import GenericInput from '../../Form/GenericInput';
 
 interface AddPropertyModalProps {
     isOpen: boolean;
@@ -33,7 +33,7 @@ function AddPropertyModal({
     onClose,
     onSubmit,
 }: AddPropertyModalProps) {
-    const { register, handleSubmit, formState } = useForm({
+    const { handleSubmit, formState, control } = useForm({
         mode: 'onChange',
         defaultValues,
     });
@@ -47,57 +47,48 @@ function AddPropertyModal({
                 <ModalBody>
                     <FormControl>
                         <Stack spacing={4}>
-                            <Box>
-                                <FormLabel>Name</FormLabel>
-                                <Input
-                                    {...register('name', {
-                                        required: 'Name is required',
-                                    })}
-                                    placeholder={
-                                        formState.errors.name?.message ??
-                                        'Name of the property'
-                                    }
-                                />
-                            </Box>
-                            <Box>
-                                <FormLabel>Description</FormLabel>
-                                <Input
-                                    {...register('description')}
-                                    placeholder="Description of the property (optional)"
-                                />
-                            </Box>
-                            <Box>
-                                <FormLabel>Location</FormLabel>
-                                <Input
-                                    {...register('location', {
-                                        required: 'Location is required',
-                                    })}
-                                    placeholder={
-                                        formState.errors.location?.message ??
-                                        'Location of the property'
-                                    }
-                                />
-                            </Box>
-                            <Box>
-                                <FormLabel>Price</FormLabel>
-                                <Input
-                                    {...register('price', {
-                                        required: 'Price is required',
-                                        min: {
-                                            value: 0,
-                                            message:
-                                                'Price must be greater than 0',
-                                        },
-                                    })}
-                                    type="number"
-                                    placeholder={
-                                        formState.errors.price?.message ??
-                                        'Price of the property'
-                                    }
-                                />
-                            </Box>
-                            <Box>
+                            <GenericInput
+                                name="name"
+                                label="Name"
+                                placeholder="Name of the property"
+                                control={control}
+                                rules={{
+                                    required: 'Name is required',
+                                }}
+                                leftAdornment={<IconPencil />}
+                            />
+                            <GenericInput
+                                name="description"
+                                label="Description"
+                                placeholder="Description of the property (optional)"
+                                control={control}
+                            />
+                            <GenericInput
+                                name="location"
+                                label="Location"
+                                placeholder="Location of the property"
+                                control={control}
+                                rules={{
+                                    required: 'Location is required',
+                                }}
+                                leftAdornment={<IconHome />}
+                            />
+                            <GenericInput
+                                name="price"
+                                label="Price"
+                                placeholder="Price of the property"
+                                control={control}
+                                type="number"
+                                rules={{
+                                    required: 'Price is required',
+                                    min: 1,
+                                }}
+                                leftAdornment="$"
+                            />
+                            <Box w="100%">
                                 <Button
+                                    w="100%"
+                                    colorScheme="teal"
                                     disabled={
                                         !formState.isValid ||
                                         formState.isSubmitting
