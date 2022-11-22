@@ -1,4 +1,4 @@
-import Breadcrumbs from '../../src/components/Navigation/Breadcrumbs';
+import Breadcrumbs from '../../../src/components/Navigation/Breadcrumbs';
 
 describe('Breadcrumbs.cy.tsx', () => {
     it('should render properly', () => {

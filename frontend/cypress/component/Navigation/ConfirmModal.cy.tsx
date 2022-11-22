@@ -1,4 +1,4 @@
-import ConfirmModal from '../../src/components/Modals/ConfirmModal';
+import ConfirmModal from '../../../src/components/Modals/ConfirmModal';
 
 describe('ConfirmModal.cy.tsx', () => {
     it('should render properly', () => {
