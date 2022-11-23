@@ -24,7 +24,8 @@ interface EditTenantModalProps {
 }
 
 const defaultValues = {
-    name: '',
+    first_name: '',
+    last_name: '',
     email: '',
     phone: '',
 };
@@ -43,7 +44,8 @@ function EditTenantModal({
     useEffect(() => {
         if (tenant) {
             reset({
-                name: tenant.name,
+                first_name: tenant.name.split(' ')[0],
+                last_name: tenant.name.split(' ')[1],
                 email: tenant.email,
                 phone: tenant.phone
             });
@@ -60,12 +62,22 @@ function EditTenantModal({
                     <FormControl>
                         <Stack spacing={4}>
                             <GenericInput
-                                name="name"
-                                label="Name"
-                                placeholder="Name of the tenant"
+                                name="first_name"
+                                label="First Name"
+                                placeholder="First name of the tenant"
                                 control={control}
                                 rules={{
-                                    required: 'Name is required',
+                                    required: 'First name is required',
+                                }}
+                                leftAdornment={<IconPencil />}
+                            />
+                            <GenericInput
+                                name="last_name"
+                                label="Last Name"
+                                placeholder="Last name of the tenant"
+                                control={control}
+                                rules={{
+                                    required: 'Last name is required',
                                 }}
                                 leftAdornment={<IconPencil />}
                             />
@@ -96,8 +108,6 @@ function EditTenantModal({
                                             id: tenant?.id ?? 0,
                                             tenant: {
                                                 ...values,
-                                                first_name: values.name.split(' ')[0],
-                                                last_name: values.name.split(' ')[1]
                                             },
                                         }),
                                     )}>
