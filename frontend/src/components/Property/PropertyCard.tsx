@@ -33,7 +33,7 @@ function PropertyCard({
                         <IconHome size={128} />
                         <Stack spacing={2}>
                             <Text align="center" fontWeight="bold">
-                                {property.name}{' '}
+                                {property.name}
                             </Text>
                         </Stack>
                     </Flex>

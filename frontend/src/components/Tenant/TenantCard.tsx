@@ -20,7 +20,9 @@ function TenantCard({ tenant, onDeleteClick }: TenantCardProps) {
                     <Flex direction="column">
                         <IconUser size={128} />
                         <Stack spacing={2}>
-                            <Text>{tenant.name}</Text>
+                            <Text textAlign="center" fontWeight="bold">
+                                {tenant.name}
+                            </Text>
                         </Stack>
                     </Flex>
                 </Center>

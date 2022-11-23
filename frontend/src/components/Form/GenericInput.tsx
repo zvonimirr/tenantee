@@ -14,7 +14,7 @@ interface GenericInputProps {
     placeholder: string;
     label: string;
     control: Control<any, any>;
-    type?: 'text' | 'number' | 'email' | 'password';
+    type?: 'text' | 'number' | 'email' | 'password' | 'tel';
     rules?: Record<string, any>;
     rightAdornment?: ReactNode;
     leftAdornment?: ReactNode;
@@ -47,6 +47,7 @@ function GenericInput({
                         {rightAdornment && (
                             <InputRightElement
                                 pointerEvents="none"
+                                // eslint-disable-next-line react/no-children-prop
                                 children={rightAdornment}
                             />
                         )}
@@ -62,6 +63,7 @@ function GenericInput({
                         {leftAdornment && (
                             <InputLeftElement
                                 pointerEvents="none"
+                                // eslint-disable-next-line react/no-children-prop
                                 children={leftAdornment}
                             />
                         )}
