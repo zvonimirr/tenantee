@@ -8,6 +8,7 @@ import Label from './Navigation/Label';
 import { SWRConfig } from 'swr';
 import Properties from '../pages/Properties';
 import Tenants from '../pages/Tenants';
+import Property from '../pages/Property';
 
 const links = [
     {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
     {
         path: '/properties',
         element: <Properties />,
+    },
+    {
+        path: '/properties/:id',
+        element: <Property />,
     },
     {
         path: '/tenants',
