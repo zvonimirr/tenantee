@@ -124,6 +124,7 @@ function EditPropertyModal({
                             />
                             <Box w="100%">
                                 <Button
+                                    id="submit"
                                     w="100%"
                                     colorScheme="teal"
                                     disabled={
