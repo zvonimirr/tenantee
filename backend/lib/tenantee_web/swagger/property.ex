@@ -87,6 +87,17 @@ defmodule TenanteeWeb.Swagger.Property do
         response(404, "Property or tenant not found")
       end
 
+      swagger_path :unpaid_rents do
+        get("/api/properties/{id}/rents/unpaid")
+        summary("List unpaid rents for a property")
+
+        parameters do
+          id(:path, :string, "ID of property to list unpaid rents for", required: true)
+        end
+
+        response(200, "Unpaid rents", Schema.ref(:UnpaidPropertyRentResponse))
+      end
+
       def swagger_definitions do
         %{
           Price:
@@ -155,6 +166,25 @@ defmodule TenanteeWeb.Swagger.Property do
 
               properties do
                 properties(:array, "Properties", items: Schema.ref(:PropertyResponseObject))
+              end
+            end,
+          UnpaidPropertyRent:
+            swagger_schema do
+              title("Unpaid property rent")
+              description("Unpaid property rent")
+
+              properties do
+                due_date(:string, "Due date of the rent", required: true)
+                tenant(Schema.ref(:TenantResponseObject), "Tenant", required: true)
+              end
+            end,
+          UnpaidPropertyRentResponse:
+            swagger_schema do
+              title("Unpaid property rent response")
+              description("Unpaid property rent response")
+
+              properties do
+                rents(:array, "Unpaid rents", items: Schema.ref(:UnpaidPropertyRent))
               end
             end
         }
