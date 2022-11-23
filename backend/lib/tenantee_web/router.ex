@@ -27,6 +27,7 @@ defmodule TenanteeWeb.Router do
       delete "/:id", PropertyController, :delete_by_id
       put "/:id/tenants/:tenant", PropertyController, :add_tenant
       delete "/:id/tenants/:tenant", PropertyController, :remove_tenant
+      get "/:id/rents/unpaid", PropertyController, :unpaid_rents
     end
 
     scope "/tenants" do
@@ -35,6 +36,7 @@ defmodule TenanteeWeb.Router do
       get "/:id", TenantController, :find
       patch "/:id", TenantController, :update
       delete "/:id", TenantController, :delete_by_id
+      get "/:id/rents/unpaid", TenantController, :unpaid_rents
     end
   end
 

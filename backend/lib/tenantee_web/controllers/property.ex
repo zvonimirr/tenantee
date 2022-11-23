@@ -2,6 +2,7 @@ defmodule TenanteeWeb.PropertyController do
   use TenanteeWeb, :controller
   use TenanteeWeb.Swagger.Property
   alias Tenantee.Property
+  alias Tenantee.Rent
 
   def add(conn, %{
         "property" =>
@@ -87,6 +88,12 @@ defmodule TenanteeWeb.PropertyController do
   def remove_tenant(conn, %{"id" => id, "tenant" => tenant_id}) do
     with {:ok, property} <- Property.remove_tenant(id, tenant_id) do
       render(conn, "show.json", %{property: property})
+    end
+  end
+
+  def unpaid_rents(conn, %{"id" => id}) do
+    with rents <- Rent.get_unpaid_rents(id) do
+      render(conn, "show_rent.json", %{rents: rents})
     end
   end
 end
