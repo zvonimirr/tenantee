@@ -375,7 +375,7 @@
   "info": {
     "description": "API for the Tenantee platform",
     "title": "Tenantee API",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "paths": {
     "/api/health-check": {

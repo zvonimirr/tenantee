@@ -8,6 +8,8 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
+![Example](./example.gif)
+
 Tenantee (pronounced "tenant-e") is a free and open-source management software aimed at landlords.
 
 ## Requirements
@@ -20,8 +22,9 @@ Tenantee (pronounced "tenant-e") is a free and open-source management software a
 2. Run `mix deps.get`
 3. Run `mix phx.swagger.generate` (Optional, but Swagger won't work without it)
 4. Configure the database in [config/dev.exs](./backend/config/dev.exs) (or prod.exs if running in prod mode)
-5. Run `mix ecto.migrate`
-6. Run `mix phx.server` (You can run in production mode by appending `MIX_ENV=prod` before the command)
+5. Run `mix ecto.create`
+6. Run `mix ecto.migrate`
+7. Run `mix phx.server` (You can run in production mode by appending `MIX_ENV=prod` before the command)
 
 Your backend should be running on [http://localhost:4000](http://localhost:4000)
 
