@@ -5,7 +5,7 @@ import { Tenant } from '../../types/tenant';
 interface TenantCardProps {
     tenant: Tenant;
     onDeleteClick: (tenant: Tenant) => void;
-    onEditClick: (tenant: Tenant) => void;
+    onEditClick?: (tenant: Tenant) => void;
 }
 
 function TenantCard({ tenant, onDeleteClick, onEditClick }: TenantCardProps) {
@@ -18,10 +18,11 @@ function TenantCard({ tenant, onDeleteClick, onEditClick }: TenantCardProps) {
                         cursor="pointer"
                         onClick={() => onDeleteClick(tenant)}
                     />
-                    <IconPencil
-                        cursor="pointer"
-                        onClick={() => onEditClick(tenant)}
-                    />
+                    {onEditClick &&
+                        <IconPencil
+                            cursor="pointer"
+                            onClick={() => onEditClick(tenant)}
+                        />}
                 </Flex>
                 <Center>
                     <Flex direction="column">
