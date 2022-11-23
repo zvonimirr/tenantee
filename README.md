@@ -29,6 +29,9 @@ Tenantee (pronounced "tenant-e") is a free and open-source management software a
 Your backend should be running on [http://localhost:4000](http://localhost:4000)
 
 You should have Swagger UI on [http://localhost:4000/api](http://localhost:4000/api)
+
+Deploying to production? Please make sure to set all the necessary environment variables and see [https://hexdocs.pm/phoenix/deployment.html](https://hexdocs.pm/phoenix/deployment.html)
+
 ### Frontend
 1. Go to [the frontend directory](./frontend)
 2. Run `npm install`
