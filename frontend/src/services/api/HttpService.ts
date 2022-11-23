@@ -26,6 +26,17 @@ export class HttpService {
         return await response.json();
     }
 
+    static async patch<T>(url: string, body: T): Promise<T> {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}${url}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        });
+        return await response.json();
+    }
+
     static async delete(url: string): Promise<void> {
         await fetch(`${import.meta.env.VITE_API_URL}${url}`, {
             method: 'DELETE',

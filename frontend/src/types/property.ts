@@ -21,3 +21,7 @@ export interface PropertyDto {
         price: number;
     };
 }
+
+export interface PropertyUpdateDto extends PropertyDto {
+    id: number;
+}
