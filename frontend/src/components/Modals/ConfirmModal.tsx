@@ -10,7 +10,7 @@ import {
     ButtonGroup,
     Button,
 } from '@chakra-ui/react';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 interface ConfirmModalProps {
     title: string;

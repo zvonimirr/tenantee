@@ -47,6 +47,7 @@ function GenericInput({
                         {rightAdornment && (
                             <InputRightElement
                                 pointerEvents="none"
+                                // eslint-disable-next-line react/no-children-prop
                                 children={rightAdornment}
                             />
                         )}
@@ -62,6 +63,7 @@ function GenericInput({
                         {leftAdornment && (
                             <InputLeftElement
                                 pointerEvents="none"
+                                // eslint-disable-next-line react/no-children-prop
                                 children={leftAdornment}
                             />
                         )}

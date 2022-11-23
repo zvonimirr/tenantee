@@ -151,12 +151,14 @@ function Tenants() {
                             !isLoading &&
                             data &&
                             isEmpty(data.tenants) && (
-                                <GridItem colSpan={3}>
-                                    <Text fontSize="lg" textAlign="center">
-                                        You don't have any tenants yet.
-                                    </Text>
-                                </GridItem>
-                            )}
+                            <GridItem colSpan={3}>
+                                <Text fontSize="lg" textAlign="center">
+                                    {
+                                        'You don\'t have any tenants yet. Click the button below to add one.'
+                                    }
+                                </Text>
+                            </GridItem>
+                        )}
                     </Grid>
                     <Center>
                         <Button
