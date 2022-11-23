@@ -1,10 +1,20 @@
-import { Box, Center, Flex, Spinner, Stack, Text } from '@chakra-ui/react';
+import {
+    Box,
+    Center,
+    Flex,
+    Grid,
+    GridItem,
+    Spinner,
+    Stack,
+    Text,
+} from '@chakra-ui/react';
 import { IconArrowBack, IconHome, IconMoneybag } from '@tabler/icons';
 import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
+import TenantCard from '../components/Tenant/TenantCard';
 import {
     propertyApiService,
     PropertyApiService,
@@ -76,6 +86,13 @@ function Property() {
                                 {property.price.currency}
                             </Text>
                         </Flex>
+                        <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+                            {property.tenants.map((tenant) => (
+                                <GridItem key={tenant.id}>
+                                    <TenantCard tenant={tenant} />
+                                </GridItem>
+                            ))}
+                        </Grid>
                     </Stack>
                 )}
             </PageContainer>

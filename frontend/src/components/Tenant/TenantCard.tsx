@@ -4,18 +4,20 @@ import { Tenant } from '../../types/tenant';
 
 interface TenantCardProps {
     tenant: Tenant;
-    onDeleteClick: (tenant: Tenant) => void;
+    onDeleteClick?: (tenant: Tenant) => void;
 }
 
 function TenantCard({ tenant, onDeleteClick }: TenantCardProps) {
     return (
         <Card>
             <CardBody>
-                <IconTrash
-                    color="red"
-                    cursor="pointer"
-                    onClick={() => onDeleteClick(tenant)}
-                />
+                {onDeleteClick && (
+                    <IconTrash
+                        color="red"
+                        cursor="pointer"
+                        onClick={() => onDeleteClick(tenant)}
+                    />
+                )}
                 <Center>
                     <Flex direction="column">
                         <IconUser size={128} />
