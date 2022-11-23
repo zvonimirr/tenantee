@@ -68,6 +68,10 @@ defmodule TenanteeWeb.Router do
         %{
           name: "Tenant",
           description: "Tenant management"
+        },
+        %{
+          name: "Rent",
+          description: "Rent management"
         }
       ]
     }

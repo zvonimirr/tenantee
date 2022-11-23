@@ -1,4 +1,7 @@
 defmodule TenanteeWeb.Swagger.Tenant do
+  @moduledoc """
+  Swagger schema for Tenant
+  """
   use PhoenixSwagger
 
   defmacro __using__(_opts) do

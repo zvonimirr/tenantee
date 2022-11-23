@@ -1,5 +1,6 @@
 defmodule TenanteeWeb.RentController do
   use TenanteeWeb, :controller
+  use TenanteeWeb.Swagger.Rent
   alias Tenantee.Rent
 
   def mark_as_paid(conn, %{"id" => id}) do
