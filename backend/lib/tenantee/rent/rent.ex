@@ -10,7 +10,7 @@ defmodule Tenantee.Rent do
   @doc """
   Returns a list of unpaid rents by property.
   """
-  def get_unpaid_rents(property_id) do
+  def get_unpaid_rents_by_property_id(property_id) do
     Repo.all(
       from r in Schema,
         where: r.property_id == ^property_id and r.paid == false
@@ -27,5 +27,14 @@ defmodule Tenantee.Rent do
         where: r.tenant_id == ^tenant_id and r.paid == false
     )
     |> Enum.map(&Repo.preload(&1, :property))
+  end
+
+  def mark_rent(rent_id, paid \\ false) do
+    with rent <- Repo.get(Schema, rent_id),
+         false <- is_nil(rent) do
+      rent
+      |> Schema.changeset(%{paid: paid})
+      |> Repo.update()
+    end
   end
 end

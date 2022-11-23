@@ -159,6 +159,30 @@
       "title": "Property response object",
       "type": "object"
     },
+    "Rent": {
+      "description": "Rent",
+      "properties": {
+        "due_date": {
+          "description": "Due Date",
+          "type": "string"
+        },
+        "id": {
+          "description": "ID",
+          "type": "integer"
+        },
+        "paid": {
+          "description": "Paid",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "paid",
+        "due_date",
+        "id"
+      ],
+      "title": "Rent",
+      "type": "object"
+    },
     "TenantDto": {
       "description": "Tenant DTO used for creating and updating tenants",
       "properties": {
@@ -586,6 +610,60 @@
         ]
       }
     },
+    "/api/rent/{id}/mark-as-paid": {
+      "post": {
+        "description": "",
+        "operationId": "TenanteeWeb.RentController.mark_as_paid",
+        "parameters": [
+          {
+            "description": "Rent ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rent marked as paid",
+            "schema": {
+              "$ref": "#/definitions/Rent"
+            }
+          }
+        },
+        "summary": "Mark rent as paid",
+        "tags": [
+          "Rent"
+        ]
+      }
+    },
+    "/api/rent/{id}/mark-as-unpaid": {
+      "post": {
+        "description": "",
+        "operationId": "TenanteeWeb.RentController.mark_as_unpaid",
+        "parameters": [
+          {
+            "description": "Rent ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rent marked as unpaid",
+            "schema": {
+              "$ref": "#/definitions/Rent"
+            }
+          }
+        },
+        "summary": "Mark rent as unpaid",
+        "tags": [
+          "Rent"
+        ]
+      }
+    },
     "/api/tenants": {
       "get": {
         "description": "",
@@ -807,6 +885,10 @@
     {
       "description": "Tenant management",
       "name": "Tenant"
+    },
+    {
+      "description": "Rent management",
+      "name": "Rent"
     }
   ]
 }

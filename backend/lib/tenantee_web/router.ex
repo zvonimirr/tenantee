@@ -38,6 +38,11 @@ defmodule TenanteeWeb.Router do
       delete "/:id", TenantController, :delete_by_id
       get "/:id/rents/unpaid", TenantController, :unpaid_rents
     end
+
+    scope "/rent" do
+      post "/:id/mark-as-paid", RentController, :mark_as_paid
+      post "/:id/mark-as-unpaid", RentController, :mark_as_unpaid
+    end
   end
 
   # coveralls-ignore-start
@@ -63,6 +68,10 @@ defmodule TenanteeWeb.Router do
         %{
           name: "Tenant",
           description: "Tenant management"
+        },
+        %{
+          name: "Rent",
+          description: "Rent management"
         }
       ]
     }
