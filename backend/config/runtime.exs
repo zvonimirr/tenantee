@@ -73,4 +73,6 @@ if config_env() == :prod do
       certfile: System.get_env("SSL_CERT_PATH", "priv/cert/selfsigned.pem")
     ],
     secret_key_base: secret_key_base
+
+  config :tenantee, TenanteeWeb.Endpoint, force_ssl: [hsts: true]
 end
