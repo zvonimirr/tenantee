@@ -20,7 +20,7 @@ config :logger, level: :info
 # to the previous section and set your `:url` port to 443:
 #
 config :tenantee, TenanteeWeb.Endpoint,
-  url: [host: System.get_env("host", "localhost"), port: 443],
+  url: [host: System.get_env("PHX_HOST", "localhost"), port: 443],
   https: [
     port: 443,
     cipher_suite: :strong,
