@@ -1,5 +1,6 @@
 defmodule TenanteeWeb.TenantView do
   use TenanteeWeb, :view
+  alias TenanteeWeb.PropertyView
 
   def render("show.json", %{tenants: tenants}) do
     %{
@@ -20,6 +21,28 @@ defmodule TenanteeWeb.TenantView do
         inserted_at: tenant.inserted_at,
         updated_at: tenant.updated_at
       }
+    }
+  end
+
+  def render("show_rent.json", %{rent: rent}) do
+    %{
+      rent: %{
+        property: %{
+          id: rent.property.id,
+          name: rent.property.name
+        },
+        paid: rent.paid,
+        due_date: rent.due_date
+      }
+    }
+  end
+
+  def render("show_rent.json", %{rents: rents}) do
+    %{
+      rents:
+        Enum.map(rents, fn rent ->
+          render("show_rent.json", %{rent: rent}) |> Map.get(:rent)
+        end)
     }
   end
 

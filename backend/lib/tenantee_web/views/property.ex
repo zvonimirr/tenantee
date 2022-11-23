@@ -30,6 +30,25 @@ defmodule TenanteeWeb.PropertyView do
     }
   end
 
+  def render("show_rent.json", %{rent: rent}) do
+    %{
+      rent: %{
+        tenant: render(TenantView, "show.json", %{tenant: rent.tenant}) |> Map.get(:tenant),
+        paid: rent.paid,
+        due_date: rent.due_date
+      }
+    }
+  end
+
+  def render("show_rent.json", %{rents: rents}) do
+    %{
+      rents:
+        Enum.map(rents, fn rent ->
+          render("show_rent.json", %{rent: rent}) |> Map.get(:rent)
+        end)
+    }
+  end
+
   def render("delete.json", %{}) do
     %{
       message: "Property deleted"

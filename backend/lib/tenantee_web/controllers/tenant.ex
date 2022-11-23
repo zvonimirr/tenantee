@@ -2,6 +2,7 @@ defmodule TenanteeWeb.TenantController do
   use TenanteeWeb, :controller
   use TenanteeWeb.Swagger.Tenant
   alias Tenantee.Tenant
+  alias Tenantee.Rent
 
   def add(conn, %{"tenant" => params}) do
     with {:ok, tenant} <- Tenant.create_tenant(params) do
@@ -59,6 +60,12 @@ defmodule TenanteeWeb.TenantController do
       else
         render(conn, "delete.json", %{})
       end
+    end
+  end
+
+  def unpaid_rents(conn, %{"id" => id}) do
+    with rents <- Rent.get_unpaid_rents_by_tenant_id(id) do
+      render(conn, "show_rent.json", %{rents: rents})
     end
   end
 end

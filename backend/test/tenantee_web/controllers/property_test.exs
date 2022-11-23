@@ -2,6 +2,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
   use TenanteeWeb.ConnCase
   use TenanteeWeb.PropertyCase
   use TenanteeWeb.TenantCase
+  use TenanteeWeb.RentCase
 
   test "POST /api/properties", %{conn: conn} do
     conn = insert_property(conn)
@@ -91,5 +92,21 @@ defmodule TenanteeWeb.PropertyControllerTest do
     tenants = json_response(conn, 200)["property"]["tenants"]
 
     assert tenants == []
+  end
+
+  test "GET /api/properties/:id/rents/unpaid", %{conn: conn} do
+    property_conn = insert_property(conn)
+    id = json_response(property_conn, 201)["property"]["id"]
+
+    tenant_conn = insert_tenant(conn)
+    tenant_id = json_response(tenant_conn, 201)["tenant"]["id"]
+
+    put(conn, "/api/properties/#{id}/tenants/#{tenant_id}")
+    insert_rent(id, tenant_id)
+
+    conn = get(conn, "/api/properties/#{id}/rents/unpaid")
+    [rent] = json_response(conn, 200)["rents"]
+
+    assert rent["tenant"]["id"] == tenant_id
   end
 end
