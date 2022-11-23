@@ -14,7 +14,7 @@ interface GenericInputProps {
     placeholder: string;
     label: string;
     control: Control<any, any>;
-    type?: 'text' | 'number' | 'email' | 'password';
+    type?: 'text' | 'number' | 'email' | 'password' | 'tel';
     rules?: Record<string, any>;
     rightAdornment?: ReactNode;
     leftAdornment?: ReactNode;
