@@ -7,8 +7,6 @@ defmodule Tenantee.Repo.Migrations.AddRent do
       add :paid, :boolean, default: false
       add :tenant_id, references(:tenants, on_delete: :delete_all)
       add :property_id, references(:properties, on_delete: :delete_all)
-
-      timestamps()
     end
   end
 
