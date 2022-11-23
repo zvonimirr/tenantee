@@ -14,7 +14,7 @@ import PageContainer from '../components/PageContainer';
 import useSWR from 'swr';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNotification } from '../hooks/useNotification';
-import { Tenant, TenantDto, TenantList } from '../types/tenant';
+import { Tenant, TenantDto, TenantList, TenantUpdateDto } from '../types/tenant';
 import {
     tenantApiService,
     TenantApiService,
@@ -23,6 +23,7 @@ import TenantCard from '../components/Tenant/TenantCard';
 import ConfirmModal from '../components/Modals/ConfirmModal';
 import { isEmpty } from 'ramda';
 import AddTenantModal from '../components/Tenant/Modals/AddTenantModal';
+import EditTenantModal from '../components/Tenant/Modals/EditTenantModal';
 
 function Tenants() {
     const { data, error, isValidating, mutate } = useSWR<TenantList>(
@@ -34,6 +35,11 @@ function Tenants() {
         isOpen: isAddNewTenantModalOpen,
         onOpen: openAddNewTenantModal,
         onClose: closeAddNewTenantModal,
+    } = useDisclosure();
+    const {
+        isOpen: isEditTenantModalOpen,
+        onOpen: openEditTenantModal,
+        onClose: closeEditTenantModal,
     } = useDisclosure();
     const {
         isOpen: isConfirmModalOpen,
@@ -72,6 +78,28 @@ function Tenants() {
             }
         },
         [mutate],
+    );
+
+    const onEditTenantSubmit = useCallback(
+        async (tenant: TenantUpdateDto) => {
+            try {
+                await tenantApiService.updateTenant(TenantApiService.updateTenantPath(tenant.id), tenant);
+
+                showSuccess(
+                    'Tenant update',
+                    `Tenant ${tenant.tenant.first_name} ${tenant.tenant.last_name} has been updated successfully`,
+                );
+            } catch (e) {
+                showError(
+                    'Error',
+                    `An error occurred while trying to update ${selectedTenant?.name} property`,
+                );
+            } finally {
+                setSelectedTenant(null);
+                closeEditTenantModal();
+                mutate();
+            }
+        }, [mutate, selectedTenant],
     );
 
     const onTenantDeleteClick = useCallback(async () => {
@@ -121,6 +149,12 @@ function Tenants() {
                 onClose={closeAddNewTenantModal}
                 onSubmit={onAddTenantSubmit}
             />
+            <EditTenantModal
+                isOpen={isEditTenantModalOpen}
+                onClose={closeEditTenantModal}
+                onSubmit={onEditTenantSubmit}
+                tenant={selectedTenant}
+            />
             <Breadcrumbs items={[{ href: '/tenants', label: 'Tenants' }]} />
             <PageContainer>
                 <Text fontSize="2xl">Your Tenants</Text>
@@ -143,6 +177,10 @@ function Tenants() {
                                         onDeleteClick={(tenant) => {
                                             setSelectedTenant(tenant);
                                             openConfirmModal();
+                                        }}
+                                        onEditClick={(tenant) => {
+                                            setSelectedTenant(tenant);
+                                            openEditTenantModal();
                                         }}
                                     />
                                 </GridItem>

@@ -15,3 +15,7 @@ export interface TenantDto {
         last_name: string;
     };
 }
+
+export interface TenantUpdateDto extends TenantDto {
+    id: number;
+}
