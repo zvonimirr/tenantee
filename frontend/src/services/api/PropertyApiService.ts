@@ -14,6 +14,10 @@ export class PropertyApiService extends HttpService {
         `/api/properties/${id}`;
     public static readonly deletePropertyPath = (id: number) =>
         `/api/properties/${id}`;
+    public static readonly removeTenantFromPropertyPath = (
+        propertyId: number,
+        tenantId: number,
+    ) => `/api/properties/${propertyId}/tenants/${tenantId}`;
 
     async getProperties(path: string) {
         return HttpService.get<PropertyList>(path);
@@ -32,6 +36,10 @@ export class PropertyApiService extends HttpService {
     }
 
     async deleteProperty(path: string) {
+        return HttpService.delete(path);
+    }
+
+    async removeTenantFromProperty(path: string) {
         return HttpService.delete(path);
     }
 }
