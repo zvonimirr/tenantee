@@ -11,10 +11,13 @@ import {
     Stack,
 } from '@chakra-ui/react';
 import { IconHome, IconPencil } from '@tabler/icons';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Property, PropertyUpdateDto } from '../../../types/property';
 import GenericInput from '../../Form/GenericInput';
+import { useEffect, useState } from 'react';
+import countryToCurrency from 'country-to-currency';
+import getSymbolFromCurrency from 'currency-symbol-map';
+import CountrySelect from 'react-flags-select';
 
 interface EditPropertyModalProps {
     isOpen: boolean;
@@ -28,6 +31,7 @@ const defaultValues = {
     description: '',
     price: 0,
     location: '',
+    currency: '',
 };
 
 function EditPropertyModal({
@@ -36,10 +40,11 @@ function EditPropertyModal({
     onSubmit,
     property,
 }: EditPropertyModalProps) {
-    const { handleSubmit, formState, control, reset } = useForm({
-        mode: 'onChange',
-        defaultValues,
-    });
+    const { handleSubmit, formState, control, reset, watch, setValue } =
+        useForm({
+            mode: 'onChange',
+            defaultValues,
+        });
 
     useEffect(() => {
         if (property) {
@@ -48,9 +53,22 @@ function EditPropertyModal({
                 description: property.description,
                 price: property.price.amount,
                 location: property.location,
+                currency: property.price.currency,
             });
         }
     }, [property]);
+
+    const currency = watch('currency');
+    const [country, setCountry] = useState('US');
+
+    useEffect(() => {
+        if (country && Object.keys(countryToCurrency).includes(country)) {
+            setValue(
+                'currency',
+                countryToCurrency[country as keyof typeof countryToCurrency],
+            );
+        }
+    }, [country]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -97,7 +115,12 @@ function EditPropertyModal({
                                     required: 'Price is required',
                                     min: 1,
                                 }}
-                                leftAdornment="$"
+                                rightAdornment={getSymbolFromCurrency(currency)}
+                            />
+                            <CountrySelect
+                                searchable
+                                selected={country}
+                                onSelect={(country) => setCountry(country)}
                             />
                             <Box w="100%">
                                 <Button

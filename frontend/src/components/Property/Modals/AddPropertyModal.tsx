@@ -9,7 +9,6 @@ import {
     ModalHeader,
     ModalOverlay,
     Stack,
-    Text,
 } from '@chakra-ui/react';
 import { IconHome, IconPencil } from '@tabler/icons';
 import { useForm } from 'react-hook-form';
