@@ -1,7 +1,4 @@
 on:
-  push:
-    paths:
-      - 'backend/**'
   pull_request:
     branches:
       - dev
