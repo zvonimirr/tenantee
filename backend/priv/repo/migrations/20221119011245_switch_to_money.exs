@@ -18,5 +18,12 @@ defmodule Tenantee.Repo.Migrations.SwitchToMoney do
     execute """
     DROP TYPE public.money_with_currency
     """
+
+    alter table(:properties) do
+      remove :price
+
+      add :price, :integer
+      add :currency, :string
+    end
   end
 end
