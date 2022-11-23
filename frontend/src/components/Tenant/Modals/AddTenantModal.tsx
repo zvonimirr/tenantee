@@ -61,6 +61,7 @@ function AddTenantModal({ isOpen, onClose, onSubmit }: AddTenantModalProps) {
                                 label="Email"
                                 placeholder="Email"
                                 control={control}
+                                rules={{ pattern: /^\S+@\S+$/i }}
                                 type="email"
                             />
                             <GenericInput
@@ -68,6 +69,7 @@ function AddTenantModal({ isOpen, onClose, onSubmit }: AddTenantModalProps) {
                                 label="Phone"
                                 placeholder="Phone"
                                 control={control}
+                                rules={{ pattern: /^\d{9,}$/ }}
                                 type="tel"
                             />
                             <Box w="100%">
