@@ -40,6 +40,7 @@ defmodule TenanteeWeb.Swagger.Rent do
               properties do
                 id(:integer, "ID", required: true)
                 due_date(:string, "Due Date", required: true)
+                paid(:boolean, "Paid", required: true)
               end
             end
         }
