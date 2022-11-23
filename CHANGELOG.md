@@ -3,6 +3,7 @@
 ## 0.2.0
 ### API
 - Rent model and mark API ([@zvonimirr](https://github.com/zvonimirr))
+- Add SSL support ([@zvonimirr](https://github.com/zvonimirr))
 
 ## 0.1.0
 
