@@ -92,7 +92,7 @@ defmodule TenanteeWeb.PropertyController do
   end
 
   def unpaid_rents(conn, %{"id" => id}) do
-    with rents <- Rent.get_unpaid_rents(id) do
+    with rents <- Rent.get_unpaid_rents_by_property_id(id) do
       render(conn, "show_rent.json", %{rents: rents})
     end
   end

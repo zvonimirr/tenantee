@@ -15,4 +15,10 @@ defmodule Tenantee.Rent.Schema do
     belongs_to :tenant, Tenant
     belongs_to :property, Property
   end
+
+  def changeset(rent, attrs) do
+    rent
+    |> cast(attrs, [:due_date, :paid, :tenant_id, :property_id])
+    |> validate_required([:due_date, :paid, :tenant_id, :property_id])
+  end
 end
