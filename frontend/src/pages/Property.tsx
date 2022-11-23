@@ -4,13 +4,15 @@ import {
     Flex,
     Grid,
     GridItem,
+    Select,
     Spinner,
     Stack,
     Text,
     useDisclosure,
 } from '@chakra-ui/react';
 import { IconArrowBack, IconHome, IconMoneybag } from '@tabler/icons';
-import { useCallback, useMemo, useState } from 'react';
+import { isEmpty, prop } from 'ramda';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import ConfirmModal from '../components/Modals/ConfirmModal';
@@ -22,8 +24,12 @@ import {
     propertyApiService,
     PropertyApiService,
 } from '../services/api/PropertyApiService';
+import {
+    tenantApiService,
+    TenantApiService,
+} from '../services/api/TenantApiService';
 import { PropertyResponse } from '../types/property';
-import { Tenant } from '../types/tenant';
+import { Tenant, TenantList } from '../types/tenant';
 
 function Property() {
     const { id } = useParams();
@@ -34,6 +40,11 @@ function Property() {
         PropertyApiService.getPropertyPath(Number(id)),
         propertyApiService.getProperty,
     );
+    const { data: tenants, isValidating: isValidatingTenants } =
+        useSWR<TenantList>(
+            TenantApiService.listTenantsPath,
+            tenantApiService.getTenants,
+        );
 
     const isLoading = useMemo(
         () => data === undefined || (isValidating && error !== undefined),
@@ -42,14 +53,33 @@ function Property() {
 
     const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
 
+    const selectRef = useRef<HTMLSelectElement>(null);
+
     const {
-        isOpen: isConfirmModalOpen,
-        onOpen: openConfirmModal,
-        onClose: closeConfirmModal,
+        isOpen: isConfirmAddModalOpen,
+        onOpen: openConfirmAddModal,
+        onClose: closeConfirmAddModal,
+    } = useDisclosure();
+    const {
+        isOpen: isConfirmRemoveModalOpen,
+        onOpen: openConfirmRemoveModal,
+        onClose: closeConfirmRemoveModal,
     } = useDisclosure();
 
     const isError = useMemo(() => error !== undefined, [error]);
     const property = useMemo(() => data?.property, [data]);
+    const tenantOptions = useMemo(() => {
+        if (!tenants?.tenants || !property) {
+            return [];
+        }
+
+        const tenantIds = property.tenants.map(prop('id'));
+
+        return tenants.tenants.filter(
+            (tenant) => !tenantIds.includes(tenant.id),
+        );
+    }, [tenants, property]);
+
     const breadcrumbs = useMemo(
         () => [
             {
@@ -63,6 +93,39 @@ function Property() {
         ],
         [property],
     );
+
+    const onTenantAddSubmit = useCallback(async () => {
+        if (property && selectedTenant && selectRef.current) {
+            try {
+                await propertyApiService.addTenantToProperty(
+                    PropertyApiService.addTenantToPropertyPath(
+                        property.id,
+                        selectedTenant.id,
+                    ),
+                );
+
+                showSuccess(
+                    'Tenant added',
+                    `${selectedTenant.name} was added to the property.`,
+                );
+            } catch (e) {
+                showError(
+                    'Error',
+                    'An error occured while trying to add the tenant to the property.',
+                );
+            } finally {
+                setSelectedTenant(null);
+                mutate();
+                selectRef.current.value = '';
+                closeConfirmAddModal();
+            }
+        }
+    }, [selectedTenant, property, mutate]);
+
+    const onTenantAddCancel = useCallback(() => {
+        setSelectedTenant(null);
+        closeConfirmAddModal();
+    }, []);
 
     const onTenantRemoveSubmit = useCallback(async () => {
         if (selectedTenant) {
@@ -85,7 +148,7 @@ function Property() {
                 );
             } finally {
                 setSelectedTenant(null);
-                closeConfirmModal();
+                closeConfirmRemoveModal();
                 mutate();
             }
         }
@@ -94,11 +157,18 @@ function Property() {
     return (
         <Box>
             <ConfirmModal
-                isOpen={isConfirmModalOpen}
+                isOpen={isConfirmAddModalOpen}
+                title={`Add ${selectedTenant?.name} to ${property?.name}?`}
+                message={`Are you sure you want to add ${selectedTenant?.name} to ${property?.name}?`}
+                onConfirm={onTenantAddSubmit}
+                onCancel={onTenantAddCancel}
+            />
+            <ConfirmModal
+                isOpen={isConfirmRemoveModalOpen}
                 title={`Remove ${selectedTenant?.name} from ${property?.name}?`}
                 message={`Are you sure you want to remove ${selectedTenant?.name} from the property?`}
                 onConfirm={onTenantRemoveSubmit}
-                onCancel={closeConfirmModal}
+                onCancel={closeConfirmRemoveModal}
             />
             <Breadcrumbs items={breadcrumbs} />
             <PageContainer>
@@ -138,12 +208,38 @@ function Property() {
                                         tenant={tenant}
                                         onDeleteClick={(tenant) => {
                                             setSelectedTenant(tenant);
-                                            openConfirmModal();
+                                            openConfirmRemoveModal();
                                         }}
                                     />
                                 </GridItem>
                             ))}
                         </Grid>
+                        <Flex gap={2} direction="column">
+                            <Text fontWeight="bold">Add tenants</Text>
+                            <Select
+                                placeholder="Tenants..."
+                                ref={selectRef}
+                                onChange={(e) => {
+                                    setSelectedTenant(
+                                        tenantOptions.find(
+                                            (t) =>
+                                                t.id === Number(e.target.value),
+                                        ) as Tenant,
+                                    );
+                                    openConfirmAddModal();
+                                }}
+                                isDisabled={
+                                    isValidatingTenants ||
+                                    isEmpty(tenantOptions) ||
+                                    selectedTenant !== null
+                                }>
+                                {tenantOptions.map((tenant) => (
+                                    <option key={tenant.id} value={tenant.id}>
+                                        {tenant.name}
+                                    </option>
+                                ))}
+                            </Select>
+                        </Flex>
                     </Stack>
                 )}
             </PageContainer>
