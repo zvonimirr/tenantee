@@ -257,6 +257,39 @@
       ],
       "title": "Tenant response object",
       "type": "object"
+    },
+    "UnpaidPropertyRent": {
+      "description": "Unpaid property rent",
+      "properties": {
+        "due_date": {
+          "description": "Due date of the rent",
+          "type": "string"
+        },
+        "tenant": {
+          "$ref": "#/definitions/TenantResponseObject",
+          "description": "Tenant"
+        }
+      },
+      "required": [
+        "tenant",
+        "due_date"
+      ],
+      "title": "Unpaid property rent",
+      "type": "object"
+    },
+    "UnpaidPropertyRentResponse": {
+      "description": "Unpaid property rent response",
+      "properties": {
+        "rents": {
+          "description": "Unpaid rents",
+          "items": {
+            "$ref": "#/definitions/UnpaidPropertyRent"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Unpaid property rent response",
+      "type": "object"
     }
   },
   "host": "localhost:4000",
@@ -394,6 +427,33 @@
           }
         },
         "summary": "Update a property",
+        "tags": [
+          "Property"
+        ]
+      }
+    },
+    "/api/properties/{id}/rents/unpaid": {
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.PropertyController.unpaid_rents",
+        "parameters": [
+          {
+            "description": "ID of property to list unpaid rents for",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unpaid rents",
+            "schema": {
+              "$ref": "#/definitions/UnpaidPropertyRentResponse"
+            }
+          }
+        },
+        "summary": "List unpaid rents for a property",
         "tags": [
           "Property"
         ]
