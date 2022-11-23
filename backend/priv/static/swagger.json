@@ -169,9 +169,14 @@
         "id": {
           "description": "ID",
           "type": "integer"
+        },
+        "paid": {
+          "description": "Paid",
+          "type": "boolean"
         }
       },
       "required": [
+        "paid",
         "due_date",
         "id"
       ],
