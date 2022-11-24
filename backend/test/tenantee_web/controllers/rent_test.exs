@@ -35,6 +35,33 @@ defmodule TenanteeWeb.RentControllerTest do
            ]
   end
 
+  test "GET /api/rent/paid", %{
+    conn: conn
+  } do
+    conn = get(conn, "/api/rent/paid")
+
+    assert json_response(conn, 200)["rents"] == []
+  end
+
+  test "GET /api/rent/unpaid", %{
+    conn: conn,
+    rent_id: rent_id,
+    property_id: property_id,
+    tenant_id: tenant_id
+  } do
+    conn = get(conn, "/api/rent/unpaid")
+
+    assert json_response(conn, 200)["rents"] == [
+             %{
+               "due_date" => "2022-11-23",
+               "id" => rent_id,
+               "paid" => false,
+               "property" => %{"id" => property_id, "name" => "Test Property"},
+               "tenant" => %{"id" => tenant_id, "name" => "Test Tenant"}
+             }
+           ]
+  end
+
   test "POST /api/rent/:id/mark-as-paid", %{conn: conn, rent_id: rent_id} do
     conn = post(conn, "/api/rent/#{rent_id}/mark-as-paid")
 

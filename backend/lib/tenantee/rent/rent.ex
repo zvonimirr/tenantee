@@ -16,6 +16,15 @@ defmodule Tenantee.Rent do
   end
 
   @doc """
+  Returns a list of all rents taking into account whether
+  the rent is paid or not.
+  """
+  def get_rents_by_paid(paid \\ false) do
+    Repo.all(from r in Schema, where: r.paid == ^paid)
+    |> Enum.map(&Repo.preload(&1, [:tenant, :property]))
+  end
+
+  @doc """
   Returns a list of unpaid rents by property.
   """
   def get_unpaid_rents_by_property_id(property_id) do

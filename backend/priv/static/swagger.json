@@ -686,6 +686,44 @@
         ]
       }
     },
+    "/api/rent/paid": {
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.RentController.list_paid",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of paid rents",
+            "schema": {
+              "$ref": "#/definitions/RentList"
+            }
+          }
+        },
+        "summary": "List all paid rents",
+        "tags": [
+          "Rent"
+        ]
+      }
+    },
+    "/api/rent/unpaid": {
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.RentController.list_unpaid",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of unpaid rents",
+            "schema": {
+              "$ref": "#/definitions/RentList"
+            }
+          }
+        },
+        "summary": "List all unpaid rents",
+        "tags": [
+          "Rent"
+        ]
+      }
+    },
     "/api/rent/{id}/mark-as-paid": {
       "post": {
         "description": "",
