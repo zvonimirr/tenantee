@@ -13,7 +13,8 @@ defmodule TenanteeWeb.RentCase do
       defp insert_rent(property_id, tenant_id) do
         Repo.insert!(%Schema{
           property_id: property_id,
-          tenant_id: tenant_id
+          tenant_id: tenant_id,
+          due_date: ~D[2022-11-23]
         })
       end
     end
