@@ -15,6 +15,20 @@ defmodule TenanteeWeb.Swagger.Rent do
         response(200, "List of rents", Schema.ref(:RentList))
       end
 
+      swagger_path :list_paid do
+        get("/api/rent/paid")
+        summary("List all paid rents")
+
+        response(200, "List of paid rents", Schema.ref(:RentList))
+      end
+
+      swagger_path :list_unpaid do
+        get("/api/rent/unpaid")
+        summary("List all unpaid rents")
+
+        response(200, "List of unpaid rents", Schema.ref(:RentList))
+      end
+
       swagger_path :mark_as_paid do
         post("/api/rent/{id}/mark-as-paid")
         summary("Mark rent as paid")

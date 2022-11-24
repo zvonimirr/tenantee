@@ -9,6 +9,18 @@ defmodule TenanteeWeb.RentController do
     end
   end
 
+  def list_paid(conn, _) do
+    with rents <- Rent.get_rents_by_paid(true) do
+      render(conn, "show.json", %{rents: rents})
+    end
+  end
+
+  def list_unpaid(conn, _) do
+    with rents <- Rent.get_rents_by_paid() do
+      render(conn, "show.json", %{rents: rents})
+    end
+  end
+
   def mark_as_paid(conn, %{"id" => id}) do
     with {:ok, rent} <- Rent.mark_rent(id, true) do
       conn
