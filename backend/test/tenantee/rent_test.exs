@@ -1,0 +1,28 @@
+defmodule TenanteeWeb.RentTest do
+  use TenanteeWeb.ConnCase
+  use TenanteeWeb.PropertyCase
+  use TenanteeWeb.TenantCase
+  use TenanteeWeb.RentCase
+
+  setup %{conn: conn} do
+    property_conn = insert_property(conn)
+    property_id = json_response(property_conn, 201)["property"]["id"]
+
+    tenant_conn = insert_tenant(conn)
+    tenant_id = json_response(tenant_conn, 201)["tenant"]["id"]
+
+    {:ok, %{property_id: property_id, tenant_id: tenant_id}}
+  end
+
+  test "add_rent", %{conn: conn, property_id: property_id, tenant_id: tenant_id} do
+    put(conn, "/api/properties/#{property_id}/tenants/#{tenant_id}")
+
+    Tenantee.Rent.Worker.perform(%Oban.Job{})
+
+    conn = get(conn, "/api/rent")
+    [rent] = json_response(conn, 200)["rents"]
+
+    assert rent["property"]["id"] == property_id
+    assert rent["tenant"]["id"] == tenant_id
+  end
+end
