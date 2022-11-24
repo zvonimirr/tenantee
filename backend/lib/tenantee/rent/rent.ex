@@ -8,6 +8,14 @@ defmodule Tenantee.Rent do
   import Ecto.Query
 
   @doc """
+  Returns a list of all rents.
+  """
+  def get_all_rents do
+    Repo.all(Schema)
+    |> Enum.map(&Repo.preload(&1, [:tenant, :property]))
+  end
+
+  @doc """
   Returns a list of unpaid rents by property.
   """
   def get_unpaid_rents_by_property_id(property_id) do
@@ -29,6 +37,9 @@ defmodule Tenantee.Rent do
     |> Enum.map(&Repo.preload(&1, :property))
   end
 
+  @doc """
+  Marks a rent as paid or unpaid.
+  """
   def mark_rent(rent_id, paid \\ false) do
     with rent <- Repo.get(Schema, rent_id),
          false <- is_nil(rent) do

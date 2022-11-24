@@ -173,6 +173,14 @@
         "paid": {
           "description": "Paid",
           "type": "boolean"
+        },
+        "property": {
+          "$ref": "#/definitions/RentProperty",
+          "description": "Property"
+        },
+        "tenant": {
+          "$ref": "#/definitions/RentTenant",
+          "description": "Tenant"
         }
       },
       "required": [
@@ -181,6 +189,55 @@
         "id"
       ],
       "title": "Rent",
+      "type": "object"
+    },
+    "RentList": {
+      "description": "Rent list",
+      "properties": {
+        "rents": {
+          "$ref": "#/definitions/Rent",
+          "description": "Items"
+        }
+      },
+      "title": "Rent list",
+      "type": "object"
+    },
+    "RentProperty": {
+      "description": "Rent property",
+      "properties": {
+        "id": {
+          "description": "ID",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "id"
+      ],
+      "title": "Rent property",
+      "type": "object"
+    },
+    "RentTenant": {
+      "description": "Rent tenant",
+      "properties": {
+        "id": {
+          "description": "ID",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "id"
+      ],
+      "title": "Rent tenant",
       "type": "object"
     },
     "TenantDto": {
@@ -607,6 +664,25 @@
         "summary": "Add a tenant to a property",
         "tags": [
           "Property"
+        ]
+      }
+    },
+    "/api/rent": {
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.RentController.list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of rents",
+            "schema": {
+              "$ref": "#/definitions/RentList"
+            }
+          }
+        },
+        "summary": "List all rents",
+        "tags": [
+          "Rent"
         ]
       }
     },

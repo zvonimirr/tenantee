@@ -8,6 +8,13 @@ defmodule TenanteeWeb.Swagger.Rent do
     quote do
       use PhoenixSwagger
 
+      swagger_path :list do
+        get("/api/rent")
+        summary("List all rents")
+
+        response(200, "List of rents", Schema.ref(:RentList))
+      end
+
       swagger_path :mark_as_paid do
         post("/api/rent/{id}/mark-as-paid")
         summary("Mark rent as paid")
@@ -32,6 +39,26 @@ defmodule TenanteeWeb.Swagger.Rent do
 
       def swagger_definitions do
         %{
+          RentTenant:
+            swagger_schema do
+              title("Rent tenant")
+              description("Rent tenant")
+
+              properties do
+                id(:integer, "ID", required: true)
+                name(:string, "Name", required: true)
+              end
+            end,
+          RentProperty:
+            swagger_schema do
+              title("Rent property")
+              description("Rent property")
+
+              properties do
+                id(:integer, "ID", required: true)
+                name(:string, "Name", required: true)
+              end
+            end,
           Rent:
             swagger_schema do
               title("Rent")
@@ -41,6 +68,17 @@ defmodule TenanteeWeb.Swagger.Rent do
                 id(:integer, "ID", required: true)
                 due_date(:string, "Due Date", required: true)
                 paid(:boolean, "Paid", required: true)
+                tenant(Schema.ref(:RentTenant), "Tenant")
+                property(Schema.ref(:RentProperty), "Property")
+              end
+            end,
+          RentList:
+            swagger_schema do
+              title("Rent list")
+              description("Rent list")
+
+              properties do
+                rents(Schema.ref(:Rent), "Items")
               end
             end
         }
