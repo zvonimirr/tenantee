@@ -12,7 +12,7 @@ defmodule Tenantee.Rent.Worker do
         Rent.add_rent(
           property,
           tenant,
-          DateTime.utc_now() |> DateTime.add(5 * 24 * 60 * 60, :second)
+          DateTime.utc_now() |> DateTime.add(property.due_date_modifier, :second)
         )
       end)
     end)
