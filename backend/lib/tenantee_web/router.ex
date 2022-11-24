@@ -40,6 +40,7 @@ defmodule TenanteeWeb.Router do
     end
 
     scope "/rent" do
+      get "/", RentController, :list
       post "/:id/mark-as-paid", RentController, :mark_as_paid
       post "/:id/mark-as-unpaid", RentController, :mark_as_unpaid
     end

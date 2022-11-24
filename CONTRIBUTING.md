@@ -36,6 +36,8 @@ If you want to add a new feature please open an issue first.
 
 This saves both the maintainer's and the contributor's time.
 
-Pull requests that are related to adding new features should include tests.
+Pull requests that are related to adding new features should include tests. (Along with Swagger docs if working on the API)
 
 If adding any new dependencies make sure the license if compatible with GPLv3.
+
+Don't forget to add yourself to the [CHANGELOG](./CHANGELOG.md).
