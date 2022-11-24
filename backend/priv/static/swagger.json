@@ -50,6 +50,10 @@
           "description": "Description of the property",
           "type": "string"
         },
+        "due_date_modifier": {
+          "description": "Due date modifier (in seconds). The due date of a rent is calculated by adding this value to the rent's start date (1st of the month)",
+          "type": "integer"
+        },
         "id": {
           "description": "ID of the property",
           "type": "integer"

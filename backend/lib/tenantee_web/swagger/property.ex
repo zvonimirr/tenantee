@@ -125,6 +125,11 @@ defmodule TenanteeWeb.Swagger.Property do
                 location(:string, "Location of the property", required: true)
                 price(:integer, "Price of the property", required: true)
                 currency(:string, "Currency of the property price", required: true)
+
+                due_date_modifier(
+                  :integer,
+                  "Due date modifier (in seconds). The due date of a rent is calculated by adding this value to the rent's start date (1st of the month)"
+                )
               end
             end,
           PropertyRequest:

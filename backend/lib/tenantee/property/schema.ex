@@ -12,6 +12,7 @@ defmodule Tenantee.Property.Schema do
     field :description, :string, default: ""
     field :location, :string
     field :price, Money.Ecto.Composite.Type
+    field :due_date_modifier, :integer, default: 5 * 24 * 60 * 60
 
     many_to_many :tenants, Tenant,
       join_through: "property_tenants",
