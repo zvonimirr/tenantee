@@ -16,6 +16,19 @@ defmodule Tenantee.Rent do
   end
 
   @doc """
+  Adds a new rent.
+  """
+  def add_rent(property, tenant, due_date) do
+    Schema.changeset(%Schema{}, %{
+      property_id: property.id,
+      tenant_id: tenant.id,
+      due_date: due_date,
+      paid: false
+    })
+    |> Repo.insert()
+  end
+
+  @doc """
   Returns a list of all rents taking into account whether
   the rent is paid or not.
   """
