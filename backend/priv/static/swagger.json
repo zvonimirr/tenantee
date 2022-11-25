@@ -930,6 +930,36 @@
         ]
       }
     },
+    "/api/tenants/{id}/rents": {
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.TenantController.all_rents",
+        "parameters": [
+          {
+            "description": "ID of tenant to fetch rents for",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rents found",
+            "schema": {
+              "$ref": "#/definitions/RentList"
+            }
+          },
+          "404": {
+            "description": "Tenant not found"
+          }
+        },
+        "summary": "List all rents for a tenant",
+        "tags": [
+          "Tenant"
+        ]
+      }
+    },
     "/api/tenants/{id}/rents/unpaid": {
       "get": {
         "description": "",

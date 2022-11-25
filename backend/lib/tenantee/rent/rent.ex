@@ -49,7 +49,18 @@ defmodule Tenantee.Rent do
   end
 
   @doc """
-  Returns wheter a tenant has unpaid rents.
+  Returns a list of all rents of a tenant.
+  """
+  def get_all_rents_by_tenant_id(tenant_id) do
+    Repo.all(
+      from r in Schema,
+        where: r.tenant_id == ^tenant_id
+    )
+    |> Enum.map(&Repo.preload(&1, :property))
+  end
+
+  @doc """
+  Returns all unpaid rents of a tenant.
   """
   def get_unpaid_rents_by_tenant_id(tenant_id) do
     Repo.all(

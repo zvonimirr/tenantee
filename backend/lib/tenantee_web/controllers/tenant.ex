@@ -63,6 +63,20 @@ defmodule TenanteeWeb.TenantController do
     end
   end
 
+  def all_rents(conn, %{"id" => id}) do
+    with tenant <- Tenant.get_tenant_by_id(id) do
+      if is_nil(tenant) do
+        conn
+        |> put_status(:not_found)
+        |> render("error.json", %{message: "Tenant not found"})
+      else
+        with rents <- Rent.get_all_rents_by_tenant_id(id) do
+          render(conn, "show_rent.json", %{rents: rents})
+        end
+      end
+    end
+  end
+
   def unpaid_rents(conn, %{"id" => id}) do
     with rents <- Rent.get_unpaid_rents_by_tenant_id(id) do
       render(conn, "show_rent.json", %{rents: rents})

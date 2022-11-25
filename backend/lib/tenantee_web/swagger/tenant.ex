@@ -64,6 +64,18 @@ defmodule TenanteeWeb.Swagger.Tenant do
         response(404, "Tenant not found")
       end
 
+      swagger_path :all_rents do
+        get("/api/tenants/{id}/rents")
+        summary("List all rents for a tenant")
+
+        parameters do
+          id(:path, :integer, "ID of tenant to fetch rents for", required: true)
+        end
+
+        response(200, "Rents found", Schema.ref(:RentList))
+        response(404, "Tenant not found")
+      end
+
       swagger_path :unpaid_rents do
         get("/api/tenants/{id}/rents/unpaid")
         summary("List unpaid rents for tenants")

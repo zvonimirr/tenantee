@@ -59,6 +59,24 @@ defmodule TenanteeWeb.TenantControllerTest do
     assert json_response(failure_find_conn, 404) == %{"error" => "Tenant not found"}
   end
 
+  test "GET /api/tenants/:id/rents", %{conn: conn} do
+    property_conn = insert_property(conn)
+    id = json_response(property_conn, 201)["property"]["id"]
+
+    tenant_conn = insert_tenant(conn)
+    tenant_id = json_response(tenant_conn, 201)["tenant"]["id"]
+
+    put(conn, "/api/properties/#{id}/tenants/#{tenant_id}")
+    insert_rent(id, tenant_id)
+
+    failure_conn = get(conn, "/api/tenants/#{tenant_id + 1}/rents")
+    conn = get(conn, "/api/tenants/#{tenant_id}/rents")
+    [rent] = json_response(conn, 200)["rents"]
+
+    assert rent["property"]["id"] == id
+    assert json_response(failure_conn, 404) == %{"error" => "Tenant not found"}
+  end
+
   test "GET /api/tenants/:id/rents/unpaid", %{conn: conn} do
     property_conn = insert_property(conn)
     id = json_response(property_conn, 201)["property"]["id"]
