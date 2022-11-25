@@ -8,15 +8,14 @@ defmodule TenanteeWeb.TenantViewTest do
     first_name: "John",
     last_name: "Doe",
     email: "jdoe@test.com",
-    phone: "555-555-5555",
-    inserted_at: ~N[2018-01-01 00:00:00],
-    updated_at: ~N[2018-01-01 00:00:00]
+    phone: "555-555-5555"
   }
 
   @api_tenant @tenant
               |> Map.delete(:first_name)
               |> Map.delete(:last_name)
               |> Map.put_new(:name, @tenant.first_name <> " " <> @tenant.last_name)
+              |> Map.put_new(:unpaid_rents, [])
 
   test "renders error.json" do
     assert render(TenanteeWeb.TenantView, "error.json", %{message: "oops"}) ==

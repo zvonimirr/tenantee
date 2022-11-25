@@ -108,6 +108,7 @@ defmodule TenanteeWeb.Swagger.Tenant do
                 name(:string, "Name of tenant", required: true)
                 phone(:string, "Phone number of tenant")
                 email(:string, "Email of tenant")
+                unpaid_rents(:array, "Unpaid rents for tenant", items: Schema.ref(:Rent))
               end
             end,
           TenantResponse:
