@@ -1,8 +1,11 @@
+import { Rent } from './rent';
+
 export interface Tenant {
     id: number;
     name: string;
     email?: string;
     phone?: string;
+    unpaid_rents: Rent[];
 }
 
 export interface TenantList {

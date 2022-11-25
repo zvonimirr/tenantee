@@ -1,5 +1,6 @@
 import { Card, CardBody, Center, Flex, Stack, Text } from '@chakra-ui/react';
 import { IconPencil, IconTrash, IconUser } from '@tabler/icons';
+import { useMemo } from 'react';
 import { Tenant } from '../../types/tenant';
 
 interface TenantCardProps {
@@ -9,6 +10,24 @@ interface TenantCardProps {
 }
 
 function TenantCard({ tenant, onDeleteClick, onEditClick }: TenantCardProps) {
+    const iconColor = useMemo(() => {
+        if (tenant.unpaid_rents.length < 1) {
+            return 'black';
+        }
+        const dates = tenant.unpaid_rents.map(rent => new Date(rent.due_date));
+
+        return dates.some(date => date < new Date()) ? '#FFE800' : 'red';
+    }, [tenant.unpaid_rents]);
+
+    const rentStatus = useMemo(() => {
+        if (tenant.unpaid_rents.length < 1) {
+            return null;
+        }
+        const dates = tenant.unpaid_rents.map(rent => new Date(rent.due_date));
+
+        return dates.some(date => date < new Date()) ? 'Has due rent' : 'Has overdue rent';
+    }, [tenant.unpaid_rents]);
+
     return (
         <Card>
             <CardBody>
@@ -26,11 +45,12 @@ function TenantCard({ tenant, onDeleteClick, onEditClick }: TenantCardProps) {
                 </Flex>
                 <Center>
                     <Flex direction="column">
-                        <IconUser size={128} />
+                        <IconUser size={128} color={iconColor} />
                         <Stack spacing={2}>
                             <Text textAlign="center" fontWeight="bold">
                                 {tenant.name}
                             </Text>
+                            {rentStatus && <Text textAlign="center">{rentStatus}</Text>}
                         </Stack>
                     </Flex>
                 </Center>
