@@ -8,6 +8,7 @@
 - List rents based on paid status API method ([@zvonimirr](https://github.com/zvonimirr))
 - Create rents via cron ([@zvonimirr](https://github.com/zvonimirr))
 - Allow modification of rent's due date ([@zvonimirr](https://github.com/zvonimirr))
+- Tenant response now returns list of unapaid rents ([@zvonimirr](https://github.com/zvonimirr))
 
 ## 0.1.0
 

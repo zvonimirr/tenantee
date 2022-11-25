@@ -334,6 +334,13 @@
         "phone": {
           "description": "Phone number of tenant",
           "type": "string"
+        },
+        "unpaid_rents": {
+          "description": "Unpaid rents for tenant",
+          "items": {
+            "$ref": "#/definitions/Rent"
+          },
+          "type": "array"
         }
       },
       "required": [

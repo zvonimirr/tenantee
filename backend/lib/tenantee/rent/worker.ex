@@ -1,4 +1,8 @@
 defmodule Tenantee.Rent.Worker do
+  @moduledoc """
+  A worker that creates a new rent instance
+  every month for each property and their tenants.
+  """
   use Oban.Worker, queue: :rents
   alias Tenantee.Property
   alias Tenantee.Rent

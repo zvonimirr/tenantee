@@ -1,6 +1,7 @@
 defmodule TenanteeWeb.TenantView do
   use TenanteeWeb, :view
-  alias TenanteeWeb.PropertyView
+  alias TenanteeWeb.RentView
+  alias Tenantee.Rent
 
   def render("show.json", %{tenants: tenants}) do
     %{
@@ -18,8 +19,11 @@ defmodule TenanteeWeb.TenantView do
         name: tenant.first_name <> " " <> tenant.last_name,
         phone: tenant.phone,
         email: tenant.email,
-        inserted_at: tenant.inserted_at,
-        updated_at: tenant.updated_at
+        unpaid_rents:
+          render(RentView, "show.json", %{
+            rents: Rent.get_unpaid_rents_by_tenant_id(tenant.id)
+          })
+          |> Map.get(:rents)
       }
     }
   end
