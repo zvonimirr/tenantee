@@ -13,7 +13,7 @@ export interface TenantList {
 }
 
 export interface TenantDto {
-    tenant: Omit<Tenant, 'id' | 'name'> & {
+    tenant: Omit<Tenant, 'id' | 'name' | 'unpaid_rents'> & {
         first_name: string;
         last_name: string;
     };
