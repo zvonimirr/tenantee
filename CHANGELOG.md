@@ -3,7 +3,7 @@
 ## 0.2.0
 ### API
 - Rent model and mark API ([@zvonimirr](https://github.com/zvonimirr))
-- SSL support ([@zvonimirr](https://github.com/zvonimirr))
+- SSL support (with Docker and without) ([@zvonimirr](https://github.com/zvonimirr))
 - List all rents API method ([@zvonimirr](https://github.com/zvonimirr))
 - List rents based on paid status API method ([@zvonimirr](https://github.com/zvonimirr))
 - Create rents via cron ([@zvonimirr](https://github.com/zvonimirr))
