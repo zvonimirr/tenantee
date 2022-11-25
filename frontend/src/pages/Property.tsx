@@ -36,6 +36,11 @@ function Property() {
     const navigate = useNavigate();
     const { showError, showSuccess } = useNotification();
 
+    const onTenantCardClick = useCallback(
+        (tenant: Tenant) => navigate(`/tenants/${tenant.id}`),
+        [navigate],
+    );
+
     const { data, error, isValidating, mutate } = useSWR<PropertyResponse>(
         PropertyApiService.getPropertyPath(Number(id)),
         propertyApiService.getProperty,
@@ -206,6 +211,7 @@ function Property() {
                                 <GridItem key={tenant.id}>
                                     <TenantCard
                                         tenant={tenant}
+                                        onClick={onTenantCardClick}
                                         onDeleteClick={(tenant) => {
                                             setSelectedTenant(tenant);
                                             openConfirmRemoveModal();

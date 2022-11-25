@@ -31,6 +31,7 @@ defmodule TenanteeWeb.TenantView do
   def render("show_rent.json", %{rent: rent}) do
     %{
       rent: %{
+        id: rent.id,
         property: %{
           id: rent.property.id,
           name: rent.property.name
