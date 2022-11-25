@@ -13,6 +13,8 @@
 
 ### UI
 - Rent status is now displayed ([@kovaj024](https://github.com/kovaj024))
+- Tenant overview page ([@kovaj024](https://github.com/kovaj024))
+- Marking rent status via UI ([@kovaj024](https://github.com/kovaj024))
 
 ## 0.1.0
 

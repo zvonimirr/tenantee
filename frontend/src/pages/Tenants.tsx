@@ -24,12 +24,14 @@ import ConfirmModal from '../components/Modals/ConfirmModal';
 import { isEmpty } from 'ramda';
 import AddTenantModal from '../components/Tenant/Modals/AddTenantModal';
 import EditTenantModal from '../components/Tenant/Modals/EditTenantModal';
+import { useNavigate } from 'react-router-dom';
 
 function Tenants() {
     const { data, error, isValidating, mutate } = useSWR<TenantList>(
         TenantApiService.listTenantsPath,
         tenantApiService.getTenants,
     );
+    const navigate = useNavigate();
     const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
     const {
         isOpen: isAddNewTenantModalOpen,
@@ -54,6 +56,11 @@ function Tenants() {
     );
 
     const isError = useMemo(() => error !== undefined, [error]);
+
+    const onTenantCardClick = useCallback(
+        (tenant: Tenant) => navigate(`/tenants/${tenant.id}`),
+        [navigate],
+    );
 
     const onAddTenantSubmit = useCallback(
         async (tenant: TenantDto) => {
@@ -174,6 +181,7 @@ function Tenants() {
                                 <GridItem key={tenant.id}>
                                     <TenantCard
                                         tenant={tenant}
+                                        onClick={onTenantCardClick}
                                         onDeleteClick={(tenant) => {
                                             setSelectedTenant(tenant);
                                             openConfirmModal();

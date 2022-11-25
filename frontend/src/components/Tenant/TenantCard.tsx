@@ -5,11 +5,12 @@ import { Tenant } from '../../types/tenant';
 
 interface TenantCardProps {
     tenant: Tenant;
+    onClick: (tenant: Tenant) => void;
     onDeleteClick: (tenant: Tenant) => void;
     onEditClick?: (tenant: Tenant) => void;
 }
 
-function TenantCard({ tenant, onDeleteClick, onEditClick }: TenantCardProps) {
+function TenantCard({ tenant, onClick, onDeleteClick, onEditClick }: TenantCardProps) {
     const iconColor = useMemo(() => {
         if (tenant.unpaid_rents.length < 1) {
             return 'black';
@@ -43,7 +44,7 @@ function TenantCard({ tenant, onDeleteClick, onEditClick }: TenantCardProps) {
                             onClick={() => onEditClick(tenant)}
                         />}
                 </Flex>
-                <Center>
+                <Center cursor="pointer" onClick={() => onClick(tenant)}>
                     <Flex direction="column">
                         <IconUser size={128} color={iconColor} />
                         <Stack spacing={2}>

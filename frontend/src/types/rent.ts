@@ -3,3 +3,7 @@ export interface Rent {
     id: number;
     paid: boolean;
 }
+
+export interface RentList {
+    rents: Rent[];
+}

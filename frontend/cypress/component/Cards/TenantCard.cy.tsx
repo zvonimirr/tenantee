@@ -1,12 +1,13 @@
 import TenantCard from '../../../src/components/Tenant/TenantCard';
 
-describe('PropertyCard', () => {
+describe('TenantCard', () => {
     it('should render and react to events properly', () => {
         const onDeleteClick = cy.stub();
         const onEditClick = cy.stub();
 
         cy.mount(
             <TenantCard
+                onClick={() => null}
                 onDeleteClick={onDeleteClick}
                 onEditClick={onEditClick}
                 tenant={{
@@ -32,6 +33,7 @@ describe('PropertyCard', () => {
 
         cy.mount(
             <TenantCard
+                onClick={() => null}
                 onDeleteClick={() => null}
                 onEditClick={() => null}
                 tenant={{
@@ -57,6 +59,7 @@ describe('PropertyCard', () => {
 
         cy.mount(
             <TenantCard
+                onClick={() => null}
                 onDeleteClick={() => null}
                 onEditClick={() => null}
                 tenant={{

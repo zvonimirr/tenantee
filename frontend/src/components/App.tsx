@@ -9,6 +9,7 @@ import { SWRConfig } from 'swr';
 import Properties from '../pages/Properties';
 import Tenants from '../pages/Tenants';
 import Property from '../pages/Property';
+import Tenant from '../pages/Tenant';
 
 const links = [
     {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
         path: '/tenants',
         element: <Tenants />,
     },
+    {
+        path: '/tenants/:id',
+        element: <Tenant />,
+    }
 ]);
 
 function App() {
