@@ -26,14 +26,24 @@ else
   echo "\nNo Credo config: Skipping code analyze..."
 fi
 
+# Set the secret
+export SECRET_KEY_BASE=$(mix phx.gen.secret)
+
+# Set MIX_ENV to prod
+export MIX_ENV=prod
+
 # Potentially Set up the database
 mix ecto.create
 mix ecto.migrate
 
 echo "\nTesting the installation..."
 # "Prove" that install was successful by running the tests
-mix test
+MIX_ENV=test mix test
 
-echo "\n Launching Phoenix web server..."
+echo "\nGenerating SSL certificate..."
+# Generate a self-signed certificate if one doesn't exist
+mix phx.gen.cert
+
+echo "\nLaunching Phoenix web server..."
 # Start the phoenix web server
 mix phx.server

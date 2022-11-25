@@ -11,10 +11,12 @@ services:
       - DB_HOST=${DB_HOST}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
+      - DATABASE_URL=ecto://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:5432/${DB_PREFIX}
     command: 
       - "./run.sh"
     ports:
       - "4000:4000"
+      - "443:443"
     volumes:
       - ./backend:/app
     depends_on:
@@ -32,6 +34,6 @@ services:
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_PREFIX}_dev
+      - POSTGRES_DB=${DB_PREFIX}
     ports:
       - "5432:5432"
