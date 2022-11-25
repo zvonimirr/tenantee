@@ -1,8 +1,11 @@
+import { Rent } from './rent';
+
 export interface Tenant {
     id: number;
     name: string;
     email?: string;
     phone?: string;
+    unpaid_rents: Rent[];
 }
 
 export interface TenantList {
@@ -10,7 +13,7 @@ export interface TenantList {
 }
 
 export interface TenantDto {
-    tenant: Omit<Tenant, 'id' | 'name'> & {
+    tenant: Omit<Tenant, 'id' | 'name' | 'unpaid_rents'> & {
         first_name: string;
         last_name: string;
     };

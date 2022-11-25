@@ -10,6 +10,9 @@
 - Allow modification of rent's due date ([@zvonimirr](https://github.com/zvonimirr))
 - Tenant response now returns list of unapaid rents ([@zvonimirr](https://github.com/zvonimirr))
 
+### UI
+- Rent status is now displayed ([@kovaj024](https://github.com/kovaj024))
+
 ## 0.1.0
 
 ### API
