@@ -56,8 +56,16 @@ defmodule TenanteeWeb.PropertyController do
          true <- Money.Currency.exists?(currency),
          property_params <-
            Map.replace_lazy(params, "price", fn price -> Money.new(price, currency) end),
-         {:ok, property} <- Property.update_property(id, property_params) do
-      render(conn, "show.json", %{property: property})
+         property <- Property.get_property(id) do
+      if property do
+        with {:ok, updated_property} <- Property.update_property(id, property_params) do
+          render(conn, "show.json", %{property: updated_property})
+        end
+      else
+        conn
+        |> put_status(:not_found)
+        |> render("error.json", %{message: "Property not found"})
+      end
     end
   end
 
@@ -74,7 +82,9 @@ defmodule TenanteeWeb.PropertyController do
         |> put_status(:not_found)
         |> render("error.json", %{message: "Property not found"})
       else
-        render(conn, "delete.json", %{})
+        conn
+        |> put_status(:no_content)
+        |> render("delete.json", %{})
       end
     end
   end
@@ -82,18 +92,37 @@ defmodule TenanteeWeb.PropertyController do
   def add_tenant(conn, %{"id" => id, "tenant" => tenant_id}) do
     with {:ok, property} <- Property.add_tenant(id, tenant_id) do
       render(conn, "show.json", %{property: property})
+    else
+      _ ->
+        conn
+        |> put_status(:not_found)
+        |> render("error.json", %{message: "Property or tenant not found"})
     end
   end
 
   def remove_tenant(conn, %{"id" => id, "tenant" => tenant_id}) do
     with {:ok, property} <- Property.remove_tenant(id, tenant_id) do
-      render(conn, "show.json", %{property: property})
+      conn
+      |> put_status(:no_content)
+      |> render("show.json", %{property: property})
+    else
+      _ ->
+        conn
+        |> put_status(:not_found)
+        |> render("error.json", %{message: "Property or tenant not found"})
     end
   end
 
   def unpaid_rents(conn, %{"id" => id}) do
-    with rents <- Rent.get_unpaid_rents_by_property_id(id) do
+    with property <- Property.get_property(id),
+         false <- is_nil(property),
+         rents <- Rent.get_unpaid_rents_by_property_id(property.id) do
       render(conn, "show_rent.json", %{rents: rents})
+    else
+      _ ->
+        conn
+        |> put_status(:not_found)
+        |> render("error.json", %{message: "Property not found"})
     end
   end
 end
