@@ -6,7 +6,7 @@ defmodule Tenantee.Repo.Migrations.AddPreferences do
     PreferenceName.create_type()
 
     create table(:preferences) do
-      add :name, :preference_name
+      add :name, :preference_name, unique: true
       add :value, :string
     end
   end

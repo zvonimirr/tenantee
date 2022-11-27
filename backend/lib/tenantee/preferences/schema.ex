@@ -15,6 +15,7 @@ defmodule Tenantee.Preferences.Schema do
   def changeset(preference, attrs) do
     preference
     |> cast(attrs, [:name, :value])
+    |> unique_constraint(:name)
     |> validate_required([:name, :value])
   end
 end
