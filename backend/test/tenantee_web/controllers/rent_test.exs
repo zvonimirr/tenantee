@@ -6,10 +6,10 @@ defmodule TenanteeWeb.RentControllerTest do
 
   setup %{conn: conn} do
     property_conn = insert_property(conn)
-    property_id = json_response(property_conn, 201)["property"]["id"]
+    property_id = json_response(property_conn, 201)["id"]
 
     tenant_conn = insert_tenant(conn)
-    tenant_id = json_response(tenant_conn, 201)["tenant"]["id"]
+    tenant_id = json_response(tenant_conn, 201)["id"]
 
     rent = insert_rent(property_id, tenant_id)
 

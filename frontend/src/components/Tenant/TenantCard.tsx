@@ -10,23 +10,34 @@ interface TenantCardProps {
     onEditClick?: (tenant: Tenant) => void;
 }
 
-function TenantCard({ tenant, onClick, onDeleteClick, onEditClick }: TenantCardProps) {
+function TenantCard({
+    tenant,
+    onClick,
+    onDeleteClick,
+    onEditClick,
+}: TenantCardProps) {
     const iconColor = useMemo(() => {
         if (tenant.unpaid_rents.length < 1) {
             return 'black';
         }
-        const dates = tenant.unpaid_rents.map(rent => new Date(rent.due_date));
+        const dates = tenant.unpaid_rents.map(
+            (rent) => new Date(rent.due_date),
+        );
+        const hasDatesInFuture = dates.some((date) => date > new Date());
 
-        return dates.some(date => date < new Date()) ? '#FFE800' : 'red';
+        return hasDatesInFuture ? '#FFE800' : 'red';
     }, [tenant.unpaid_rents]);
 
     const rentStatus = useMemo(() => {
         if (tenant.unpaid_rents.length < 1) {
             return null;
         }
-        const dates = tenant.unpaid_rents.map(rent => new Date(rent.due_date));
+        const dates = tenant.unpaid_rents.map(
+            (rent) => new Date(rent.due_date),
+        );
+        const hasDatesInPast = dates.some((date) => date < new Date());
 
-        return dates.some(date => date < new Date()) ? 'Has due rent' : 'Has overdue rent';
+        return hasDatesInPast ? 'Has overdue rent' : 'Has due rent';
     }, [tenant.unpaid_rents]);
 
     return (
@@ -38,11 +49,12 @@ function TenantCard({ tenant, onClick, onDeleteClick, onEditClick }: TenantCardP
                         cursor="pointer"
                         onClick={() => onDeleteClick(tenant)}
                     />
-                    {onEditClick &&
+                    {onEditClick && (
                         <IconPencil
                             cursor="pointer"
                             onClick={() => onEditClick(tenant)}
-                        />}
+                        />
+                    )}
                 </Flex>
                 <Center cursor="pointer" onClick={() => onClick(tenant)}>
                     <Flex direction="column">
@@ -51,7 +63,9 @@ function TenantCard({ tenant, onClick, onDeleteClick, onEditClick }: TenantCardP
                             <Text textAlign="center" fontWeight="bold">
                                 {tenant.name}
                             </Text>
-                            {rentStatus && <Text textAlign="center">{rentStatus}</Text>}
+                            {rentStatus && (
+                                <Text textAlign="center">{rentStatus}</Text>
+                            )}
                         </Stack>
                     </Flex>
                 </Center>

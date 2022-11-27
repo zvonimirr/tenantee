@@ -8,17 +8,17 @@ defmodule TenanteeWeb.PropertyControllerTest do
     conn = insert_property(conn)
     failure_conn = post conn, "/api/properties", property: %{name: "Test Property 2"}
 
-    assert json_response(conn, 201)["property"]["name"] == "Test Property"
+    assert json_response(conn, 201)["name"] == "Test Property"
     assert json_response(failure_conn, 400) == %{"error" => "Invalid params"}
   end
 
   test "GET /api/properties/:id", %{conn: conn} do
     conn = insert_property(conn)
-    id = json_response(conn, 201)["property"]["id"]
+    id = json_response(conn, 201)["id"]
 
     conn = get(conn, "/api/properties/#{id}")
 
-    assert json_response(conn, 200)["property"]["name"] == "Test Property"
+    assert json_response(conn, 200)["name"] == "Test Property"
   end
 
   test "GET /api/properties", %{conn: conn} do
@@ -30,7 +30,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
 
   test "PATCH /api/properties/:id", %{conn: conn} do
     conn = insert_property(conn)
-    id = json_response(conn, 201)["property"]["id"]
+    id = json_response(conn, 201)["id"]
 
     conn =
       patch conn, "/api/properties/#{id}", %{
@@ -43,64 +43,79 @@ defmodule TenanteeWeb.PropertyControllerTest do
 
     failure_conn = patch(conn, "/api/properties/#{id}")
 
-    assert json_response(conn, 200)["property"]["name"] == "Test Property 2"
+    failure2_conn =
+      patch(conn, "/api/properties/0", %{
+        property: %{
+          name: "Test Property 2",
+          price: 1000,
+          currency: "PHP"
+        }
+      })
 
-    assert json_response(conn, 200)["property"]["price"] == %{
+    assert json_response(conn, 200)["name"] == "Test Property 2"
+
+    assert json_response(conn, 200)["price"] == %{
              "amount" => 1000,
              "currency" => "PHP"
            }
 
     assert json_response(failure_conn, 400) == %{"error" => "Invalid params"}
+    assert json_response(failure2_conn, 404) == %{"error" => "Property not found"}
   end
 
   test "DELETE /api/properties/:id", %{conn: conn} do
     conn = insert_property(conn)
-    id = json_response(conn, 201)["property"]["id"]
+    id = json_response(conn, 201)["id"]
 
     conn = delete(conn, "/api/properties/#{id}")
     failure_conn = delete(conn, "/api/properties/#{id}")
     failure_find_conn = get(conn, "/api/properties/#{id}")
 
-    assert json_response(conn, 200) == %{"message" => "Property deleted"}
+    assert json_response(conn, 204) == %{"message" => "Property deleted"}
     assert json_response(failure_conn, 404) == %{"error" => "Property not found"}
     assert json_response(failure_find_conn, 404) == %{"error" => "Property not found"}
   end
 
-  test "POST /api/properties/:id/tenants/:tenant", %{conn: conn} do
+  test "PUT /api/properties/:id/tenants/:tenant", %{conn: conn} do
     property_conn = insert_property(conn)
-    id = json_response(property_conn, 201)["property"]["id"]
+    id = json_response(property_conn, 201)["id"]
 
     tenant_conn = insert_tenant(conn)
-    tenant_id = json_response(tenant_conn, 201)["tenant"]["id"]
+    tenant_id = json_response(tenant_conn, 201)["id"]
 
+    failure_conn = put(conn, "/api/properties/#{id + 1}/tenants/#{tenant_id}")
     conn = put(conn, "/api/properties/#{id}/tenants/#{tenant_id}")
-    tenants = json_response(conn, 200)["property"]["tenants"]
+    tenants = json_response(conn, 200)["tenants"]
 
     assert List.first(tenants)["id"] == tenant_id
+    assert json_response(failure_conn, 404) == %{"error" => "Property or tenant not found"}
   end
 
   test "DELETE /api/properties/:id/tenants/:tenant", %{conn: conn} do
     property_conn = insert_property(conn)
-    id = json_response(property_conn, 201)["property"]["id"]
+    id = json_response(property_conn, 201)["id"]
 
     tenant_conn = insert_tenant(conn)
-    tenant_id = json_response(tenant_conn, 201)["tenant"]["id"]
+    tenant_id = json_response(tenant_conn, 201)["id"]
 
+    failure_conn = delete(conn, "/api/properties/#{id + 1}/tenants/#{tenant_id}")
     put(conn, "/api/properties/#{id}/tenants/#{tenant_id}")
     conn = delete(conn, "/api/properties/#{id}/tenants/#{tenant_id}")
 
-    tenants = json_response(conn, 200)["property"]["tenants"]
+    tenants = json_response(conn, 204)["tenants"]
 
     assert tenants == []
+    assert json_response(failure_conn, 404) == %{"error" => "Property or tenant not found"}
   end
 
   test "GET /api/properties/:id/rents/unpaid", %{conn: conn} do
     property_conn = insert_property(conn)
-    id = json_response(property_conn, 201)["property"]["id"]
+    id = json_response(property_conn, 201)["id"]
 
     tenant_conn = insert_tenant(conn)
-    tenant_id = json_response(tenant_conn, 201)["tenant"]["id"]
+    tenant_id = json_response(tenant_conn, 201)["id"]
 
+    failure_conn = get(conn, "/api/properties/#{id + 1}/rents/unpaid")
     put(conn, "/api/properties/#{id}/tenants/#{tenant_id}")
     insert_rent(id, tenant_id)
 
@@ -108,5 +123,6 @@ defmodule TenanteeWeb.PropertyControllerTest do
     [rent] = json_response(conn, 200)["rents"]
 
     assert rent["tenant"]["id"] == tenant_id
+    assert json_response(failure_conn, 404) == %{"error" => "Property not found"}
   end
 end

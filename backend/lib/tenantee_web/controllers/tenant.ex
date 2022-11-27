@@ -40,8 +40,16 @@ defmodule TenanteeWeb.TenantController do
         "id" => id,
         "tenant" => params
       }) do
-    with {:ok, tenant} <- Tenant.update_tenant(id, params) do
-      render(conn, "show.json", %{tenant: tenant})
+    with tenant <- Tenant.get_tenant_by_id(id) do
+      if tenant do
+        with {:ok, tenant} <- Tenant.update_tenant(id, params) do
+          render(conn, "show.json", %{tenant: tenant})
+        end
+      else
+        conn
+        |> put_status(:not_found)
+        |> render("error.json", %{message: "Tenant not found"})
+      end
     end
   end
 
@@ -58,7 +66,9 @@ defmodule TenanteeWeb.TenantController do
         |> put_status(:not_found)
         |> render("error.json", %{message: "Tenant not found"})
       else
-        render(conn, "delete.json", %{})
+        conn
+        |> put_status(:no_content)
+        |> render("delete.json", %{})
       end
     end
   end
@@ -78,8 +88,16 @@ defmodule TenanteeWeb.TenantController do
   end
 
   def unpaid_rents(conn, %{"id" => id}) do
-    with rents <- Rent.get_unpaid_rents_by_tenant_id(id) do
-      render(conn, "show_rent.json", %{rents: rents})
+    with tenant <- Tenant.get_tenant_by_id(id) do
+      if is_nil(tenant) do
+        conn
+        |> put_status(:not_found)
+        |> render("error.json", %{message: "Tenant not found"})
+      else
+        with rents <- Rent.get_unpaid_rents_by_tenant_id(id) do
+          render(conn, "show_rent.json", %{rents: rents})
+        end
+      end
     end
   end
 end

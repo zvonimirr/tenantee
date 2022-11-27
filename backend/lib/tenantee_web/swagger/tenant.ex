@@ -13,10 +13,10 @@ defmodule TenanteeWeb.Swagger.Tenant do
         summary("Add a new tenant")
 
         parameters do
-          tenant(:body, Schema.ref(:TenantRequest), "Tenant to add", required: true)
+          tenant(:body, Schema.ref(:Tenant), "Tenant to add", required: true)
         end
 
-        response(201, "Tenant created", Schema.ref(:TenantResponse))
+        response(201, "Tenant created", Schema.ref(:Tenant))
         response(400, "Invalid params")
       end
 
@@ -28,7 +28,7 @@ defmodule TenanteeWeb.Swagger.Tenant do
           id(:path, :integer, "ID of tenant to fetch", required: true)
         end
 
-        response(200, "Tenant found", Schema.ref(:TenantResponse))
+        response(200, "Tenant found", Schema.ref(:Tenant))
         response(404, "Tenant not found")
       end
 
@@ -36,7 +36,7 @@ defmodule TenanteeWeb.Swagger.Tenant do
         get("/api/tenants")
         summary("List all tenants")
 
-        response(200, "Tenants found", Schema.ref(:TenantResponseList))
+        response(200, "Tenants found", Schema.ref(:TenantList))
       end
 
       swagger_path :update do
@@ -45,10 +45,10 @@ defmodule TenanteeWeb.Swagger.Tenant do
 
         parameters do
           id(:path, :integer, "ID of tenant to update", required: true)
-          tenant(:body, Schema.ref(:TenantRequest), "Tenant to update", required: true)
+          tenant(:body, Schema.ref(:Tenant), "Tenant to update", required: true)
         end
 
-        response(200, "Tenant updated", Schema.ref(:TenantResponse))
+        response(200, "Tenant updated", Schema.ref(:Tenant))
         response(404, "Tenant not found")
       end
 
@@ -60,7 +60,7 @@ defmodule TenanteeWeb.Swagger.Tenant do
           id(:path, :integer, "ID of tenant to delete", required: true)
         end
 
-        response(200, "Tenant deleted")
+        response(204, "Tenant deleted")
         response(404, "Tenant not found")
       end
 
@@ -84,96 +84,35 @@ defmodule TenanteeWeb.Swagger.Tenant do
           id(:path, :string, "ID of tenant to list unpaid rents for", required: true)
         end
 
-        response(200, "Unpaid rents", Schema.ref(:UnpaidTenantRentResponse))
+        response(200, "Unpaid rents", Schema.ref(:RentList))
+        response(404, "Tenant not found")
       end
 
       def swagger_definitions do
         %{
-          TenantDto:
+          Tenant:
             swagger_schema do
-              title("Tenant DTO")
-              description("Tenant DTO used for creating and updating tenants")
-
-              properties do
-                first_name(:string, "Tenant first name", required: true)
-                last_name(:string, "Tenant last name", required: true)
-                phone(:string, "Tenant phone number")
-                email(:string, "Tenant email address")
-              end
-            end,
-          TenantRequest:
-            swagger_schema do
-              title("Tenant request")
-              description("Tenant request used for creating and updating tenants")
-
-              properties do
-                tenant(Schema.ref(:TenantDto), "Tenant to create or update", required: true)
-              end
-            end,
-          TenantResponseObject:
-            swagger_schema do
-              title("Tenant response object")
-              description("Tenant response object")
+              title("Tenant")
+              description("A tenant")
 
               properties do
                 id(:integer, "ID of tenant", required: true)
-                name(:string, "Name of tenant", required: true)
-                phone(:string, "Phone number of tenant")
-                email(:string, "Email of tenant")
-                unpaid_rents(:array, "Unpaid rents for tenant", items: Schema.ref(:Rent))
+                name(:string, "Name of tenant (only in response)", required: true)
+                first_name(:string, "Tenant first name", required: true)
+                last_name(:string, "Tenant last name", required: true)
+                email(:string, "Email of tenant", required: true)
+                phone(:string, "Phone of tenant", required: true)
               end
             end,
-          TenantResponse:
+          TenantList:
             swagger_schema do
-              title("Tenant response")
-              description("Tenant response")
-
-              properties do
-                tenant(Schema.ref(:TenantResponseObject), "Tenant", required: true)
-              end
-            end,
-          TenantResponseList:
-            swagger_schema do
-              title("Tenant response list")
-              description("Tenant response list")
+              title("Tenant list")
+              description("List of tenants")
 
               properties do
                 tenants(
-                  Schema.array(:TenantResponseObject),
+                  Schema.array(:Tenant),
                   "Tenants",
-                  required: true
-                )
-              end
-            end,
-          UnpaidRentProperty:
-            swagger_schema do
-              title("Unpaid tenant rent property")
-              description("Unpaid tenant rent property")
-
-              properties do
-                id(:integer, "ID of property", required: true)
-                name(:string, "Name of property", required: true)
-              end
-            end,
-          UnpaidTenantRent:
-            swagger_schema do
-              title("Unpaid tenant rent")
-              description("Unpaid tenant rent")
-
-              properties do
-                due_date(:string, "Due date of unpaid rent", required: true)
-                property(Schema.ref(:UnpaidRentProperty), "Property", required: true)
-              end
-            end,
-          UnpaidTenantRentResponse:
-            swagger_schema do
-              title("Unpaid tenant rent response")
-              description("Unpaid tenant rent response")
-
-              properties do
-                rents(
-                  Schema.array(:UnpaidTenantRent),
-                  "Unpaid rents",
                   required: true
                 )
               end

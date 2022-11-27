@@ -1,8 +1,4 @@
-import {
-    PropertyDto,
-    PropertyList,
-    PropertyResponse,
-} from '../../types/property';
+import { Property, PropertyDto, PropertyList } from '../../types/property';
 import { HttpService } from './HttpService';
 
 export class PropertyApiService extends HttpService {
@@ -28,7 +24,7 @@ export class PropertyApiService extends HttpService {
     }
 
     async getProperty(path: string) {
-        return HttpService.get<PropertyResponse>(path);
+        return HttpService.get<Property>(path);
     }
 
     async addNewProperty(path: string, property: PropertyDto) {

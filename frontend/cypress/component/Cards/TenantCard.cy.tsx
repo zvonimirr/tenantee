@@ -28,8 +28,12 @@ describe('TenantCard', () => {
     });
 
     it('should render due rent', () => {
-        const due_Date = new Date();
-        const due_date = `${due_Date.getFullYear()}-${due_Date.getMonth()}-${due_Date.getDay()}`;
+        // Get current date
+        const date = new Date();
+        // Set date 5 days in the future
+        date.setDate(date.getDate() + 5);
+        // Calculate due_date to YYYY-MM-DD format
+        const due_date = date.toISOString().split('T')[0];
 
         cy.mount(
             <TenantCard
@@ -39,11 +43,13 @@ describe('TenantCard', () => {
                 tenant={{
                     id: 1,
                     name: 'Test Tenant',
-                    unpaid_rents: [{
-                        id: 1,
-                        paid: false,
-                        due_date,
-                    }],
+                    unpaid_rents: [
+                        {
+                            id: 1,
+                            paid: false,
+                            due_date,
+                        },
+                    ],
                 }}
             />,
         );
@@ -65,11 +71,13 @@ describe('TenantCard', () => {
                 tenant={{
                     id: 1,
                     name: 'Test Tenant',
-                    unpaid_rents: [{
-                        id: 1,
-                        paid: false,
-                        due_date,
-                    }],
+                    unpaid_rents: [
+                        {
+                            id: 1,
+                            paid: false,
+                            due_date,
+                        },
+                    ],
                 }}
             />,
         );

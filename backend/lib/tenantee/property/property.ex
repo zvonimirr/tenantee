@@ -65,6 +65,8 @@ defmodule Tenantee.Property do
          %TenantSchema{} = tenant <- Tenant.get_tenant_by_id(tenant_id) do
       Schema.add_tenant(property, tenant)
       |> Repo.update()
+    else
+      _ -> :error
     end
   end
 
@@ -76,6 +78,8 @@ defmodule Tenantee.Property do
          %TenantSchema{} = tenant <- Tenant.get_tenant_by_id(tenant_id) do
       Schema.remove_tenant(property, tenant)
       |> Repo.update()
+    else
+      _ -> :error
     end
   end
 end

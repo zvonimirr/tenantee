@@ -14,7 +14,8 @@ defmodule TenanteeWeb.PropertyViewTest do
     },
     inserted_at: ~N[2018-01-01 00:00:00],
     updated_at: ~N[2018-01-01 00:00:00],
-    tenants: []
+    tenants: [],
+    due_date_modifier: 0
   }
 
   test "renders error.json" do
@@ -29,9 +30,8 @@ defmodule TenanteeWeb.PropertyViewTest do
 
   describe "renders show.json" do
     test "single property" do
-      assert render(TenanteeWeb.PropertyView, "show.json", %{property: @property}) == %{
-               property: @property
-             }
+      assert render(TenanteeWeb.PropertyView, "show.json", %{property: @property}) ==
+               @property
     end
 
     test "list of properties" do

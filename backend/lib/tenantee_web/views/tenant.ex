@@ -5,26 +5,21 @@ defmodule TenanteeWeb.TenantView do
 
   def render("show.json", %{tenants: tenants}) do
     %{
-      tenants:
-        Enum.map(tenants, fn tenant ->
-          render("show.json", %{tenant: tenant}) |> Map.get(:tenant)
-        end)
+      tenants: Enum.map(tenants, &render("show.json", %{tenant: &1}))
     }
   end
 
   def render("show.json", %{tenant: tenant}) do
     %{
-      tenant: %{
-        id: tenant.id,
-        name: tenant.first_name <> " " <> tenant.last_name,
-        phone: tenant.phone,
-        email: tenant.email,
-        unpaid_rents:
-          render(RentView, "show.json", %{
-            rents: Rent.get_unpaid_rents_by_tenant_id(tenant.id)
-          })
-          |> Map.get(:rents)
-      }
+      id: tenant.id,
+      name: tenant.first_name <> " " <> tenant.last_name,
+      phone: tenant.phone,
+      email: tenant.email,
+      unpaid_rents:
+        render(RentView, "show.json", %{
+          rents: Rent.get_unpaid_rents_by_tenant_id(tenant.id)
+        })
+        |> Map.get(:rents)
     }
   end
 

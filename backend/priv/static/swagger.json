@@ -39,8 +39,8 @@
       "title": "Price",
       "type": "object"
     },
-    "PropertyDto": {
-      "description": "Property DTO used for creating and updating properties",
+    "Property": {
+      "description": "A property",
       "properties": {
         "currency": {
           "description": "Currency of the property price",
@@ -69,98 +69,38 @@
         "price": {
           "description": "Price of the property",
           "type": "integer"
+        },
+        "tenants": {
+          "description": "Tenants of the property",
+          "items": {
+            "$ref": "#/definitions/Tenant"
+          },
+          "type": "array"
         }
       },
       "required": [
+        "tenants",
         "currency",
         "price",
         "location",
         "name",
         "id"
       ],
-      "title": "Property DTO",
+      "title": "Property",
       "type": "object"
     },
-    "PropertyRequest": {
-      "description": "Property Request used for creating and updating properties",
-      "properties": {
-        "property": {
-          "$ref": "#/definitions/PropertyDto",
-          "description": "Property"
-        }
-      },
-      "required": [
-        "property"
-      ],
-      "title": "Property request",
-      "type": "object"
-    },
-    "PropertyResponse": {
-      "description": "Property response",
-      "properties": {
-        "property": {
-          "$ref": "#/definitions/PropertyResponseObject",
-          "description": "Property"
-        }
-      },
-      "required": [
-        "property"
-      ],
-      "title": "Property response",
-      "type": "object"
-    },
-    "PropertyResponseList": {
-      "description": "Property response list",
+    "PropertyList": {
+      "description": "List of properties",
       "properties": {
         "properties": {
           "description": "Properties",
           "items": {
-            "$ref": "#/definitions/PropertyResponseObject"
+            "$ref": "#/definitions/Property"
           },
           "type": "array"
         }
       },
-      "title": "Property response list",
-      "type": "object"
-    },
-    "PropertyResponseObject": {
-      "description": "Property response object",
-      "properties": {
-        "description": {
-          "description": "Description of the property",
-          "type": "string"
-        },
-        "id": {
-          "description": "ID of the property",
-          "type": "integer"
-        },
-        "location": {
-          "description": "Location of the property",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the property",
-          "type": "string"
-        },
-        "price": {
-          "$ref": "#/definitions/Price",
-          "description": "Price of the property"
-        },
-        "tenants": {
-          "description": "Tenants of the property",
-          "items": {
-            "$ref": "#/definitions/TenantResponseObject"
-          },
-          "type": "array"
-        }
-      },
-      "required": [
-        "price",
-        "location",
-        "name",
-        "id"
-      ],
-      "title": "Property response object",
+      "title": "Property list",
       "type": "object"
     },
     "Rent": {
@@ -179,12 +119,12 @@
           "type": "boolean"
         },
         "property": {
-          "$ref": "#/definitions/RentProperty",
-          "description": "Property"
+          "$ref": "#/definitions/Property",
+          "description": "Property (optional)"
         },
         "tenant": {
-          "$ref": "#/definitions/RentTenant",
-          "description": "Tenant"
+          "$ref": "#/definitions/Tenant",
+          "description": "Tenant (optional)"
         }
       },
       "required": [
@@ -206,106 +146,52 @@
       "title": "Rent list",
       "type": "object"
     },
-    "RentProperty": {
-      "description": "Rent property",
-      "properties": {
-        "id": {
-          "description": "ID",
-          "type": "integer"
-        },
-        "name": {
-          "description": "Name",
-          "type": "string"
-        }
-      },
-      "required": [
-        "name",
-        "id"
-      ],
-      "title": "Rent property",
-      "type": "object"
-    },
-    "RentTenant": {
-      "description": "Rent tenant",
-      "properties": {
-        "id": {
-          "description": "ID",
-          "type": "integer"
-        },
-        "name": {
-          "description": "Name",
-          "type": "string"
-        }
-      },
-      "required": [
-        "name",
-        "id"
-      ],
-      "title": "Rent tenant",
-      "type": "object"
-    },
-    "TenantDto": {
-      "description": "Tenant DTO used for creating and updating tenants",
+    "Tenant": {
+      "description": "A tenant",
       "properties": {
         "email": {
-          "description": "Tenant email address",
+          "description": "Email of tenant",
           "type": "string"
         },
         "first_name": {
           "description": "Tenant first name",
           "type": "string"
         },
+        "id": {
+          "description": "ID of tenant",
+          "type": "integer"
+        },
         "last_name": {
           "description": "Tenant last name",
           "type": "string"
         },
+        "name": {
+          "description": "Name of tenant (only in response)",
+          "type": "string"
+        },
         "phone": {
-          "description": "Tenant phone number",
+          "description": "Phone of tenant",
           "type": "string"
         }
       },
       "required": [
+        "phone",
+        "email",
         "last_name",
-        "first_name"
+        "first_name",
+        "name",
+        "id"
       ],
-      "title": "Tenant DTO",
+      "title": "Tenant",
       "type": "object"
     },
-    "TenantRequest": {
-      "description": "Tenant request used for creating and updating tenants",
-      "properties": {
-        "tenant": {
-          "$ref": "#/definitions/TenantDto",
-          "description": "Tenant to create or update"
-        }
-      },
-      "required": [
-        "tenant"
-      ],
-      "title": "Tenant request",
-      "type": "object"
-    },
-    "TenantResponse": {
-      "description": "Tenant response",
-      "properties": {
-        "tenant": {
-          "$ref": "#/definitions/TenantResponseObject",
-          "description": "Tenant"
-        }
-      },
-      "required": [
-        "tenant"
-      ],
-      "title": "Tenant response",
-      "type": "object"
-    },
-    "TenantResponseList": {
-      "description": "Tenant response list",
+    "TenantList": {
+      "description": "List of tenants",
       "properties": {
         "tenants": {
           "description": "Tenants",
           "items": {
-            "$ref": "#/definitions/TenantResponseObject"
+            "$ref": "#/definitions/Tenant"
           },
           "type": "array"
         }
@@ -313,129 +199,7 @@
       "required": [
         "tenants"
       ],
-      "title": "Tenant response list",
-      "type": "object"
-    },
-    "TenantResponseObject": {
-      "description": "Tenant response object",
-      "properties": {
-        "email": {
-          "description": "Email of tenant",
-          "type": "string"
-        },
-        "id": {
-          "description": "ID of tenant",
-          "type": "integer"
-        },
-        "name": {
-          "description": "Name of tenant",
-          "type": "string"
-        },
-        "phone": {
-          "description": "Phone number of tenant",
-          "type": "string"
-        },
-        "unpaid_rents": {
-          "description": "Unpaid rents for tenant",
-          "items": {
-            "$ref": "#/definitions/Rent"
-          },
-          "type": "array"
-        }
-      },
-      "required": [
-        "name",
-        "id"
-      ],
-      "title": "Tenant response object",
-      "type": "object"
-    },
-    "UnpaidPropertyRent": {
-      "description": "Unpaid property rent",
-      "properties": {
-        "due_date": {
-          "description": "Due date of the rent",
-          "type": "string"
-        },
-        "tenant": {
-          "$ref": "#/definitions/TenantResponseObject",
-          "description": "Tenant"
-        }
-      },
-      "required": [
-        "tenant",
-        "due_date"
-      ],
-      "title": "Unpaid property rent",
-      "type": "object"
-    },
-    "UnpaidPropertyRentResponse": {
-      "description": "Unpaid property rent response",
-      "properties": {
-        "rents": {
-          "description": "Unpaid rents",
-          "items": {
-            "$ref": "#/definitions/UnpaidPropertyRent"
-          },
-          "type": "array"
-        }
-      },
-      "title": "Unpaid property rent response",
-      "type": "object"
-    },
-    "UnpaidRentProperty": {
-      "description": "Unpaid tenant rent property",
-      "properties": {
-        "id": {
-          "description": "ID of property",
-          "type": "integer"
-        },
-        "name": {
-          "description": "Name of property",
-          "type": "string"
-        }
-      },
-      "required": [
-        "name",
-        "id"
-      ],
-      "title": "Unpaid tenant rent property",
-      "type": "object"
-    },
-    "UnpaidTenantRent": {
-      "description": "Unpaid tenant rent",
-      "properties": {
-        "due_date": {
-          "description": "Due date of unpaid rent",
-          "type": "string"
-        },
-        "property": {
-          "$ref": "#/definitions/UnpaidRentProperty",
-          "description": "Property"
-        }
-      },
-      "required": [
-        "property",
-        "due_date"
-      ],
-      "title": "Unpaid tenant rent",
-      "type": "object"
-    },
-    "UnpaidTenantRentResponse": {
-      "description": "Unpaid tenant rent response",
-      "properties": {
-        "rents": {
-          "description": "Unpaid rents",
-          "items": {
-            "$ref": "#/definitions/UnpaidTenantRent"
-          },
-          "type": "array"
-        }
-      },
-      "required": [
-        "rents"
-      ],
-      "title": "Unpaid tenant rent response",
+      "title": "Tenant list",
       "type": "object"
     }
   },
@@ -477,7 +241,7 @@
           "200": {
             "description": "Properties found",
             "schema": {
-              "$ref": "#/definitions/PropertyResponseList"
+              "$ref": "#/definitions/PropertyList"
             }
           }
         },
@@ -529,7 +293,7 @@
           "200": {
             "description": "Property found",
             "schema": {
-              "$ref": "#/definitions/PropertyResponse"
+              "$ref": "#/definitions/Property"
             }
           },
           "404": {
@@ -558,7 +322,7 @@
             "name": "property",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/PropertyRequest"
+              "$ref": "#/definitions/Property"
             }
           }
         ],
@@ -566,7 +330,7 @@
           "200": {
             "description": "Property updated",
             "schema": {
-              "$ref": "#/definitions/PropertyResponse"
+              "$ref": "#/definitions/Property"
             }
           },
           "404": {
@@ -596,7 +360,7 @@
           "200": {
             "description": "Unpaid rents",
             "schema": {
-              "$ref": "#/definitions/UnpaidPropertyRentResponse"
+              "$ref": "#/definitions/RentList"
             }
           }
         },
@@ -630,7 +394,7 @@
           "200": {
             "description": "Tenant removed from property",
             "schema": {
-              "$ref": "#/definitions/PropertyResponse"
+              "$ref": "#/definitions/Property"
             }
           },
           "404": {
@@ -665,7 +429,7 @@
           "200": {
             "description": "Tenant added to property",
             "schema": {
-              "$ref": "#/definitions/PropertyResponse"
+              "$ref": "#/definitions/Property"
             }
           },
           "404": {
@@ -798,7 +562,7 @@
           "200": {
             "description": "Tenants found",
             "schema": {
-              "$ref": "#/definitions/TenantResponseList"
+              "$ref": "#/definitions/TenantList"
             }
           }
         },
@@ -817,7 +581,7 @@
             "name": "tenant",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/TenantRequest"
+              "$ref": "#/definitions/Tenant"
             }
           }
         ],
@@ -825,7 +589,7 @@
           "201": {
             "description": "Tenant created",
             "schema": {
-              "$ref": "#/definitions/TenantResponse"
+              "$ref": "#/definitions/Tenant"
             }
           },
           "400": {
@@ -880,7 +644,7 @@
           "200": {
             "description": "Tenant found",
             "schema": {
-              "$ref": "#/definitions/TenantResponse"
+              "$ref": "#/definitions/Tenant"
             }
           },
           "404": {
@@ -909,7 +673,7 @@
             "name": "tenant",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/TenantRequest"
+              "$ref": "#/definitions/Tenant"
             }
           }
         ],
@@ -917,7 +681,7 @@
           "200": {
             "description": "Tenant updated",
             "schema": {
-              "$ref": "#/definitions/TenantResponse"
+              "$ref": "#/definitions/Tenant"
             }
           },
           "404": {
@@ -977,7 +741,7 @@
           "200": {
             "description": "Unpaid rents",
             "schema": {
-              "$ref": "#/definitions/UnpaidTenantRentResponse"
+              "$ref": "#/definitions/RentList"
             }
           }
         },
@@ -998,7 +762,7 @@
             "name": "property",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/PropertyRequest"
+              "$ref": "#/definitions/Property"
             }
           }
         ],
@@ -1006,14 +770,14 @@
           "201": {
             "description": "Property added",
             "schema": {
-              "$ref": "#/definitions/PropertyResponse"
+              "$ref": "#/definitions/Property"
             }
           },
           "400": {
             "description": "Invalid params"
           }
         },
-        "summary": "Add a new property",
+        "summary": "Add a new property, without any tenants.",
         "tags": [
           "Property"
         ]

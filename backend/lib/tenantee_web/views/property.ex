@@ -4,36 +4,31 @@ defmodule TenanteeWeb.PropertyView do
 
   def render("show.json", %{properties: properties}) do
     %{
-      properties:
-        Enum.map(properties, fn property ->
-          render("show.json", %{property: property}) |> Map.get(:property)
-        end)
+      properties: Enum.map(properties, &render("show.json", %{property: &1}))
     }
   end
 
   def render("show.json", %{property: property}) do
     %{
-      property: %{
-        id: property.id,
-        name: property.name,
-        description: property.description,
-        location: property.location,
-        price: %{
-          amount: property.price.amount,
-          currency: property.price.currency
-        },
-        inserted_at: property.inserted_at,
-        updated_at: property.updated_at,
-        tenants:
-          render(TenantView, "show.json", %{tenants: property.tenants}) |> Map.get(:tenants)
-      }
+      id: property.id,
+      name: property.name,
+      description: property.description,
+      location: property.location,
+      price: %{
+        amount: property.price.amount,
+        currency: property.price.currency
+      },
+      due_date_modifier: property.due_date_modifier,
+      inserted_at: property.inserted_at,
+      updated_at: property.updated_at,
+      tenants: render(TenantView, "show.json", %{tenants: property.tenants}) |> Map.get(:tenants)
     }
   end
 
   def render("show_rent.json", %{rent: rent}) do
     %{
       rent: %{
-        tenant: render(TenantView, "show.json", %{tenant: rent.tenant}) |> Map.get(:tenant),
+        tenant: render(TenantView, "show.json", %{tenant: rent.tenant}),
         paid: rent.paid,
         due_date: rent.due_date
       }
