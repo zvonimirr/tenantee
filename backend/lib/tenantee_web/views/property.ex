@@ -18,7 +18,7 @@ defmodule TenanteeWeb.PropertyView do
       location: property.location,
       price: %{
         amount: price.amount,
-        currency: price.currency |> Atom.to_string()
+        currency: price.currency
       },
       due_date_modifier: property.due_date_modifier,
       inserted_at: property.inserted_at,
