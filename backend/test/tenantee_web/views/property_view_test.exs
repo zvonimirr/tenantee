@@ -9,8 +9,8 @@ defmodule TenanteeWeb.PropertyViewTest do
     description: "Test Description",
     location: "Test Location",
     price: %{
-      amount: 100,
-      currency: "USD"
+      amount: Decimal.new(100),
+      currency: :USD
     },
     inserted_at: ~N[2018-01-01 00:00:00],
     updated_at: ~N[2018-01-01 00:00:00],

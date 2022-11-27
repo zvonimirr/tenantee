@@ -2,17 +2,12 @@
 
 ## 0.2.0
 ### API
-- Rent model and mark API ([@zvonimirr](https://github.com/zvonimirr))
+- Rent system API (cron, listing etc.) ([@zvonimirr](https://github.com/zvonimirr))
 - SSL support (with Docker and without) ([@zvonimirr](https://github.com/zvonimirr))
-- List all rents API method ([@zvonimirr](https://github.com/zvonimirr))
-- List rents based on paid status API method ([@zvonimirr](https://github.com/zvonimirr))
-- Create rents via cron ([@zvonimirr](https://github.com/zvonimirr))
-- Allow modification of rent's due date ([@zvonimirr](https://github.com/zvonimirr))
-- Tenant response now returns list of unapaid rents ([@zvonimirr](https://github.com/zvonimirr))
-- All rents by tenant ID API method ([@zvonimirr](https://github.com/zvonimirr))
 - Normalize responses and clean up Swagger docs ([@zvonimirr](https://github.com/zvonimirr))
 - Better error handling and test cleanup ([@zvonimirr](https://github.com/zvonimirr))
 - Set & list preferences API method ([@zvonimirr](https://github.com/zvonimirr))
+- Implement on-the-fly currency conversion ([@zvonimirr](https://github.com/zvonimirr))
 
 ### UI
 - Rent status is now displayed ([@kovaj024](https://github.com/kovaj024))

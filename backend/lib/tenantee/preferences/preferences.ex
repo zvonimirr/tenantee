@@ -4,20 +4,32 @@ defmodule Tenantee.Preferences do
   """
   alias Tenantee.Repo
   alias Tenantee.Preferences.Schema
+  import Ecto.Query
 
   def get_preferences do
     Repo.all(Schema)
+    |> Enum.uniq_by(& &1.name)
+  end
+
+  def get_preference(name, default \\ nil) do
+    with preferences <- Repo.all(from(p in Schema, where: p.name == ^name)),
+         [preference] <- preferences,
+         false <- is_nil(preference) do
+      {:ok, preference}
+    else
+      _error -> {:ok, default}
+    end
   end
 
   def set_preference(name, value) do
     try do
-      case Repo.get_by(Schema, name: name) do
-        nil ->
+      case get_preference(name) do
+        {:ok, nil} ->
           %Schema{}
           |> Schema.changeset(%{name: name, value: value})
           |> Repo.insert()
 
-        preference ->
+        {:ok, preference} ->
           preference
           |> Schema.changeset(%{value: value})
           |> Repo.update()
