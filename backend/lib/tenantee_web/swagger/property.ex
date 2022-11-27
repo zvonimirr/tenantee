@@ -9,7 +9,7 @@ defmodule TenanteeWeb.Swagger.Property do
       use PhoenixSwagger
 
       swagger_path :add do
-        post("/properties")
+        post("/api/properties")
         summary("Add a new property, without any tenants.")
 
         parameters do
