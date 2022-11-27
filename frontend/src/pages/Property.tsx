@@ -28,10 +28,10 @@ import {
     tenantApiService,
     TenantApiService,
 } from '../services/api/TenantApiService';
-import { PropertyResponse } from '../types/property';
+import { Property } from '../types/property';
 import { Tenant, TenantList } from '../types/tenant';
 
-function Property() {
+function PropertyPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { showError, showSuccess } = useNotification();
@@ -41,7 +41,12 @@ function Property() {
         [navigate],
     );
 
-    const { data, error, isValidating, mutate } = useSWR<PropertyResponse>(
+    const {
+        data: property,
+        error,
+        isValidating,
+        mutate,
+    } = useSWR<Property>(
         PropertyApiService.getPropertyPath(Number(id)),
         propertyApiService.getProperty,
     );
@@ -52,8 +57,8 @@ function Property() {
         );
 
     const isLoading = useMemo(
-        () => data === undefined || (isValidating && error !== undefined),
-        [data, isValidating, error],
+        () => property === undefined || (isValidating && error !== undefined),
+        [property, isValidating, error],
     );
 
     const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
@@ -72,7 +77,6 @@ function Property() {
     } = useDisclosure();
 
     const isError = useMemo(() => error !== undefined, [error]);
-    const property = useMemo(() => data?.property, [data]);
     const tenantOptions = useMemo(() => {
         if (!tenants?.tenants || !property) {
             return [];
@@ -253,4 +257,4 @@ function Property() {
     );
 }
 
-export default Property;
+export default PropertyPage;

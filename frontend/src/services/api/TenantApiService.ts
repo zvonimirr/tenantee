@@ -1,11 +1,12 @@
-import {  TenantDto, TenantList, TenantResponse } from '../../types/tenant';
+import { TenantDto, TenantList, Tenant } from '../../types/tenant';
 import { HttpService } from './HttpService';
 
 export class TenantApiService extends HttpService {
     public static readonly listTenantsPath = () => '/api/tenants';
     public static readonly addTenantPath = () => '/api/tenants';
     public static readonly getTenantPath = (id: number) => `/api/tenants/${id}`;
-    public static readonly updateTenantPath = (id: number) => `/api/tenants/${id}`; 
+    public static readonly updateTenantPath = (id: number) =>
+        `/api/tenants/${id}`;
     public static readonly deleteTenantPath = (id: number) =>
         `/api/tenants/${id}`;
 
@@ -14,7 +15,7 @@ export class TenantApiService extends HttpService {
     }
 
     async getTenant(path: string) {
-        return HttpService.get<TenantResponse>(path);
+        return HttpService.get<Tenant>(path);
     }
 
     async addTenant(path: string, tenant: TenantDto) {

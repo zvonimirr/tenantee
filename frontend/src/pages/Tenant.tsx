@@ -1,4 +1,12 @@
-import { Box, Center, Checkbox, Flex, Spinner, Stack, Text } from '@chakra-ui/react';
+import {
+    Box,
+    Center,
+    Checkbox,
+    Flex,
+    Spinner,
+    Stack,
+    Text,
+} from '@chakra-ui/react';
 import { IconArrowBack } from '@tabler/icons';
 import { useCallback, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,30 +15,54 @@ import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
 import { useNotification } from '../hooks/useNotification';
 import { rentApiService, RentApiService } from '../services/api/RentApiService';
-import { tenantApiService, TenantApiService } from '../services/api/TenantApiService';
+import {
+    tenantApiService,
+    TenantApiService,
+} from '../services/api/TenantApiService';
 import { Rent, RentList } from '../types/rent';
-import { TenantResponse } from '../types/tenant';
+import { Tenant } from '../types/tenant';
 
-function Tenant() {
+function TenantPage() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { showError, showSuccess } = useNotification();
 
-    const { data: tenantData, error: tenantError, isValidating: isValidatingTenant } = useSWR<TenantResponse>(
+    const {
+        data: tenant,
+        error: tenantError,
+        isValidating: isValidatingTenant,
+    } = useSWR<Tenant>(
         TenantApiService.getTenantPath(Number(id)),
-        tenantApiService.getTenant
+        tenantApiService.getTenant,
     );
 
-    const isLoadingTenant = useMemo(() => tenantData === undefined || (isValidatingTenant && tenantError !== undefined), [tenantData, isValidatingTenant, tenantError]);
-    const isTenantError = useMemo(() => tenantError !== undefined, [tenantError]);
-    const tenant = useMemo(() => tenantData?.tenant, [tenantData]);
+    const isLoadingTenant = useMemo(
+        () =>
+            tenant === undefined ||
+            (isValidatingTenant && tenantError !== undefined),
+        [tenant, isValidatingTenant, tenantError],
+    );
+    const isTenantError = useMemo(
+        () => tenantError !== undefined,
+        [tenantError],
+    );
 
-    const { data: rentData, error: rentError, isValidating: isValidatingRent, mutate: mutateRents } = useSWR<RentList>(
+    const {
+        data: rentData,
+        error: rentError,
+        isValidating: isValidatingRent,
+        mutate: mutateRents,
+    } = useSWR<RentList>(
         tenant ? RentApiService.getRentsByTenantIdPath(tenant.id) : null,
-        rentApiService.getRents
+        rentApiService.getRents,
     );
 
-    const isLoadingRents = useMemo(() => rentData === undefined || (isValidatingRent && rentError !== undefined), [rentData, isValidatingRent, rentError]);
+    const isLoadingRents = useMemo(
+        () =>
+            rentData === undefined ||
+            (isValidatingRent && rentError !== undefined),
+        [rentData, isValidatingRent, rentError],
+    );
     const isRentError = useMemo(() => rentError !== undefined, [rentError]);
     const rents = useMemo(() => rentData?.rents, [rentData]);
 
@@ -50,13 +82,19 @@ function Tenant() {
 
     const onRentStatusUpdate = useCallback(async (rent: Rent) => {
         try {
-            await rentApiService.updateRent(RentApiService.markRentPath(rent.id, !rent.paid));
-            showSuccess('Rent status updated', 'Successfully updated the status of the rent');
-        }
-        catch {
-            showError('Error', 'An error occured while trying to update the rent status.');
-        }
-        finally {
+            await rentApiService.updateRent(
+                RentApiService.markRentPath(rent.id, !rent.paid),
+            );
+            showSuccess(
+                'Rent status updated',
+                'Successfully updated the status of the rent',
+            );
+        } catch {
+            showError(
+                'Error',
+                'An error occured while trying to update the rent status.',
+            );
+        } finally {
             mutateRents();
         }
     }, []);
@@ -90,14 +128,26 @@ function Tenant() {
                         {!isLoadingRents && !isRentError && rents && (
                             <Stack spacing={1}>
                                 <Text fontSize="xl">Rents:</Text>
-                                {
-                                    rents.map(rent => {
-                                        return <Flex key={rent.due_date} gap={2} alignItems="center">
-                                            <Text>{new Date(rent.due_date).toDateString()}</Text>
-                                            <Checkbox checked={rent.paid} onChange={() => onRentStatusUpdate(rent)} />
-                                        </Flex>;
-                                    })
-                                }
+                                {rents.map((rent) => {
+                                    return (
+                                        <Flex
+                                            key={rent.due_date}
+                                            gap={2}
+                                            alignItems="center">
+                                            <Text>
+                                                {new Date(
+                                                    rent.due_date,
+                                                ).toDateString()}
+                                            </Text>
+                                            <Checkbox
+                                                checked={rent.paid}
+                                                onChange={() =>
+                                                    onRentStatusUpdate(rent)
+                                                }
+                                            />
+                                        </Flex>
+                                    );
+                                })}
                             </Stack>
                         )}
                     </Stack>
@@ -105,6 +155,6 @@ function Tenant() {
             </PageContainer>
         </Box>
     );
-};
+}
 
-export default Tenant;
+export default TenantPage;
