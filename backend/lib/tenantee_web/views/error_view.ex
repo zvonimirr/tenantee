@@ -7,6 +7,10 @@ defmodule TenanteeWeb.ErrorView do
   #   %{errors: %{detail: "Internal Server Error"}}
   # end
 
+  def render("error.json", %{message: message}) do
+    %{error: message}
+  end
+
   # By default, Phoenix returns the status message from
   # the template name. For example, "404.json" becomes
   # "Not Found".
