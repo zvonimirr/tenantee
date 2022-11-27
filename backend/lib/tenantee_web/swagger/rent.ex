@@ -53,26 +53,6 @@ defmodule TenanteeWeb.Swagger.Rent do
 
       def swagger_definitions do
         %{
-          RentTenant:
-            swagger_schema do
-              title("Rent tenant")
-              description("Rent tenant")
-
-              properties do
-                id(:integer, "ID", required: true)
-                name(:string, "Name", required: true)
-              end
-            end,
-          RentProperty:
-            swagger_schema do
-              title("Rent property")
-              description("Rent property")
-
-              properties do
-                id(:integer, "ID", required: true)
-                name(:string, "Name", required: true)
-              end
-            end,
           Rent:
             swagger_schema do
               title("Rent")
@@ -82,8 +62,8 @@ defmodule TenanteeWeb.Swagger.Rent do
                 id(:integer, "ID", required: true)
                 due_date(:string, "Due Date", required: true)
                 paid(:boolean, "Paid", required: true)
-                tenant(Schema.ref(:RentTenant), "Tenant")
-                property(Schema.ref(:RentProperty), "Property")
+                tenant(Schema.ref(:Tenant), "Tenant (optional)")
+                property(Schema.ref(:Property), "Property (optional)")
               end
             end,
           RentList:

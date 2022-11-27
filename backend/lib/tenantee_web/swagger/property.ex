@@ -10,13 +10,13 @@ defmodule TenanteeWeb.Swagger.Property do
 
       swagger_path :add do
         post("/properties")
-        summary("Add a new property")
+        summary("Add a new property, without any tenants.")
 
         parameters do
-          property(:body, Schema.ref(:PropertyRequest), "Property to add", required: true)
+          property(:body, Schema.ref(:Property), "Property to add", required: true)
         end
 
-        response(201, "Property added", Schema.ref(:PropertyResponse))
+        response(201, "Property added", Schema.ref(:Property))
         response(400, "Invalid params")
       end
 
@@ -28,7 +28,7 @@ defmodule TenanteeWeb.Swagger.Property do
           property(:path, :string, "ID of property to fetch", required: true)
         end
 
-        response(200, "Property found", Schema.ref(:PropertyResponse))
+        response(200, "Property found", Schema.ref(:Property))
         response(404, "Property not found")
       end
 
@@ -36,7 +36,7 @@ defmodule TenanteeWeb.Swagger.Property do
         get("/api/properties")
         summary("List all properties")
 
-        response(200, "Properties found", Schema.ref(:PropertyResponseList))
+        response(200, "Properties found", Schema.ref(:PropertyList))
       end
 
       swagger_path :update do
@@ -45,10 +45,10 @@ defmodule TenanteeWeb.Swagger.Property do
 
         parameters do
           id(:path, :string, "ID of property to update", required: true)
-          property(:body, Schema.ref(:PropertyRequest), "Property to update", required: true)
+          property(:body, Schema.ref(:Property), "Property to update", required: true)
         end
 
-        response(200, "Property updated", Schema.ref(:PropertyResponse))
+        response(200, "Property updated", Schema.ref(:Property))
         response(404, "Property not found")
       end
 
@@ -73,7 +73,7 @@ defmodule TenanteeWeb.Swagger.Property do
           tenant(:path, :string, "ID of tenant to add", required: true)
         end
 
-        response(200, "Tenant added to property", Schema.ref(:PropertyResponse))
+        response(200, "Tenant added to property", Schema.ref(:Property))
         response(404, "Property or tenant not found")
       end
 
@@ -86,7 +86,7 @@ defmodule TenanteeWeb.Swagger.Property do
           tenant(:path, :string, "ID of tenant to remove", required: true)
         end
 
-        response(200, "Tenant removed from property", Schema.ref(:PropertyResponse))
+        response(200, "Tenant removed from property", Schema.ref(:Property))
         response(404, "Property or tenant not found")
       end
 
@@ -98,7 +98,7 @@ defmodule TenanteeWeb.Swagger.Property do
           id(:path, :string, "ID of property to list unpaid rents for", required: true)
         end
 
-        response(200, "Unpaid rents", Schema.ref(:UnpaidPropertyRentResponse))
+        response(200, "Unpaid rents", Schema.ref(:RentList))
       end
 
       def swagger_definitions do
@@ -113,10 +113,10 @@ defmodule TenanteeWeb.Swagger.Property do
                 currency(:string, "Currency", required: true)
               end
             end,
-          PropertyDto:
+          Property:
             swagger_schema do
-              title("Property DTO")
-              description("Property DTO used for creating and updating properties")
+              title("Property")
+              description("A property")
 
               properties do
                 id(:integer, "ID of the property", required: true)
@@ -130,69 +130,22 @@ defmodule TenanteeWeb.Swagger.Property do
                   :integer,
                   "Due date modifier (in seconds). The due date of a rent is calculated by adding this value to the rent's start date (1st of the month)"
                 )
-              end
-            end,
-          PropertyRequest:
-            swagger_schema do
-              title("Property request")
-              description("Property Request used for creating and updating properties")
 
-              properties do
-                property(Schema.ref(:PropertyDto), "Property", required: true)
-              end
-            end,
-          PropertyResponseObject:
-            swagger_schema do
-              title("Property response object")
-              description("Property response object")
-
-              properties do
-                id(:integer, "ID of the property", required: true)
-                name(:string, "Name of the property", required: true)
-                description(:string, "Description of the property")
-                location(:string, "Location of the property", required: true)
-                price(Schema.ref(:Price), "Price of the property", required: true)
-
-                tenants(:array, "Tenants of the property",
-                  items: Schema.ref(:TenantResponseObject)
+                tenants(
+                  :array,
+                  "Tenants of the property",
+                  items: Schema.ref(:Tenant),
+                  required: true
                 )
               end
             end,
-          PropertyResponse:
+          PropertyList:
             swagger_schema do
-              title("Property response")
-              description("Property response")
+              title("Property list")
+              description("List of properties")
 
               properties do
-                property(Schema.ref(:PropertyResponseObject), "Property", required: true)
-              end
-            end,
-          PropertyResponseList:
-            swagger_schema do
-              title("Property response list")
-              description("Property response list")
-
-              properties do
-                properties(:array, "Properties", items: Schema.ref(:PropertyResponseObject))
-              end
-            end,
-          UnpaidPropertyRent:
-            swagger_schema do
-              title("Unpaid property rent")
-              description("Unpaid property rent")
-
-              properties do
-                due_date(:string, "Due date of the rent", required: true)
-                tenant(Schema.ref(:TenantResponseObject), "Tenant", required: true)
-              end
-            end,
-          UnpaidPropertyRentResponse:
-            swagger_schema do
-              title("Unpaid property rent response")
-              description("Unpaid property rent response")
-
-              properties do
-                rents(:array, "Unpaid rents", items: Schema.ref(:UnpaidPropertyRent))
+                properties(:array, "Properties", items: Schema.ref(:Property))
               end
             end
         }
