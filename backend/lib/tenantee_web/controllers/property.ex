@@ -3,6 +3,8 @@ defmodule TenanteeWeb.PropertyController do
   use TenanteeWeb.Swagger.Property
   alias Tenantee.Property
   alias Tenantee.Rent
+  alias Tenantee.Utils.Currency
+  import Tenantee.Utils.Error, only: [respond: 3]
 
   def add(conn, %{
         "property" =>
@@ -12,33 +14,33 @@ defmodule TenanteeWeb.PropertyController do
             "price" => price
           } = params
       })
-      when is_integer(price) do
+      when is_integer(price) and price > 0 do
     with currency <- Map.get(params, "currency", "USD"),
-         true <- Money.Currency.exists?(currency),
+         :ok <- Currency.valid?(currency),
          property_params <- Map.replace(params, "price", Money.new(price, currency)),
          {:ok, property} <-
            Property.create_property(property_params) do
       conn
       |> put_status(:created)
       |> render("show.json", %{property: property})
+    else
+      {:error, "Invalid currency"} ->
+        respond(conn, :unprocessable_entity, "Invalid currency")
     end
   end
 
   def add(conn, _) do
-    conn
-    |> put_status(:bad_request)
-    |> render("error.json", %{message: "Invalid params"})
+    respond(conn, :unprocessable_entity, "Invalid property")
   end
 
   def find(conn, %{"id" => id}) do
-    with property <- Property.get_property(id) do
-      if property do
-        render(conn, "show.json", %{property: property})
-      else
+    case Property.get_property(id) do
+      {:ok, property} ->
         conn
-        |> put_status(:not_found)
-        |> render("error.json", %{message: "Property not found"})
-      end
+        |> render("show.json", %{property: property})
+
+      {:error, :not_found} ->
+        respond(conn, :not_found, "Property not found")
     end
   end
 
@@ -53,76 +55,62 @@ defmodule TenanteeWeb.PropertyController do
         "property" => params
       }) do
     with currency <- Map.get(params, "currency", "USD"),
-         true <- Money.Currency.exists?(currency),
+         :ok <- Currency.valid?(currency),
          property_params <-
            Map.replace_lazy(params, "price", fn price -> Money.new(price, currency) end),
-         property <- Property.get_property(id) do
-      if property do
-        with {:ok, updated_property} <- Property.update_property(id, property_params) do
-          render(conn, "show.json", %{property: updated_property})
-        end
-      else
-        conn
-        |> put_status(:not_found)
-        |> render("error.json", %{message: "Property not found"})
-      end
+         {:ok, _property} <- Property.get_property(id),
+         {:ok, updated_property} <- Property.update_property(id, property_params) do
+      render(conn, "show.json", %{property: updated_property})
+    else
+      {:error, "Invalid currency"} ->
+        respond(conn, :unprocessable_entity, "Invalid currency")
+
+      {:error, :not_found} ->
+        respond(conn, :not_found, "Property not found")
     end
   end
 
   def update(conn, _) do
-    conn
-    |> put_status(:bad_request)
-    |> render("error.json", %{message: "Invalid params"})
+    respond(conn, :unprocessable_entity, "Invalid property")
   end
 
   def delete_by_id(conn, %{"id" => id}) do
-    with {affected_rows, nil} <- Property.delete_property(id) do
-      if affected_rows < 1 do
-        conn
-        |> put_status(:not_found)
-        |> render("error.json", %{message: "Property not found"})
-      else
-        conn
-        |> put_status(:no_content)
-        |> render("delete.json", %{})
-      end
+    case Property.delete_property(id) do
+      {:ok, :deleted} -> respond(conn, :no_content, "Property deleted")
+      {:error, :not_found} -> respond(conn, :not_found, "Property not found")
     end
   end
 
   def add_tenant(conn, %{"id" => id, "tenant" => tenant_id}) do
-    with {:ok, property} <- Property.add_tenant(id, tenant_id) do
-      render(conn, "show.json", %{property: property})
-    else
-      _ ->
+    case Property.add_tenant(id, tenant_id) do
+      {:ok, property} ->
         conn
-        |> put_status(:not_found)
-        |> render("error.json", %{message: "Property or tenant not found"})
+        |> put_status(:created)
+        |> render("show.json", %{property: property})
+
+      {:error, _error} ->
+        respond(conn, :not_found, "Property or tenant not found")
     end
   end
 
   def remove_tenant(conn, %{"id" => id, "tenant" => tenant_id}) do
-    with {:ok, property} <- Property.remove_tenant(id, tenant_id) do
-      conn
-      |> put_status(:no_content)
-      |> render("show.json", %{property: property})
-    else
-      _ ->
+    case Property.remove_tenant(id, tenant_id) do
+      {:ok, property} ->
         conn
-        |> put_status(:not_found)
-        |> render("error.json", %{message: "Property or tenant not found"})
+        |> put_status(:no_content)
+        |> render("show.json", %{property: property})
+
+      {:error, _error} ->
+        respond(conn, :not_found, "Property or tenant not found")
     end
   end
 
   def unpaid_rents(conn, %{"id" => id}) do
-    with property <- Property.get_property(id),
-         false <- is_nil(property),
+    with {:ok, property} <- Property.get_property(id),
          rents <- Rent.get_unpaid_rents_by_property_id(property.id) do
       render(conn, "show_rent.json", %{rents: rents})
     else
-      _ ->
-        conn
-        |> put_status(:not_found)
-        |> render("error.json", %{message: "Property not found"})
+      {:error, :not_found} -> respond(conn, :not_found, "Property not found")
     end
   end
 end

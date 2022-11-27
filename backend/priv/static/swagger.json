@@ -265,7 +265,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Property deleted"
           },
           "404": {
@@ -335,6 +335,9 @@
           },
           "404": {
             "description": "Property not found"
+          },
+          "422": {
+            "description": "Invalid property"
           }
         },
         "summary": "Update a property",
@@ -362,6 +365,9 @@
             "schema": {
               "$ref": "#/definitions/RentList"
             }
+          },
+          "404": {
+            "description": "Property not found"
           }
         },
         "summary": "List unpaid rents for a property",
@@ -391,7 +397,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Tenant removed from property",
             "schema": {
               "$ref": "#/definitions/Property"
@@ -518,6 +524,9 @@
             "schema": {
               "$ref": "#/definitions/Rent"
             }
+          },
+          "404": {
+            "description": "Rent not found"
           }
         },
         "summary": "Mark rent as paid",
@@ -545,6 +554,9 @@
             "schema": {
               "$ref": "#/definitions/Rent"
             }
+          },
+          "404": {
+            "description": "Rent not found"
           }
         },
         "summary": "Mark rent as unpaid",
@@ -594,6 +606,9 @@
           },
           "400": {
             "description": "Invalid params"
+          },
+          "422": {
+            "description": "Invalid tenant"
           }
         },
         "summary": "Add a new tenant",
@@ -616,7 +631,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Tenant deleted"
           },
           "404": {
@@ -686,6 +701,9 @@
           },
           "404": {
             "description": "Tenant not found"
+          },
+          "422": {
+            "description": "Invalid tenant"
           }
         },
         "summary": "Update a tenant by ID",
@@ -743,6 +761,9 @@
             "schema": {
               "$ref": "#/definitions/RentList"
             }
+          },
+          "404": {
+            "description": "Tenant not found"
           }
         },
         "summary": "List unpaid rents for tenants",
@@ -775,6 +796,9 @@
           },
           "400": {
             "description": "Invalid params"
+          },
+          "422": {
+            "description": "Invalid property"
           }
         },
         "summary": "Add a new property, without any tenants.",

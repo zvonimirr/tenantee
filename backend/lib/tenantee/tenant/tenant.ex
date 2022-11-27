@@ -20,7 +20,9 @@ defmodule Tenantee.Tenant do
   Gets a single tenant.
   """
   def get_tenant_by_id(id) do
-    Repo.get(Schema, id)
+    with tenant <- Repo.get(Schema, id) do
+      if tenant, do: {:ok, tenant}, else: {:error, :not_found}
+    end
   end
 
   @doc """
@@ -34,16 +36,24 @@ defmodule Tenantee.Tenant do
   Updates an existing tenant.
   """
   def update_tenant(id, attrs) do
-    get_tenant_by_id(id)
-    |> Schema.changeset(attrs)
-    |> Repo.update()
+    with {:ok, tenant} <- get_tenant_by_id(id),
+         changeset <- Schema.changeset(tenant, attrs),
+         {:ok, updated_tenant} <- Repo.update(changeset) do
+      {:ok, updated_tenant}
+    else
+      {:error, :not_found} ->
+        {:error, :not_found}
+    end
   end
 
   @doc """
   Deletes an existing tenant.
   """
   def delete_tenant(id) do
-    from(t in Schema, where: t.id == ^id)
-    |> Repo.delete_all()
+    with {affected_rows, nil} <-
+           from(t in Schema, where: t.id == ^id)
+           |> Repo.delete_all() do
+      if affected_rows > 0, do: {:ok, :deleted}, else: {:error, :not_found}
+    end
   end
 end

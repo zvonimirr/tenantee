@@ -25,8 +25,9 @@ defmodule Tenantee.Property do
   Gets a single property.
   """
   def get_property(id) do
-    Repo.get(Schema, id)
-    |> Repo.preload([:tenants])
+    with property <- Repo.get(Schema, id) do
+      if property, do: {:ok, Repo.preload(property, :tenants)}, else: {:error, :not_found}
+    end
   end
 
   @doc """
@@ -42,10 +43,11 @@ defmodule Tenantee.Property do
   """
   def update_property(id, attrs) do
     with {:ok, property} <-
-           get_property(id)
-           |> Schema.changeset(attrs)
-           |> Repo.update() do
-      {:ok, Repo.preload(property, :tenants)}
+           get_property(id),
+         changeset <-
+           Schema.changeset(property, attrs),
+         {:ok, updated_property} <- Repo.update(changeset) do
+      {:ok, Repo.preload(updated_property, :tenants)}
     end
   end
 
@@ -53,20 +55,23 @@ defmodule Tenantee.Property do
   Deletes an existing property.
   """
   def delete_property(id) do
-    from(p in Schema, where: p.id == ^id)
-    |> Repo.delete_all()
+    with {affected_rows, nil} <-
+           from(p in Schema, where: p.id == ^id)
+           |> Repo.delete_all() do
+      if affected_rows > 0, do: {:ok, :deleted}, else: {:error, :not_found}
+    end
   end
 
   @doc """
   Adds an existing tenant to a property.
   """
   def add_tenant(property_id, tenant_id) do
-    with %Schema{} = property <- get_property(property_id),
-         %TenantSchema{} = tenant <- Tenant.get_tenant_by_id(tenant_id) do
+    with {:ok, %Schema{} = property} <- get_property(property_id),
+         {:ok, %TenantSchema{} = tenant} <- Tenant.get_tenant_by_id(tenant_id) do
       Schema.add_tenant(property, tenant)
       |> Repo.update()
     else
-      _ -> :error
+      {:error, error} -> {:error, error}
     end
   end
 
@@ -74,12 +79,12 @@ defmodule Tenantee.Property do
   Removes a tenant from the property.
   """
   def remove_tenant(property_id, tenant_id) do
-    with %Schema{} = property <- get_property(property_id),
-         %TenantSchema{} = tenant <- Tenant.get_tenant_by_id(tenant_id) do
+    with {:ok, %Schema{} = property} <- get_property(property_id),
+         {:ok, %TenantSchema{} = tenant} <- Tenant.get_tenant_by_id(tenant_id) do
       Schema.remove_tenant(property, tenant)
       |> Repo.update()
     else
-      _ -> :error
+      {:error, error} -> {:error, error}
     end
   end
 end

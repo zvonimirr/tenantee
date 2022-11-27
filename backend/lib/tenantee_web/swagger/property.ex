@@ -17,6 +17,7 @@ defmodule TenanteeWeb.Swagger.Property do
         end
 
         response(201, "Property added", Schema.ref(:Property))
+        response(422, "Invalid property")
         response(400, "Invalid params")
       end
 
@@ -49,6 +50,7 @@ defmodule TenanteeWeb.Swagger.Property do
         end
 
         response(200, "Property updated", Schema.ref(:Property))
+        response(422, "Invalid property")
         response(404, "Property not found")
       end
 

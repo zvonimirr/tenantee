@@ -17,6 +17,7 @@ defmodule TenanteeWeb.Swagger.Tenant do
         end
 
         response(201, "Tenant created", Schema.ref(:Tenant))
+        response(422, "Invalid tenant")
         response(400, "Invalid params")
       end
 
@@ -49,6 +50,7 @@ defmodule TenanteeWeb.Swagger.Tenant do
         end
 
         response(200, "Tenant updated", Schema.ref(:Tenant))
+        response(422, "Invalid tenant")
         response(404, "Tenant not found")
       end
 
