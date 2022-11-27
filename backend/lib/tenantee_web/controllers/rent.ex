@@ -2,6 +2,7 @@ defmodule TenanteeWeb.RentController do
   use TenanteeWeb, :controller
   use TenanteeWeb.Swagger.Rent
   alias Tenantee.Rent
+  import Tenantee.Utils.Error, only: [respond: 3]
 
   def list(conn, _) do
     with rents <- Rent.get_all_rents() do
@@ -26,6 +27,8 @@ defmodule TenanteeWeb.RentController do
       conn
       |> put_status(:ok)
       |> render("show.json", %{rent: rent})
+    else
+      {:error, :not_found} -> respond(conn, :not_found, "Rent not found")
     end
   end
 
@@ -34,6 +37,8 @@ defmodule TenanteeWeb.RentController do
       conn
       |> put_status(:ok)
       |> render("show.json", %{rent: rent})
+    else
+      {:error, :not_found} -> respond(conn, :not_found, "Rent not found")
     end
   end
 end

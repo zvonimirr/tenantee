@@ -79,6 +79,8 @@ defmodule Tenantee.Rent do
       rent
       |> Schema.changeset(%{paid: paid})
       |> Repo.update()
+    else
+      _ -> {:error, :not_found}
     end
   end
 end

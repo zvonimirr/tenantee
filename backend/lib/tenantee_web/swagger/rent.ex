@@ -38,6 +38,7 @@ defmodule TenanteeWeb.Swagger.Rent do
         end
 
         response(200, "Rent marked as paid", Schema.ref(:Rent))
+        response(404, "Rent not found")
       end
 
       swagger_path :mark_as_unpaid do
@@ -49,6 +50,7 @@ defmodule TenanteeWeb.Swagger.Rent do
         end
 
         response(200, "Rent marked as unpaid", Schema.ref(:Rent))
+        response(404, "Rent not found")
       end
 
       def swagger_definitions do
