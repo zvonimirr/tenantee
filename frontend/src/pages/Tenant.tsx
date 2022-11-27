@@ -128,26 +128,30 @@ function TenantPage() {
                         {!isLoadingRents && !isRentError && rents && (
                             <Stack spacing={1}>
                                 <Text fontSize="xl">Rents:</Text>
-                                {rents.map((rent) => {
-                                    return (
-                                        <Flex
-                                            key={rent.due_date}
-                                            gap={2}
-                                            alignItems="center">
-                                            <Text>
-                                                {new Date(
-                                                    rent.due_date,
-                                                ).toDateString()}
-                                            </Text>
-                                            <Checkbox
-                                                checked={rent.paid}
-                                                onChange={() =>
-                                                    onRentStatusUpdate(rent)
-                                                }
-                                            />
-                                        </Flex>
-                                    );
-                                })}
+                                {rents.length === 0 && (
+                                    <Text>No rents found</Text>
+                                )}
+                                {rents.length > 0 &&
+                                    rents.map((rent) => {
+                                        return (
+                                            <Flex
+                                                key={rent.due_date}
+                                                gap={2}
+                                                alignItems="center">
+                                                <Text>
+                                                    {new Date(
+                                                        rent.due_date,
+                                                    ).toDateString()}
+                                                </Text>
+                                                <Checkbox
+                                                    checked={rent.paid}
+                                                    onChange={() =>
+                                                        onRentStatusUpdate(rent)
+                                                    }
+                                                />
+                                            </Flex>
+                                        );
+                                    })}
                             </Stack>
                         )}
                     </Stack>
