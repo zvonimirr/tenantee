@@ -12,6 +12,7 @@
 - All rents by tenant ID API method ([@zvonimirr](https://github.com/zvonimirr))
 - Normalize responses and clean up Swagger docs ([@zvonimirr](https://github.com/zvonimirr))
 - Better error handling and test cleanup ([@zvonimirr](https://github.com/zvonimirr))
+- Add preferences and list all preferences API method ([@zvonimirr](https://github.com/zvonimirr))
 
 ### UI
 - Rent status is now displayed ([@kovaj024](https://github.com/kovaj024))
