@@ -7,7 +7,9 @@ defmodule Tenantee.Utils.Currency do
   Checks if the given currency is valid.
   """
   def valid?(currency) do
-    if Money.Currency.exists?(currency) do
+    currencies = Cldr.known_currencies() |> Enum.map(&Atom.to_string(&1))
+
+    if currency in currencies do
       :ok
     else
       {:error, "Invalid currency"}

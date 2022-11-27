@@ -25,9 +25,6 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Configure Money
-config :money, :default_currency, :EUR
-
 # Configure Oban
 config :tenantee, Oban,
   repo: Tenantee.Repo,

@@ -48,14 +48,15 @@ defmodule Tenantee.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:money, "~> 1.12"},
       {:cors_plug, "~> 3.0"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.11.1", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.15.0", only: [:test], runtime: false},
       {:phoenix_swagger, "~> 0.8"},
       {:ex_json_schema, "~> 0.5"},
-      {:oban, "~> 2.13"}
+      {:oban, "~> 2.13"},
+      {:ex_money, "~> 5.0"},
+      {:ex_money_sql, "~> 1.7"}
     ]
   end
 
