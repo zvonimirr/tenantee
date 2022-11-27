@@ -14,12 +14,10 @@ defmodule TenanteeWeb.PropertyControllerTest do
     test "invalid currency", %{conn: conn} do
       conn =
         post(conn, "/api/properties", %{
-          "property" => %{
-            "name" => "Test Property",
-            "location" => "Test Location",
-            "currency" => "invalid",
-            "price" => 1000
-          }
+          "name" => "Test Property",
+          "location" => "Test Location",
+          "currency" => "invalid",
+          "price" => 1000
         })
 
       assert json_response(conn, 422)["message"] == "Invalid currency"
@@ -63,12 +61,10 @@ defmodule TenanteeWeb.PropertyControllerTest do
 
       conn =
         patch(conn, "/api/properties/#{id}", %{
-          "property" => %{
-            "name" => "Updated Property",
-            "location" => "Updated Location",
-            "currency" => "USD",
-            "price" => 1000
-          }
+          "name" => "Updated Property",
+          "location" => "Updated Location",
+          "currency" => "USD",
+          "price" => 1000
         })
 
       assert json_response(conn, 200)["name"] == "Updated Property"
@@ -80,12 +76,10 @@ defmodule TenanteeWeb.PropertyControllerTest do
 
       conn =
         patch(conn, "/api/properties/#{id}", %{
-          "property" => %{
-            "name" => "Updated Property",
-            "location" => "Updated Location",
-            "currency" => "invalid",
-            "price" => 1000
-          }
+          "name" => "Updated Property",
+          "location" => "Updated Location",
+          "currency" => "invalid",
+          "price" => 1000
         })
 
       assert json_response(conn, 422)["message"] == "Invalid currency"
@@ -95,7 +89,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
       conn = insert_property(conn)
       id = json_response(conn, 201)["id"]
 
-      conn = patch(conn, "/api/properties/#{id}", %{})
+      conn = patch(conn, "/api/properties/#{id}")
 
       assert json_response(conn, 422)["message"] == "Invalid property"
     end
@@ -103,12 +97,10 @@ defmodule TenanteeWeb.PropertyControllerTest do
     test "not found", %{conn: conn} do
       conn =
         patch(conn, "/api/properties/0", %{
-          "property" => %{
-            "name" => "Updated Property",
-            "location" => "Updated Location",
-            "currency" => "USD",
-            "price" => 1000
-          }
+          "name" => "Updated Property",
+          "location" => "Updated Location",
+          "currency" => "USD",
+          "price" => 1000
         })
 
       assert json_response(conn, 404)["message"] == "Property not found"

@@ -331,6 +331,39 @@
         "tags": [
           "Property"
         ]
+      },
+      "post": {
+        "description": "",
+        "operationId": "TenanteeWeb.PropertyController.add",
+        "parameters": [
+          {
+            "description": "Property to add",
+            "in": "body",
+            "name": "property",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Property"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Property added",
+            "schema": {
+              "$ref": "#/definitions/Property"
+            }
+          },
+          "400": {
+            "description": "Invalid params"
+          },
+          "422": {
+            "description": "Invalid property"
+          }
+        },
+        "summary": "Add a new property, without any tenants.",
+        "tags": [
+          "Property"
+        ]
       }
     },
     "/api/properties/{id}": {
@@ -851,41 +884,6 @@
         "summary": "List unpaid rents for tenants",
         "tags": [
           "Tenant"
-        ]
-      }
-    },
-    "/properties": {
-      "post": {
-        "description": "",
-        "operationId": "TenanteeWeb.PropertyController.add",
-        "parameters": [
-          {
-            "description": "Property to add",
-            "in": "body",
-            "name": "property",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Property"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Property added",
-            "schema": {
-              "$ref": "#/definitions/Property"
-            }
-          },
-          "400": {
-            "description": "Invalid params"
-          },
-          "422": {
-            "description": "Invalid property"
-          }
-        },
-        "summary": "Add a new property, without any tenants.",
-        "tags": [
-          "Property"
         ]
       }
     }

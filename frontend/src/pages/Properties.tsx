@@ -104,7 +104,7 @@ function Properties() {
 
                 showSuccess(
                     'Property updated',
-                    `Property ${property.property.name} has been updated successfully`,
+                    `Property ${property.name} has been updated successfully`,
                 );
             } catch (e) {
                 showError(

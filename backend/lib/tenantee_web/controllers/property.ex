@@ -6,14 +6,14 @@ defmodule TenanteeWeb.PropertyController do
   alias Tenantee.Utils.Currency
   import Tenantee.Utils.Error, only: [respond: 3]
 
-  def add(conn, %{
-        "property" =>
-          %{
-            "name" => _name,
-            "location" => _location,
-            "price" => price
-          } = params
-      })
+  def add(
+        conn,
+        %{
+          "name" => _name,
+          "location" => _location,
+          "price" => price
+        } = params
+      )
       when is_integer(price) and price > 0 do
     with currency <- Map.get(params, "currency", "USD"),
          :ok <- Currency.valid?(currency),
@@ -51,14 +51,18 @@ defmodule TenanteeWeb.PropertyController do
     end
   end
 
-  def update(conn, %{
-        "id" => id,
-        "property" => params
-      }) do
-    with currency <- Map.get(params, "currency", "USD"),
+  def update(
+        conn,
+        %{
+          "id" => id
+        } = params
+      ) do
+    with true <- Map.keys(params) -- ["id"] != [],
+         currency <- Map.get(params, "currency", "USD"),
          :ok <- Currency.valid?(currency),
          property_params <-
-           Map.replace_lazy(params, "price", fn price -> Money.new(price, currency) end),
+           Map.replace_lazy(params, "price", fn price -> Money.new(price, currency) end)
+           |> Map.delete("id"),
          {:ok, _property} <- Property.get_property(id),
          {:ok, updated_property} <- Property.update_property(id, property_params) do
       render(conn, "show.json", %{property: updated_property})
@@ -68,11 +72,10 @@ defmodule TenanteeWeb.PropertyController do
 
       {:error, :not_found} ->
         respond(conn, :not_found, "Property not found")
-    end
-  end
 
-  def update(conn, _) do
-    respond(conn, :unprocessable_entity, "Invalid property")
+      false ->
+        respond(conn, :unprocessable_entity, "Invalid property")
+    end
   end
 
   def delete_by_id(conn, %{"id" => id}) do

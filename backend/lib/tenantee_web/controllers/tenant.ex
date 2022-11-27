@@ -5,7 +5,13 @@ defmodule TenanteeWeb.TenantController do
   alias Tenantee.Rent
   import Tenantee.Utils.Error, only: [respond: 3]
 
-  def add(conn, %{"tenant" => params}) do
+  def add(
+        conn,
+        %{
+          "first_name" => _first_name,
+          "last_name" => _last_name
+        } = params
+      ) do
     with {:ok, tenant} <- Tenant.create_tenant(params) do
       conn
       |> put_status(:created)
@@ -34,11 +40,13 @@ defmodule TenanteeWeb.TenantController do
     end
   end
 
-  def update(conn, %{
-        "id" => id,
-        "tenant" => params
-      }) do
-    case Tenant.update_tenant(id, params) do
+  def update(
+        conn,
+        %{
+          "id" => id
+        } = params
+      ) do
+    case Tenant.update_tenant(id, params |> Map.delete("id")) do
       {:ok, tenant} ->
         conn
         |> render("show.json", %{tenant: tenant})
@@ -46,10 +54,6 @@ defmodule TenanteeWeb.TenantController do
       {:error, :not_found} ->
         respond(conn, :not_found, "Tenant not found")
     end
-  end
-
-  def update(conn, _params) do
-    respond(conn, :unprocessable_entity, "Invalid tenant")
   end
 
   def delete_by_id(conn, %{"id" => id}) do

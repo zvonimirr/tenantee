@@ -134,11 +134,9 @@ function EditPropertyModal({
                                     }
                                     onClick={handleSubmit((values) =>
                                         onSubmit({
+                                            ...values,
+                                            price: Number(values.price),
                                             id: property?.id ?? 0,
-                                            property: {
-                                                ...values,
-                                                price: Number(values.price),
-                                            },
                                         }),
                                     )}>
                                     Update Property

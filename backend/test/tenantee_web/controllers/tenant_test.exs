@@ -48,22 +48,13 @@ defmodule TenanteeWeb.TenantControllerTest do
       tenant = insert_tenant(conn)
       id = json_response(tenant, 201)["id"]
 
-      conn = patch(conn, "/api/tenants/#{id}", %{tenant: %{first_name: "New", last_name: "name"}})
+      conn = patch(conn, "/api/tenants/#{id}", %{first_name: "New", last_name: "name"})
 
       assert json_response(conn, 200)["name"] == "New name"
     end
 
-    test "invalid parameters", %{conn: conn} do
-      tenant = insert_tenant(conn)
-      id = json_response(tenant, 201)["id"]
-
-      conn = patch(conn, "/api/tenants/#{id}", %{})
-
-      assert json_response(conn, 422)["message"] == "Invalid tenant"
-    end
-
     test "not found", %{conn: conn} do
-      conn = patch(conn, "/api/tenants/0", %{tenant: %{first_name: "New", last_name: "name"}})
+      conn = patch(conn, "/api/tenants/0", %{first_name: "New", last_name: "name"})
 
       assert json_response(conn, 404)["message"] == "Tenant not found"
     end

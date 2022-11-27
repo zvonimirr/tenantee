@@ -1,4 +1,9 @@
-import { Property, PropertyDto, PropertyList } from '../../types/property';
+import {
+    Property,
+    PropertyDto,
+    PropertyList,
+    PropertyUpdateDto,
+} from '../../types/property';
 import { HttpService } from './HttpService';
 
 export class PropertyApiService extends HttpService {
@@ -31,7 +36,7 @@ export class PropertyApiService extends HttpService {
         return HttpService.post<PropertyDto>(path, property);
     }
 
-    async updateProperty(path: string, property: PropertyDto) {
+    async updateProperty(path: string, property: PropertyUpdateDto) {
         return HttpService.patch<PropertyDto>(path, property);
     }
 
