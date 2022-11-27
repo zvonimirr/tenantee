@@ -1,6 +1,5 @@
 defmodule TenanteeWeb.PropertyControllerTest do
   use TenanteeWeb.ConnCase
-  use TenanteeWeb.TenantCase
   use TenanteeWeb.RentCase
 
   defp insert_property(conn) do
@@ -136,8 +135,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
     test "happy path", %{conn: conn} do
       conn = insert_property(conn)
       id = json_response(conn, 201)["id"]
-      conn = insert_tenant(conn)
-      tenant = json_response(conn, 201)["id"]
+      %{id: tenant} = Tenantee.Factory.Tenant.insert()
 
       conn = put(conn, "/api/properties/#{id}/tenants/#{tenant}")
 
@@ -156,10 +154,10 @@ defmodule TenanteeWeb.PropertyControllerTest do
     test "happy path", %{conn: conn} do
       conn = insert_property(conn)
       id = json_response(conn, 201)["id"]
-      conn = insert_tenant(conn)
-      tenant = json_response(conn, 201)["id"]
-      conn = put(conn, "/api/properties/#{id}/tenants/#{tenant}")
 
+      %{id: tenant} = Tenantee.Factory.Tenant.insert()
+
+      put(conn, "/api/properties/#{id}/tenants/#{tenant}")
       conn = delete(conn, "/api/properties/#{id}/tenants/#{tenant}")
 
       assert json_response(conn, 204)["tenants"] == []
@@ -176,9 +174,10 @@ defmodule TenanteeWeb.PropertyControllerTest do
     test "happy path", %{conn: conn} do
       conn = insert_property(conn)
       id = json_response(conn, 201)["id"]
-      conn = insert_tenant(conn)
-      tenant = json_response(conn, 201)["id"]
-      conn = put(conn, "/api/properties/#{id}/tenants/#{tenant}")
+
+      %{id: tenant} = Tenantee.Factory.Tenant.insert()
+
+      put(conn, "/api/properties/#{id}/tenants/#{tenant}")
       insert_rent(id, tenant)
 
       conn = get(conn, "/api/properties/#{id}/rents/unpaid")

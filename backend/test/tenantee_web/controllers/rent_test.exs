@@ -1,14 +1,11 @@
 defmodule TenanteeWeb.RentControllerTest do
   use TenanteeWeb.ConnCase
-  use TenanteeWeb.TenantCase
   use TenanteeWeb.RentCase
 
-  setup %{conn: conn} do
+  setup %{conn: _conn} do
     %{id: property_id} = Tenantee.Factory.Property.insert(name: "Test Property")
 
-    tenant_conn = insert_tenant(conn)
-    tenant_id = json_response(tenant_conn, 201)["id"]
-
+    %{id: tenant_id} = Tenantee.Factory.Tenant.insert(first_name: "Test", last_name: "Tenant")
     rent = insert_rent(property_id, tenant_id)
 
     {:ok, %{rent_id: Map.get(rent, :id), property_id: property_id, tenant_id: tenant_id}}

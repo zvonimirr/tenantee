@@ -1,7 +1,14 @@
 defmodule TenanteeWeb.TenantControllerTest do
   use TenanteeWeb.ConnCase
-  use TenanteeWeb.TenantCase
   use TenanteeWeb.RentCase
+
+  defp insert_tenant(conn) do
+    conn
+    |> post("/api/tenants", %{
+      first_name: "Test",
+      last_name: "Tenant"
+    })
+  end
 
   describe "POST /api/tenants" do
     test "happy path", %{conn: conn} do
