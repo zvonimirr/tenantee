@@ -282,6 +282,36 @@
         "tags": [
           "Preferences"
         ]
+      },
+      "put": {
+        "description": "",
+        "operationId": "TenanteeWeb.PreferencesController.set",
+        "parameters": [
+          {
+            "description": "Preference to set",
+            "in": "body",
+            "name": "preference",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Preference"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Preference set",
+            "schema": {
+              "$ref": "#/definitions/Preference"
+            }
+          },
+          "422": {
+            "description": "Invalid preference name"
+          }
+        },
+        "summary": "Set preference",
+        "tags": [
+          "Preferences"
+        ]
       }
     },
     "/api/properties": {

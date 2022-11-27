@@ -50,6 +50,7 @@ defmodule TenanteeWeb.Router do
 
     scope "/preferences" do
       get "/", PreferencesController, :list
+      put "/", PreferencesController, :set
     end
   end
 
