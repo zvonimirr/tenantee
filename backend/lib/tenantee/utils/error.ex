@@ -12,6 +12,7 @@ defmodule Tenantee.Utils.Error do
   def respond(conn, status, message) when is_binary(message) and is_atom(status) do
     conn
     |> put_status(status)
-    |> render(ErrorView, "error.json", %{message: message})
+    |> put_view(ErrorView)
+    |> render("error.json", %{message: message})
   end
 end

@@ -9,7 +9,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
     failure_conn = post conn, "/api/properties", property: %{name: "Test Property 2"}
 
     assert json_response(conn, 201)["name"] == "Test Property"
-    assert json_response(failure_conn, 400) == %{"error" => "Invalid params"}
+    assert json_response(failure_conn, 422) == %{"error" => "Invalid property"}
   end
 
   test "GET /api/properties/:id", %{conn: conn} do
@@ -59,7 +59,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
              "currency" => "PHP"
            }
 
-    assert json_response(failure_conn, 400) == %{"error" => "Invalid params"}
+    assert json_response(failure_conn, 422) == %{"error" => "Invalid property"}
     assert json_response(failure2_conn, 404) == %{"error" => "Property not found"}
   end
 
@@ -85,7 +85,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
 
     failure_conn = put(conn, "/api/properties/#{id + 1}/tenants/#{tenant_id}")
     conn = put(conn, "/api/properties/#{id}/tenants/#{tenant_id}")
-    tenants = json_response(conn, 200)["tenants"]
+    tenants = json_response(conn, 201)["tenants"]
 
     assert List.first(tenants)["id"] == tenant_id
     assert json_response(failure_conn, 404) == %{"error" => "Property or tenant not found"}

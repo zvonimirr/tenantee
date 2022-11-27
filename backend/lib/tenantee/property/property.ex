@@ -46,10 +46,10 @@ defmodule Tenantee.Property do
   def update_property(id, attrs) do
     with {:ok, property} <-
            get_property(id),
-         property
-         |> Schema.changeset(attrs)
-         |> Repo.update() do
-      {:ok, Repo.preload(property, :tenants)}
+         changeset <-
+           Schema.changeset(property, attrs),
+         {:ok, updated_property} <- Repo.update(changeset) do
+      {:ok, Repo.preload(updated_property, :tenants)}
     end
   end
 
