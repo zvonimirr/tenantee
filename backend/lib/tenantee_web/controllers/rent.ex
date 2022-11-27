@@ -23,22 +23,26 @@ defmodule TenanteeWeb.RentController do
   end
 
   def mark_as_paid(conn, %{"id" => id}) do
-    with {:ok, rent} <- Rent.mark_rent(id, true) do
-      conn
-      |> put_status(:ok)
-      |> render("show.json", %{rent: rent})
-    else
-      {:error, :not_found} -> respond(conn, :not_found, "Rent not found")
+    case Rent.mark_rent(id, true) do
+      {:ok, rent} ->
+        conn
+        |> put_status(:ok)
+        |> render("show.json", %{rent: rent})
+
+      {:error, :not_found} ->
+        respond(conn, :not_found, "Rent not found")
     end
   end
 
   def mark_as_unpaid(conn, %{"id" => id}) do
-    with {:ok, rent} <- Rent.mark_rent(id) do
-      conn
-      |> put_status(:ok)
-      |> render("show.json", %{rent: rent})
-    else
-      {:error, :not_found} -> respond(conn, :not_found, "Rent not found")
+    case Rent.mark_rent(id) do
+      {:ok, rent} ->
+        conn
+        |> put_status(:ok)
+        |> render("show.json", %{rent: rent})
+
+      {:error, :not_found} ->
+        respond(conn, :not_found, "Rent not found")
     end
   end
 end

@@ -18,11 +18,13 @@ defmodule TenanteeWeb.TenantController do
   end
 
   def find(conn, %{"id" => id}) do
-    with {:ok, tenant} <- Tenant.get_tenant_by_id(id) do
-      conn
-      |> render("show.json", %{tenant: tenant})
-    else
-      {:error, :not_found} -> respond(conn, :not_found, "Tenant not found")
+    case Tenant.get_tenant_by_id(id) do
+      {:ok, tenant} ->
+        conn
+        |> render("show.json", %{tenant: tenant})
+
+      {:error, :not_found} ->
+        respond(conn, :not_found, "Tenant not found")
     end
   end
 
@@ -36,11 +38,13 @@ defmodule TenanteeWeb.TenantController do
         "id" => id,
         "tenant" => params
       }) do
-    with {:ok, tenant} <- Tenant.update_tenant(id, params) do
-      conn
-      |> render("show.json", %{tenant: tenant})
-    else
-      {:error, :not_found} -> respond(conn, :not_found, "Tenant not found")
+    case Tenant.update_tenant(id, params) do
+      {:ok, tenant} ->
+        conn
+        |> render("show.json", %{tenant: tenant})
+
+      {:error, :not_found} ->
+        respond(conn, :not_found, "Tenant not found")
     end
   end
 

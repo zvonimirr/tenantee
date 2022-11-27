@@ -34,11 +34,13 @@ defmodule TenanteeWeb.PropertyController do
   end
 
   def find(conn, %{"id" => id}) do
-    with {:ok, property} <- Property.get_property(id) do
-      conn
-      |> render("show.json", %{property: property})
-    else
-      {:error, :not_found} -> respond(conn, :not_found, "Property not found")
+    case Property.get_property(id) do
+      {:ok, property} ->
+        conn
+        |> render("show.json", %{property: property})
+
+      {:error, :not_found} ->
+        respond(conn, :not_found, "Property not found")
     end
   end
 
@@ -80,21 +82,24 @@ defmodule TenanteeWeb.PropertyController do
   end
 
   def add_tenant(conn, %{"id" => id, "tenant" => tenant_id}) do
-    with {:ok, property} <- Property.add_tenant(id, tenant_id) do
-      conn
-      |> put_status(:created)
-      |> render("show.json", %{property: property})
-    else
-      {:error, _error} -> respond(conn, :not_found, "Property or tenant not found")
+    case Property.add_tenant(id, tenant_id) do
+      {:ok, property} ->
+        conn
+        |> put_status(:created)
+        |> render("show.json", %{property: property})
+
+      {:error, _error} ->
+        respond(conn, :not_found, "Property or tenant not found")
     end
   end
 
   def remove_tenant(conn, %{"id" => id, "tenant" => tenant_id}) do
-    with {:ok, property} <- Property.remove_tenant(id, tenant_id) do
-      conn
-      |> put_status(:no_content)
-      |> render("show.json", %{property: property})
-    else
+    case Property.remove_tenant(id, tenant_id) do
+      {:ok, property} ->
+        conn
+        |> put_status(:no_content)
+        |> render("show.json", %{property: property})
+
       {:error, _error} ->
         respond(conn, :not_found, "Property or tenant not found")
     end
