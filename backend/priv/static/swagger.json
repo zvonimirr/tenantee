@@ -20,6 +20,39 @@
       "title": "Health Check",
       "type": "object"
     },
+    "Preference": {
+      "description": "A preference",
+      "properties": {
+        "name": {
+          "description": "The name of the preference",
+          "type": "string"
+        },
+        "value": {
+          "description": "The value of the preference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "name"
+      ],
+      "title": "Preference",
+      "type": "object"
+    },
+    "PreferenceList": {
+      "description": "A list of preferences",
+      "properties": {
+        "preferences": {
+          "description": "The list of preferences",
+          "items": {
+            "$ref": "#/definitions/Preference"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Preference list",
+      "type": "object"
+    },
     "Price": {
       "description": "Price of a property",
       "properties": {
@@ -229,6 +262,25 @@
         "summary": "Health check",
         "tags": [
           "General"
+        ]
+      }
+    },
+    "/api/preferences": {
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.PreferencesController.list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of preferences",
+            "schema": {
+              "$ref": "#/definitions/PreferenceList"
+            }
+          }
+        },
+        "summary": "List all preferences",
+        "tags": [
+          "Preferences"
         ]
       }
     },
@@ -832,6 +884,10 @@
     {
       "description": "Rent management",
       "name": "Rent"
+    },
+    {
+      "description": "Preferences management",
+      "name": "Preferences"
     }
   ]
 }

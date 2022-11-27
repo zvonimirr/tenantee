@@ -47,6 +47,10 @@ defmodule TenanteeWeb.Router do
       post "/:id/mark-as-paid", RentController, :mark_as_paid
       post "/:id/mark-as-unpaid", RentController, :mark_as_unpaid
     end
+
+    scope "/preferences" do
+      get "/", PreferencesController, :list
+    end
   end
 
   # coveralls-ignore-start
@@ -76,6 +80,10 @@ defmodule TenanteeWeb.Router do
         %{
           name: "Rent",
           description: "Rent management"
+        },
+        %{
+          name: "Preferences",
+          description: "Preferences management"
         }
       ]
     }
