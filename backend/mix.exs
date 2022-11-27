@@ -56,7 +56,8 @@ defmodule Tenantee.MixProject do
       {:ex_json_schema, "~> 0.5"},
       {:oban, "~> 2.13"},
       {:ex_money, "~> 5.0"},
-      {:ex_money_sql, "~> 1.7"}
+      {:ex_money_sql, "~> 1.7"},
+      {:ecto_enum, "~> 1.4"}
     ]
   end
 
