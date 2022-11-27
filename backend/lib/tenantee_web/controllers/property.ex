@@ -26,9 +26,6 @@ defmodule TenanteeWeb.PropertyController do
     else
       {:error, "Invalid currency"} ->
         respond(conn, :unprocessable_entity, "Invalid currency")
-
-      {:error, _changeset} ->
-        respond(conn, :unprocessable_entity, "Invalid property")
     end
   end
 
@@ -68,9 +65,6 @@ defmodule TenanteeWeb.PropertyController do
 
       {:error, :not_found} ->
         respond(conn, :not_found, "Property not found")
-
-      {:error, _changeset} ->
-        respond(conn, :unprocessable_entity, "Invalid property")
     end
   end
 

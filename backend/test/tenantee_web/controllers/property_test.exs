@@ -4,21 +4,49 @@ defmodule TenanteeWeb.PropertyControllerTest do
   use TenanteeWeb.TenantCase
   use TenanteeWeb.RentCase
 
-  test "POST /api/properties", %{conn: conn} do
-    conn = insert_property(conn)
-    failure_conn = post conn, "/api/properties", property: %{name: "Test Property 2"}
+  describe "POST /api/properties" do
+    test "happy path", %{conn: conn} do
+      conn = insert_property(conn)
 
-    assert json_response(conn, 201)["name"] == "Test Property"
-    assert json_response(failure_conn, 422) == %{"error" => "Invalid property"}
+      assert json_response(conn, 201)["name"] == "Test Property"
+    end
+
+    test "invalid currency", %{conn: conn} do
+      conn =
+        post(conn, "/api/properties", %{
+          "property" => %{
+            "name" => "Test Property",
+            "location" => "Test Location",
+            "currency" => "invalid",
+            "price" => 1000
+          }
+        })
+
+      assert json_response(conn, 422)["error"] == "Invalid currency"
+    end
+
+    test "invalid params", %{conn: conn} do
+      conn = post(conn, "/api/properties", %{})
+
+      assert json_response(conn, 422)["error"] == "Invalid property"
+    end
   end
 
-  test "GET /api/properties/:id", %{conn: conn} do
-    conn = insert_property(conn)
-    id = json_response(conn, 201)["id"]
+  describe "GET /api/properties/:id" do
+    test "happy path", %{conn: conn} do
+      conn = insert_property(conn)
+      id = json_response(conn, 201)["id"]
 
-    conn = get(conn, "/api/properties/#{id}")
+      conn = get(conn, "/api/properties/#{id}")
 
-    assert json_response(conn, 200)["name"] == "Test Property"
+      assert json_response(conn, 200)["name"] == "Test Property"
+    end
+
+    test "not found", %{conn: conn} do
+      conn = get(conn, "/api/properties/0")
+
+      assert json_response(conn, 404)["error"] == "Property not found"
+    end
   end
 
   test "GET /api/properties", %{conn: conn} do
@@ -28,101 +56,140 @@ defmodule TenanteeWeb.PropertyControllerTest do
     assert json_response(conn, 200)["properties"] != []
   end
 
-  test "PATCH /api/properties/:id", %{conn: conn} do
-    conn = insert_property(conn)
-    id = json_response(conn, 201)["id"]
+  describe "PATCH /api/properties/:id" do
+    test "happy path", %{conn: conn} do
+      conn = insert_property(conn)
+      id = json_response(conn, 201)["id"]
 
-    conn =
-      patch conn, "/api/properties/#{id}", %{
-        property: %{
-          name: "Test Property 2",
-          price: 1000,
-          currency: "PHP"
-        }
-      }
+      conn =
+        patch(conn, "/api/properties/#{id}", %{
+          "property" => %{
+            "name" => "Updated Property",
+            "location" => "Updated Location",
+            "currency" => "USD",
+            "price" => 1000
+          }
+        })
 
-    failure_conn = patch(conn, "/api/properties/#{id}")
+      assert json_response(conn, 200)["name"] == "Updated Property"
+    end
 
-    failure2_conn =
-      patch(conn, "/api/properties/0", %{
-        property: %{
-          name: "Test Property 2",
-          price: 1000,
-          currency: "PHP"
-        }
-      })
+    test "invalid currency", %{conn: conn} do
+      conn = insert_property(conn)
+      id = json_response(conn, 201)["id"]
 
-    assert json_response(conn, 200)["name"] == "Test Property 2"
+      conn =
+        patch(conn, "/api/properties/#{id}", %{
+          "property" => %{
+            "name" => "Updated Property",
+            "location" => "Updated Location",
+            "currency" => "invalid",
+            "price" => 1000
+          }
+        })
 
-    assert json_response(conn, 200)["price"] == %{
-             "amount" => 1000,
-             "currency" => "PHP"
-           }
+      assert json_response(conn, 422)["error"] == "Invalid currency"
+    end
 
-    assert json_response(failure_conn, 422) == %{"error" => "Invalid property"}
-    assert json_response(failure2_conn, 404) == %{"error" => "Property not found"}
+    test "invalid params", %{conn: conn} do
+      conn = insert_property(conn)
+      id = json_response(conn, 201)["id"]
+
+      conn = patch(conn, "/api/properties/#{id}", %{})
+
+      assert json_response(conn, 422)["error"] == "Invalid property"
+    end
+
+    test "not found", %{conn: conn} do
+      conn =
+        patch(conn, "/api/properties/0", %{
+          "property" => %{
+            "name" => "Updated Property",
+            "location" => "Updated Location",
+            "currency" => "USD",
+            "price" => 1000
+          }
+        })
+
+      assert json_response(conn, 404)["error"] == "Property not found"
+    end
   end
 
-  test "DELETE /api/properties/:id", %{conn: conn} do
-    conn = insert_property(conn)
-    id = json_response(conn, 201)["id"]
+  describe "DELETE /api/properties/:id" do
+    test "happy path", %{conn: conn} do
+      conn = insert_property(conn)
+      id = json_response(conn, 201)["id"]
 
-    conn = delete(conn, "/api/properties/#{id}")
-    failure_conn = delete(conn, "/api/properties/#{id}")
-    failure_find_conn = get(conn, "/api/properties/#{id}")
+      conn = delete(conn, "/api/properties/#{id}")
 
-    assert json_response(conn, 204) == %{"message" => "Property deleted"}
-    assert json_response(failure_conn, 404) == %{"error" => "Property not found"}
-    assert json_response(failure_find_conn, 404) == %{"error" => "Property not found"}
+      assert json_response(conn, 204)["message"] == "Property deleted"
+    end
+
+    test "not found", %{conn: conn} do
+      conn = delete(conn, "/api/properties/0")
+
+      assert json_response(conn, 404)["error"] == "Property not found"
+    end
   end
 
-  test "PUT /api/properties/:id/tenants/:tenant", %{conn: conn} do
-    property_conn = insert_property(conn)
-    id = json_response(property_conn, 201)["id"]
+  describe "PUT /api/properties/:id/tenants/:tenant" do
+    test "happy path", %{conn: conn} do
+      conn = insert_property(conn)
+      id = json_response(conn, 201)["id"]
+      conn = insert_tenant(conn)
+      tenant = json_response(conn, 201)["id"]
 
-    tenant_conn = insert_tenant(conn)
-    tenant_id = json_response(tenant_conn, 201)["id"]
+      conn = put(conn, "/api/properties/#{id}/tenants/#{tenant}")
 
-    failure_conn = put(conn, "/api/properties/#{id + 1}/tenants/#{tenant_id}")
-    conn = put(conn, "/api/properties/#{id}/tenants/#{tenant_id}")
-    tenants = json_response(conn, 201)["tenants"]
+      tenants = json_response(conn, 201)["tenants"]
+      assert List.first(tenants)["id"] == tenant
+    end
 
-    assert List.first(tenants)["id"] == tenant_id
-    assert json_response(failure_conn, 404) == %{"error" => "Property or tenant not found"}
+    test "not found", %{conn: conn} do
+      conn = put(conn, "/api/properties/0/tenants/0")
+
+      assert json_response(conn, 404)["error"] == "Property or tenant not found"
+    end
   end
 
-  test "DELETE /api/properties/:id/tenants/:tenant", %{conn: conn} do
-    property_conn = insert_property(conn)
-    id = json_response(property_conn, 201)["id"]
+  describe "DELETE /api/properties/:id/tenants/:tenant" do
+    test "happy path", %{conn: conn} do
+      conn = insert_property(conn)
+      id = json_response(conn, 201)["id"]
+      conn = insert_tenant(conn)
+      tenant = json_response(conn, 201)["id"]
+      conn = put(conn, "/api/properties/#{id}/tenants/#{tenant}")
 
-    tenant_conn = insert_tenant(conn)
-    tenant_id = json_response(tenant_conn, 201)["id"]
+      conn = delete(conn, "/api/properties/#{id}/tenants/#{tenant}")
 
-    failure_conn = delete(conn, "/api/properties/#{id + 1}/tenants/#{tenant_id}")
-    put(conn, "/api/properties/#{id}/tenants/#{tenant_id}")
-    conn = delete(conn, "/api/properties/#{id}/tenants/#{tenant_id}")
+      assert json_response(conn, 204)["tenants"] == []
+    end
 
-    tenants = json_response(conn, 204)["tenants"]
+    test "not found", %{conn: conn} do
+      conn = delete(conn, "/api/properties/0/tenants/0")
 
-    assert tenants == []
-    assert json_response(failure_conn, 404) == %{"error" => "Property or tenant not found"}
+      assert json_response(conn, 404)["error"] == "Property or tenant not found"
+    end
   end
 
-  test "GET /api/properties/:id/rents/unpaid", %{conn: conn} do
-    property_conn = insert_property(conn)
-    id = json_response(property_conn, 201)["id"]
+  describe "GET /api/properties/:id/rents/unpaid" do
+    test "happy path", %{conn: conn} do
+      conn = insert_property(conn)
+      id = json_response(conn, 201)["id"]
+      conn = insert_tenant(conn)
+      tenant = json_response(conn, 201)["id"]
+      conn = put(conn, "/api/properties/#{id}/tenants/#{tenant}")
+      insert_rent(id, tenant)
 
-    tenant_conn = insert_tenant(conn)
-    tenant_id = json_response(tenant_conn, 201)["id"]
+      conn = get(conn, "/api/properties/#{id}/rents/unpaid")
 
-    failure_conn = get(conn, "/api/properties/#{id + 1}/rents/unpaid")
-    put(conn, "/api/properties/#{id}/tenants/#{tenant_id}")
-    insert_rent(id, tenant_id)
+      assert List.first(json_response(conn, 200)["rents"])["tenant"]["id"] == tenant
+    end
 
-    conn = get(conn, "/api/properties/#{id}/rents/unpaid")
-    [rent] = json_response(conn, 200)["rents"]
+    test "not found", %{conn: conn} do
+      conn = get(conn, "/api/properties/0/rents/unpaid")
 
-    assert rent["tenant"]["id"] == tenant_id
-    assert json_response(failure_conn, 404) == %{"error" => "Property not found"}
+      assert json_response(conn, 404)["error"] == "Property not found"
+    end
   end
 end
