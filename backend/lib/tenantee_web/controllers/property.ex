@@ -14,7 +14,7 @@ defmodule TenanteeWeb.PropertyController do
           "price" => price
         } = params
       )
-      when is_integer(price) and price > 0 do
+      when is_number(price) and price > 0 do
     with currency <- Map.get(params, "currency", "USD"),
          :ok <- Currency.valid?(currency),
          money <- Money.new(price, currency),

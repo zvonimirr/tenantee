@@ -9,6 +9,13 @@ defmodule Tenantee.Preferences do
     Repo.all(Schema)
   end
 
+  def get_preference(name) do
+    case Repo.get_by(Schema, name: name) do
+      nil -> {:error, "Preference not found"}
+      preference -> {:ok, preference}
+    end
+  end
+
   def set_preference(name, value) do
     try do
       case Repo.get_by(Schema, name: name) do
