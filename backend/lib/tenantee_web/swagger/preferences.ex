@@ -15,6 +15,18 @@ defmodule TenanteeWeb.Swagger.Preferences do
         response(200, "List of preferences", Schema.ref(:PreferenceList))
       end
 
+      swagger_path :set do
+        put("/api/preferences")
+        summary("Set preference")
+
+        parameters do
+          preference(:body, Schema.ref(:Preference), "Preference to set", required: true)
+        end
+
+        response(200, "Preference set", Schema.ref(:Preference))
+        response(422, "Invalid preference name")
+      end
+
       def swagger_definitions do
         %{
           Preference:
