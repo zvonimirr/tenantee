@@ -9,14 +9,16 @@ defmodule TenanteeWeb.PropertyView do
   end
 
   def render("show.json", %{property: property}) do
+    price = Tenantee.Utils.Currency.convert(property.price)
+
     %{
       id: property.id,
       name: property.name,
       description: property.description,
       location: property.location,
       price: %{
-        amount: property.price.amount,
-        currency: property.price.currency
+        amount: price.amount,
+        currency: price.currency |> Atom.to_string()
       },
       due_date_modifier: property.due_date_modifier,
       inserted_at: property.inserted_at,
