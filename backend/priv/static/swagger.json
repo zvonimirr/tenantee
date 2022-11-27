@@ -95,6 +95,10 @@
           "description": "Location of the property",
           "type": "string"
         },
+        "monthly_revenue": {
+          "$ref": "#/definitions/Price",
+          "description": "Monthly revenue of the property"
+        },
         "name": {
           "description": "Name of the property",
           "type": "string"
@@ -114,6 +118,7 @@
       "required": [
         "tenants",
         "currency",
+        "monthly_revenue",
         "price",
         "location",
         "name",

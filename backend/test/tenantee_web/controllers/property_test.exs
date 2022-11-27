@@ -134,6 +134,15 @@ defmodule TenanteeWeb.PropertyControllerTest do
       assert List.first(tenants)["id"] == tenant
     end
 
+    test "monthly revenue", %{conn: conn} do
+      %{id: id, price: price} = Tenantee.Factory.Property.insert()
+      %{id: tenant} = Tenantee.Factory.Tenant.insert()
+
+      conn = put(conn, "/api/properties/#{id}/tenants/#{tenant}")
+
+      assert json_response(conn, 201)["monthly_revenue"]["amount"] == price.amount |> to_string()
+    end
+
     test "not found", %{conn: conn} do
       conn = put(conn, "/api/properties/0/tenants/0")
 
