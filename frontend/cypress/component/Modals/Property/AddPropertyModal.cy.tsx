@@ -51,13 +51,11 @@ describe('AddPropertyModal', () => {
         cy.get('#submit').click();
 
         cy.wrap(onSubmit).should('have.been.calledWith', {
-            property: {
-                name: '123',
-                description: '123',
-                location: '123',
-                price: 123,
-                currency: 'USD',
-            },
+            name: '123',
+            description: '123',
+            location: '123',
+            price: 123,
+            currency: 'USD',
         });
     });
 });

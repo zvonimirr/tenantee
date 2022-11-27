@@ -62,13 +62,11 @@ describe('EditPropertyModal', () => {
 
         cy.wrap(onSubmit).should('have.been.calledWith', {
             id: 1,
-            property: {
-                name: 'Test Property',
-                description: 'Test Description',
-                price: 100,
-                location: 'Test Location',
-                currency: 'USD',
-            },
+            name: 'Test Property',
+            description: 'Test Description',
+            price: 100,
+            location: 'Test Location',
+            currency: 'USD',
         });
     });
 });
