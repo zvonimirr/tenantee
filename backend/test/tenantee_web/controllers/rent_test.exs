@@ -1,14 +1,15 @@
 defmodule TenanteeWeb.RentControllerTest do
   use TenanteeWeb.ConnCase
-  use TenanteeWeb.RentCase
 
   setup %{conn: _conn} do
     %{id: property_id} = Tenantee.Factory.Property.insert(name: "Test Property")
 
     %{id: tenant_id} = Tenantee.Factory.Tenant.insert(first_name: "Test", last_name: "Tenant")
-    rent = insert_rent(property_id, tenant_id)
 
-    {:ok, %{rent_id: Map.get(rent, :id), property_id: property_id, tenant_id: tenant_id}}
+    %{id: rent_id} =
+      Tenantee.Factory.Rent.insert(property_id, tenant_id, due_date: ~D[2022-11-23])
+
+    {:ok, %{rent_id: rent_id, property_id: property_id, tenant_id: tenant_id}}
   end
 
   test "GET /api/rent", %{

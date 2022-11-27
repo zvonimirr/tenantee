@@ -1,6 +1,5 @@
 defmodule TenanteeWeb.RentTest do
   use TenanteeWeb.ConnCase
-  use TenanteeWeb.RentCase
 
   setup %{conn: _conn} do
     %{id: property_id} = Tenantee.Factory.Property.insert()
