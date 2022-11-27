@@ -22,7 +22,7 @@ defmodule Tenantee.Utils.Currency do
   # Don't want to waste my App quota on testing
 
   @doc """
-  Convert the given amount to the given currency.
+  Convert the given amount to the default currency.
   """
   def convert(%{
         amount: amount,

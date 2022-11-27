@@ -10,6 +10,7 @@ defmodule TenanteeWeb.PropertyView do
 
   def render("show.json", %{property: property}) do
     price = Tenantee.Utils.Currency.convert(property.price)
+    monthly_revenue = Tenantee.Stats.get_monthly_revenue(property)
 
     %{
       id: property.id,
@@ -19,6 +20,10 @@ defmodule TenanteeWeb.PropertyView do
       price: %{
         amount: price.amount,
         currency: price.currency
+      },
+      monthly_revenue: %{
+        amount: monthly_revenue.amount,
+        currency: monthly_revenue.currency
       },
       due_date_modifier: property.due_date_modifier,
       inserted_at: property.inserted_at,

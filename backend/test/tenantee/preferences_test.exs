@@ -1,7 +1,6 @@
 defmodule Tenantee.PreferencesTest do
   use Tenantee.DataCase
   alias Tenantee.Preferences
-  alias Tenantee.Preferences.Schema
 
   describe "get all preferences" do
     test "returns all preferences" do

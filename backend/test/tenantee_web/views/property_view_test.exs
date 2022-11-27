@@ -15,7 +15,11 @@ defmodule TenanteeWeb.PropertyViewTest do
     inserted_at: ~N[2018-01-01 00:00:00],
     updated_at: ~N[2018-01-01 00:00:00],
     tenants: [],
-    due_date_modifier: 0
+    due_date_modifier: 0,
+    monthly_revenue: %{
+      amount: Decimal.new(0),
+      currency: :USD
+    }
   }
 
   test "renders error.json" do

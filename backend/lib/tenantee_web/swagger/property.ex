@@ -127,6 +127,11 @@ defmodule TenanteeWeb.Swagger.Property do
                 description(:string, "Description of the property")
                 location(:string, "Location of the property", required: true)
                 price(:integer, "Price of the property", required: true)
+
+                monthly_revenue(Schema.ref(:Price), "Monthly revenue of the property",
+                  required: true
+                )
+
                 currency(:string, "Currency of the property price", required: true)
 
                 due_date_modifier(
