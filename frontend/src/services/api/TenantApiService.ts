@@ -1,4 +1,9 @@
-import { TenantDto, TenantList, Tenant } from '../../types/tenant';
+import {
+    TenantDto,
+    TenantList,
+    Tenant,
+    TenantUpdateDto,
+} from '../../types/tenant';
 import { HttpService } from './HttpService';
 
 export class TenantApiService extends HttpService {
@@ -22,7 +27,7 @@ export class TenantApiService extends HttpService {
         return HttpService.post<TenantDto>(path, tenant);
     }
 
-    async updateTenant(path: string, tenant: TenantDto) {
+    async updateTenant(path: string, tenant: TenantUpdateDto) {
         return HttpService.patch<TenantDto>(path, tenant);
     }
 

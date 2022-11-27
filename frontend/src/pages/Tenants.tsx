@@ -14,7 +14,12 @@ import PageContainer from '../components/PageContainer';
 import useSWR from 'swr';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNotification } from '../hooks/useNotification';
-import { Tenant, TenantDto, TenantList, TenantUpdateDto } from '../types/tenant';
+import {
+    Tenant,
+    TenantDto,
+    TenantList,
+    TenantUpdateDto,
+} from '../types/tenant';
 import {
     tenantApiService,
     TenantApiService,
@@ -90,11 +95,14 @@ function Tenants() {
     const onEditTenantSubmit = useCallback(
         async (tenant: TenantUpdateDto) => {
             try {
-                await tenantApiService.updateTenant(TenantApiService.updateTenantPath(tenant.id), tenant);
+                await tenantApiService.updateTenant(
+                    TenantApiService.updateTenantPath(tenant.id),
+                    tenant,
+                );
 
                 showSuccess(
                     'Tenant update',
-                    `Tenant ${tenant.tenant.first_name} ${tenant.tenant.last_name} has been updated successfully`,
+                    `Tenant ${tenant.first_name} ${tenant.last_name} has been updated successfully`,
                 );
             } catch (e) {
                 showError(
@@ -106,7 +114,8 @@ function Tenants() {
                 closeEditTenantModal();
                 mutate();
             }
-        }, [mutate, selectedTenant],
+        },
+        [mutate, selectedTenant],
     );
 
     const onTenantDeleteClick = useCallback(async () => {
@@ -197,14 +206,14 @@ function Tenants() {
                             !isLoading &&
                             data &&
                             isEmpty(data.tenants) && (
-                            <GridItem colSpan={3}>
-                                <Text fontSize="lg" textAlign="center">
-                                    {
-                                        'You don\'t have any tenants yet. Click the button below to add one.'
-                                    }
-                                </Text>
-                            </GridItem>
-                        )}
+                                <GridItem colSpan={3}>
+                                    <Text fontSize="lg" textAlign="center">
+                                        {
+                                            "You don't have any tenants yet. Click the button below to add one."
+                                        }
+                                    </Text>
+                                </GridItem>
+                            )}
                     </Grid>
                     <Center>
                         <Button

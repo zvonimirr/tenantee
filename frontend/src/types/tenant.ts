@@ -12,14 +12,12 @@ export interface TenantList {
     tenants: Tenant[];
 }
 
-export interface TenantDto {
-    tenant: Omit<Tenant, 'id' | 'name' | 'unpaid_rents'> & {
-        first_name: string;
-        last_name: string;
-    };
+export interface TenantDto
+    extends Omit<Tenant, 'id' | 'name' | 'unpaid_rents'> {
+    first_name: string;
+    last_name: string;
 }
 
 export interface TenantUpdateDto extends TenantDto {
     id: number;
 }
-

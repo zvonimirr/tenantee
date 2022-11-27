@@ -104,7 +104,7 @@ function Properties() {
 
                 showSuccess(
                     'Property updated',
-                    `Property ${property.property.name} has been updated successfully`,
+                    `Property ${property.name} has been updated successfully`,
                 );
             } catch (e) {
                 showError(
@@ -210,14 +210,14 @@ function Properties() {
                             !isLoading &&
                             data &&
                             isEmpty(data.properties) && (
-                            <GridItem colSpan={3}>
-                                <Text fontSize="lg" textAlign="center">
-                                    {
-                                        'You don\'t have any properties yet. Click the button below to add one.'
-                                    }
-                                </Text>
-                            </GridItem>
-                        )}
+                                <GridItem colSpan={3}>
+                                    <Text fontSize="lg" textAlign="center">
+                                        {
+                                            "You don't have any properties yet. Click the button below to add one."
+                                        }
+                                    </Text>
+                                </GridItem>
+                            )}
                     </Grid>
                     <Center>
                         <Button

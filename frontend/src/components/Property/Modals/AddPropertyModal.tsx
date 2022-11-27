@@ -118,10 +118,8 @@ function AddPropertyModal({
                                     }
                                     onClick={handleSubmit((values) =>
                                         onSubmit({
-                                            property: {
-                                                ...values,
-                                                price: Number(values.price),
-                                            },
+                                            ...values,
+                                            price: Number(values.price),
                                         }),
                                     )}>
                                     Add Property

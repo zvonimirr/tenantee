@@ -81,7 +81,7 @@ function AddTenantModal({ isOpen, onClose, onSubmit }: AddTenantModalProps) {
                                         formState.isSubmitting
                                     }
                                     onClick={handleSubmit((values) => {
-                                        onSubmit({ tenant: values });
+                                        onSubmit(values);
                                     })}>
                                     Add Tenant
                                 </Button>

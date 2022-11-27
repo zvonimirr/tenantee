@@ -47,7 +47,7 @@ function EditTenantModal({
                 first_name: tenant.name.split(' ')[0],
                 last_name: tenant.name.split(' ')[1],
                 email: tenant.email,
-                phone: tenant.phone
+                phone: tenant.phone,
             });
         }
     }, [tenant]);
@@ -105,10 +105,8 @@ function EditTenantModal({
                                     }
                                     onClick={handleSubmit((values) =>
                                         onSubmit({
+                                            ...values,
                                             id: tenant?.id ?? 0,
-                                            tenant: {
-                                                ...values,
-                                            },
                                         }),
                                     )}>
                                     Update Property
