@@ -11,15 +11,9 @@ defmodule Tenantee.Tenant do
   Creates a new tenant.
   """
   def create_tenant(tenant) do
-    case %Schema{}
-         |> Schema.changeset(tenant)
-         |> Repo.insert() do
-      {:ok, tenant} ->
-        {:ok, tenant}
-
-      {:error, changeset} ->
-        {:error, changeset}
-    end
+    %Schema{}
+    |> Schema.changeset(tenant)
+    |> Repo.insert()
   end
 
   @doc """

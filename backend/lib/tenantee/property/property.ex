@@ -13,11 +13,11 @@ defmodule Tenantee.Property do
   Creates a new property.
   """
   def create_property(attrs) do
-    case %Schema{}
-         |> Schema.changeset(attrs)
-         |> Repo.insert() do
-      {:ok, property} -> {:ok, Repo.preload(property, :tenants)}
-      {:error, changeset} -> {:error, changeset}
+    with {:ok, property} <-
+           %Schema{}
+           |> Schema.changeset(attrs)
+           |> Repo.insert() do
+      {:ok, Repo.preload(property, :tenants)}
     end
   end
 
