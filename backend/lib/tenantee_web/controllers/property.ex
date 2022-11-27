@@ -73,11 +73,8 @@ defmodule TenanteeWeb.PropertyController do
   end
 
   def delete_by_id(conn, %{"id" => id}) do
-    with {:ok, :deleted} <- Property.delete_property(id) do
-      conn
-      |> put_status(:no_content)
-      |> render("delete.json", %{})
-    else
+    case Property.delete_property(id) do
+      {:ok, :deleted} -> respond(conn, :no_content, "Property deleted")
       {:error, :not_found} -> respond(conn, :not_found, "Property not found")
     end
   end
@@ -98,10 +95,8 @@ defmodule TenanteeWeb.PropertyController do
       |> put_status(:no_content)
       |> render("show.json", %{property: property})
     else
-      _ ->
-        conn
-        |> put_status(:not_found)
-        |> render("error.json", %{message: "Property or tenant not found"})
+      {:error, _error} ->
+        respond(conn, :not_found, "Property or tenant not found")
     end
   end
 

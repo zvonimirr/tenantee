@@ -3,6 +3,7 @@ defmodule TenanteeWeb.TenantController do
   use TenanteeWeb.Swagger.Tenant
   alias Tenantee.Tenant
   alias Tenantee.Rent
+  import Tenantee.Utils.Error, only: [respond: 3]
 
   def add(conn, %{"tenant" => params}) do
     with {:ok, tenant} <- Tenant.create_tenant(params) do
@@ -13,20 +14,15 @@ defmodule TenanteeWeb.TenantController do
   end
 
   def add(conn, _params) do
-    conn
-    |> put_status(:bad_request)
-    |> render("error.json", %{message: "Invalid params"})
+    respond(conn, :unprocessable_entity, "Invalid tenant")
   end
 
   def find(conn, %{"id" => id}) do
-    with tenant <- Tenant.get_tenant_by_id(id) do
-      if tenant do
-        render(conn, "show.json", %{tenant: tenant})
-      else
-        conn
-        |> put_status(:not_found)
-        |> render("error.json", %{message: "Tenant not found"})
-      end
+    with {:ok, tenant} <- Tenant.get_tenant_by_id(id) do
+      conn
+      |> render("show.json", %{tenant: tenant})
+    else
+      {:error, :not_found} -> respond(conn, :not_found, "Tenant not found")
     end
   end
 
@@ -40,64 +36,40 @@ defmodule TenanteeWeb.TenantController do
         "id" => id,
         "tenant" => params
       }) do
-    with tenant <- Tenant.get_tenant_by_id(id) do
-      if tenant do
-        with {:ok, tenant} <- Tenant.update_tenant(id, params) do
-          render(conn, "show.json", %{tenant: tenant})
-        end
-      else
-        conn
-        |> put_status(:not_found)
-        |> render("error.json", %{message: "Tenant not found"})
-      end
+    with {:ok, tenant} <- Tenant.update_tenant(id, params) do
+      conn
+      |> render("show.json", %{tenant: tenant})
+    else
+      {:error, :not_found} -> respond(conn, :not_found, "Tenant not found")
     end
   end
 
   def update(conn, _params) do
-    conn
-    |> put_status(:bad_request)
-    |> render("error.json", %{message: "Invalid params"})
+    respond(conn, :unprocessable_entity, "Invalid tenant")
   end
 
   def delete_by_id(conn, %{"id" => id}) do
-    with {affected_rows, nil} <- Tenant.delete_tenant(id) do
-      if affected_rows < 1 do
-        conn
-        |> put_status(:not_found)
-        |> render("error.json", %{message: "Tenant not found"})
-      else
-        conn
-        |> put_status(:no_content)
-        |> render("delete.json", %{})
-      end
+    case Tenant.delete_tenant(id) do
+      {:ok, :deleted} -> respond(conn, :no_content, "Tenant deleted")
+      {:error, :not_found} -> respond(conn, :not_found, "Tenant not found")
     end
   end
 
   def all_rents(conn, %{"id" => id}) do
-    with tenant <- Tenant.get_tenant_by_id(id) do
-      if is_nil(tenant) do
-        conn
-        |> put_status(:not_found)
-        |> render("error.json", %{message: "Tenant not found"})
-      else
-        with rents <- Rent.get_all_rents_by_tenant_id(id) do
-          render(conn, "show_rent.json", %{rents: rents})
-        end
-      end
+    with {:ok, _tenant} <- Tenant.get_tenant_by_id(id),
+         rents <- Rent.get_all_rents_by_tenant_id(id) do
+      render(conn, "show_rent.json", %{rents: rents})
+    else
+      {:error, :not_found} -> respond(conn, :not_found, "Tenant not found")
     end
   end
 
   def unpaid_rents(conn, %{"id" => id}) do
-    with tenant <- Tenant.get_tenant_by_id(id) do
-      if is_nil(tenant) do
-        conn
-        |> put_status(:not_found)
-        |> render("error.json", %{message: "Tenant not found"})
-      else
-        with rents <- Rent.get_unpaid_rents_by_tenant_id(id) do
-          render(conn, "show_rent.json", %{rents: rents})
-        end
-      end
+    with {:ok, _tenant} <- Tenant.get_tenant_by_id(id),
+         rents <- Rent.get_unpaid_rents_by_tenant_id(id) do
+      render(conn, "show_rent.json", %{rents: rents})
+    else
+      {:error, :not_found} -> respond(conn, :not_found, "Tenant not found")
     end
   end
 end

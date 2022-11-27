@@ -13,6 +13,6 @@ defmodule Tenantee.Utils.Error do
     conn
     |> put_status(status)
     |> put_view(ErrorView)
-    |> render("error.json", %{message: message})
+    |> render("message.json", %{message: message})
   end
 end

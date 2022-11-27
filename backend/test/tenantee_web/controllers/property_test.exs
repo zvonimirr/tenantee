@@ -22,13 +22,13 @@ defmodule TenanteeWeb.PropertyControllerTest do
           }
         })
 
-      assert json_response(conn, 422)["error"] == "Invalid currency"
+      assert json_response(conn, 422)["message"] == "Invalid currency"
     end
 
     test "invalid params", %{conn: conn} do
       conn = post(conn, "/api/properties", %{})
 
-      assert json_response(conn, 422)["error"] == "Invalid property"
+      assert json_response(conn, 422)["message"] == "Invalid property"
     end
   end
 
@@ -45,7 +45,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
     test "not found", %{conn: conn} do
       conn = get(conn, "/api/properties/0")
 
-      assert json_response(conn, 404)["error"] == "Property not found"
+      assert json_response(conn, 404)["message"] == "Property not found"
     end
   end
 
@@ -88,7 +88,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
           }
         })
 
-      assert json_response(conn, 422)["error"] == "Invalid currency"
+      assert json_response(conn, 422)["message"] == "Invalid currency"
     end
 
     test "invalid params", %{conn: conn} do
@@ -97,7 +97,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
 
       conn = patch(conn, "/api/properties/#{id}", %{})
 
-      assert json_response(conn, 422)["error"] == "Invalid property"
+      assert json_response(conn, 422)["message"] == "Invalid property"
     end
 
     test "not found", %{conn: conn} do
@@ -111,7 +111,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
           }
         })
 
-      assert json_response(conn, 404)["error"] == "Property not found"
+      assert json_response(conn, 404)["message"] == "Property not found"
     end
   end
 
@@ -128,7 +128,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
     test "not found", %{conn: conn} do
       conn = delete(conn, "/api/properties/0")
 
-      assert json_response(conn, 404)["error"] == "Property not found"
+      assert json_response(conn, 404)["message"] == "Property not found"
     end
   end
 
@@ -148,7 +148,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
     test "not found", %{conn: conn} do
       conn = put(conn, "/api/properties/0/tenants/0")
 
-      assert json_response(conn, 404)["error"] == "Property or tenant not found"
+      assert json_response(conn, 404)["message"] == "Property or tenant not found"
     end
   end
 
@@ -168,7 +168,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
     test "not found", %{conn: conn} do
       conn = delete(conn, "/api/properties/0/tenants/0")
 
-      assert json_response(conn, 404)["error"] == "Property or tenant not found"
+      assert json_response(conn, 404)["message"] == "Property or tenant not found"
     end
   end
 
@@ -189,7 +189,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
     test "not found", %{conn: conn} do
       conn = get(conn, "/api/properties/0/rents/unpaid")
 
-      assert json_response(conn, 404)["error"] == "Property not found"
+      assert json_response(conn, 404)["message"] == "Property not found"
     end
   end
 end

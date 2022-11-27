@@ -69,7 +69,7 @@ defmodule Tenantee.Property do
   """
   def add_tenant(property_id, tenant_id) do
     with {:ok, %Schema{} = property} <- get_property(property_id),
-         %TenantSchema{} = tenant <- Tenant.get_tenant_by_id(tenant_id) do
+         {:ok, %TenantSchema{} = tenant} <- Tenant.get_tenant_by_id(tenant_id) do
       Schema.add_tenant(property, tenant)
       |> Repo.update()
     else
@@ -82,7 +82,7 @@ defmodule Tenantee.Property do
   """
   def remove_tenant(property_id, tenant_id) do
     with {:ok, %Schema{} = property} <- get_property(property_id),
-         %TenantSchema{} = tenant <- Tenant.get_tenant_by_id(tenant_id) do
+         {:ok, %TenantSchema{} = tenant} <- Tenant.get_tenant_by_id(tenant_id) do
       Schema.remove_tenant(property, tenant)
       |> Repo.update()
     else
