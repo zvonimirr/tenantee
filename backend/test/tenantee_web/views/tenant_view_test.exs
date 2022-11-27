@@ -29,9 +29,8 @@ defmodule TenanteeWeb.TenantViewTest do
 
   describe "renders show.json" do
     test "single property" do
-      assert render(TenanteeWeb.TenantView, "show.json", %{tenant: @tenant}) == %{
-               tenant: @api_tenant
-             }
+      assert render(TenanteeWeb.TenantView, "show.json", %{tenant: @tenant}) ==
+               @api_tenant
     end
 
     test "list of properties" do
