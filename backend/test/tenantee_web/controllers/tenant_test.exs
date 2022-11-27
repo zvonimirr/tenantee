@@ -42,8 +42,21 @@ defmodule TenanteeWeb.TenantControllerTest do
 
     failure_conn = patch(conn, "/api/tenants/#{id}", %{})
 
+    failure2_conn =
+      patch(conn, "/api/tenants/#{id + 1}", %{
+        tenant: %{
+          first_name: "Updated",
+          last_name: "Updated",
+          email: "Updated",
+          phone: "Updated",
+          property_id: "Updated",
+          rent_id: "Updated"
+        }
+      })
+
     assert json_response(conn, 200)["name"] == "Updated Tenant"
     assert json_response(failure_conn, 400) == %{"error" => "Invalid params"}
+    assert json_response(failure2_conn, 404) == %{"error" => "Tenant not found"}
   end
 
   test "DELETE /api/tenants/:id", %{conn: conn} do
@@ -54,7 +67,7 @@ defmodule TenanteeWeb.TenantControllerTest do
     failure_conn = delete(conn, "/api/tenants/#{id}")
     failure_find_conn = get(conn, "/api/tenants/#{id}")
 
-    assert json_response(conn, 200) == %{"message" => "Tenant deleted"}
+    assert json_response(conn, 204) == %{"message" => "Tenant deleted"}
     assert json_response(failure_conn, 404) == %{"error" => "Tenant not found"}
     assert json_response(failure_find_conn, 404) == %{"error" => "Tenant not found"}
   end
@@ -87,9 +100,12 @@ defmodule TenanteeWeb.TenantControllerTest do
     put(conn, "/api/properties/#{id}/tenants/#{tenant_id}")
     insert_rent(id, tenant_id)
 
+    failure_conn = get(conn, "/api/tenants/#{tenant_id + 1}/rents/unpaid")
+
     conn = get(conn, "/api/tenants/#{tenant_id}/rents/unpaid")
     [rent] = json_response(conn, 200)["rents"]
 
     assert rent["property"]["id"] == id
+    assert json_response(failure_conn, 404) == %{"error" => "Tenant not found"}
   end
 end
