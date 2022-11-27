@@ -1,6 +1,5 @@
 defmodule TenanteeWeb.TenantControllerTest do
   use TenanteeWeb.ConnCase
-  use TenanteeWeb.PropertyCase
   use TenanteeWeb.TenantCase
   use TenanteeWeb.RentCase
 
@@ -79,8 +78,7 @@ defmodule TenanteeWeb.TenantControllerTest do
 
   describe "GET /api/tenants/:id/rents" do
     test "happy path", %{conn: conn} do
-      property = insert_property(conn)
-      property_id = json_response(property, 201)["id"]
+      %{id: property_id} = Tenantee.Factory.Property.insert()
       tenant = insert_tenant(conn)
       tenant_id = json_response(tenant, 201)["id"]
       insert_rent(property_id, tenant_id)
@@ -99,8 +97,7 @@ defmodule TenanteeWeb.TenantControllerTest do
 
   describe "GET /api/tenants/:id/rents/unpaid" do
     test "happy path", %{conn: conn} do
-      property = insert_property(conn)
-      property_id = json_response(property, 201)["id"]
+      %{id: property_id} = Tenantee.Factory.Property.insert()
       tenant = insert_tenant(conn)
       tenant_id = json_response(tenant, 201)["id"]
       insert_rent(property_id, tenant_id)

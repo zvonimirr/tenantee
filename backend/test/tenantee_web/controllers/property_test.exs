@@ -1,8 +1,16 @@
 defmodule TenanteeWeb.PropertyControllerTest do
   use TenanteeWeb.ConnCase
-  use TenanteeWeb.PropertyCase
   use TenanteeWeb.TenantCase
   use TenanteeWeb.RentCase
+
+  defp insert_property(conn) do
+    conn
+    |> post("/api/properties", %{
+      "name" => "Test Property",
+      "location" => "Test Location",
+      "price" => 1000
+    })
+  end
 
   describe "POST /api/properties" do
     test "happy path", %{conn: conn} do

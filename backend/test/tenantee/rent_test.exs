@@ -1,12 +1,10 @@
 defmodule TenanteeWeb.RentTest do
   use TenanteeWeb.ConnCase
-  use TenanteeWeb.PropertyCase
   use TenanteeWeb.TenantCase
   use TenanteeWeb.RentCase
 
   setup %{conn: conn} do
-    property_conn = insert_property(conn)
-    property_id = json_response(property_conn, 201)["id"]
+    %{id: property_id} = Tenantee.Factory.Property.insert()
 
     tenant_conn = insert_tenant(conn)
     tenant_id = json_response(tenant_conn, 201)["id"]
