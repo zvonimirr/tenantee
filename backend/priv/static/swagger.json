@@ -205,7 +205,7 @@
         },
         "income": {
           "$ref": "#/definitions/Price",
-          "description": "Debt of tenant (only in response)"
+          "description": "Predicted income for this tenant (only in response)"
         },
         "last_name": {
           "description": "Tenant last name",
