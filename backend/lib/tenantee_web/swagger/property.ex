@@ -26,7 +26,7 @@ defmodule TenanteeWeb.Swagger.Property do
         summary("Find a property by ID")
 
         parameters do
-          property(:path, :string, "ID of property to fetch", required: true)
+          id(:path, :integer, "ID of property to fetch", required: true)
         end
 
         response(200, "Property found", Schema.ref(:Property))
@@ -45,7 +45,7 @@ defmodule TenanteeWeb.Swagger.Property do
         summary("Update a property")
 
         parameters do
-          id(:path, :string, "ID of property to update", required: true)
+          id(:path, :integer, "ID of property to update", required: true)
           property(:body, Schema.ref(:Property), "Property to update", required: true)
         end
 
@@ -59,10 +59,10 @@ defmodule TenanteeWeb.Swagger.Property do
         summary("Delete a property")
 
         parameters do
-          id(:path, :string, "ID of property to delete", required: true)
+          id(:path, :integer, "ID of property to delete", required: true)
         end
 
-        response(204, "Property deleted")
+        response(200, "Property deleted")
         response(404, "Property not found")
       end
 
@@ -71,8 +71,8 @@ defmodule TenanteeWeb.Swagger.Property do
         summary("Add a tenant to a property")
 
         parameters do
-          id(:path, :string, "ID of property to add tenant to", required: true)
-          tenant(:path, :string, "ID of tenant to add", required: true)
+          id(:path, :integer, "ID of property to add tenant to", required: true)
+          tenant(:path, :integer, "ID of tenant to add", required: true)
         end
 
         response(200, "Tenant added to property", Schema.ref(:Property))
@@ -84,11 +84,11 @@ defmodule TenanteeWeb.Swagger.Property do
         summary("Remove a tenant from a property")
 
         parameters do
-          id(:path, :string, "ID of property to remove tenant from", required: true)
-          tenant(:path, :string, "ID of tenant to remove", required: true)
+          id(:path, :integer, "ID of property to remove tenant from", required: true)
+          tenant(:path, :integer, "ID of tenant to remove", required: true)
         end
 
-        response(204, "Tenant removed from property", Schema.ref(:Property))
+        response(200, "Tenant removed from property", Schema.ref(:Property))
         response(404, "Property or tenant not found")
       end
 
@@ -97,7 +97,7 @@ defmodule TenanteeWeb.Swagger.Property do
         summary("List unpaid rents for a property")
 
         parameters do
-          id(:path, :string, "ID of property to list unpaid rents for", required: true)
+          id(:path, :integer, "ID of property to list unpaid rents for", required: true)
         end
 
         response(200, "Unpaid rents", Schema.ref(:RentList))

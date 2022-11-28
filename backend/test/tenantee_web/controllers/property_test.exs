@@ -112,7 +112,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
 
       conn = delete(conn, "/api/properties/#{id}")
 
-      assert json_response(conn, 204)["message"] == "Property deleted"
+      assert json_response(conn, 200)["message"] == "Property deleted"
     end
 
     test "not found", %{conn: conn} do
@@ -159,7 +159,7 @@ defmodule TenanteeWeb.PropertyControllerTest do
       put(conn, "/api/properties/#{id}/tenants/#{tenant}")
       conn = delete(conn, "/api/properties/#{id}/tenants/#{tenant}")
 
-      assert json_response(conn, 204)["tenants"] == []
+      assert json_response(conn, 200)["tenants"] == []
     end
 
     test "not found", %{conn: conn} do

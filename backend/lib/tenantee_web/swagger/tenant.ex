@@ -62,7 +62,7 @@ defmodule TenanteeWeb.Swagger.Tenant do
           id(:path, :integer, "ID of tenant to delete", required: true)
         end
 
-        response(204, "Tenant deleted")
+        response(200, "Tenant deleted")
         response(404, "Tenant not found")
       end
 
@@ -83,7 +83,7 @@ defmodule TenanteeWeb.Swagger.Tenant do
         summary("List unpaid rents for tenants")
 
         parameters do
-          id(:path, :string, "ID of tenant to list unpaid rents for", required: true)
+          id(:path, :integer, "ID of tenant to list unpaid rents for", required: true)
         end
 
         response(200, "Unpaid rents", Schema.ref(:RentList))

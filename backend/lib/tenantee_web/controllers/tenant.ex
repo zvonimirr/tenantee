@@ -58,7 +58,7 @@ defmodule TenanteeWeb.TenantController do
 
   def delete_by_id(conn, %{"id" => id}) do
     case Tenant.delete_tenant(id) do
-      {:ok, :deleted} -> respond(conn, :no_content, "Tenant deleted")
+      {:ok, :deleted} -> respond(conn, :ok, "Tenant deleted")
       {:error, :not_found} -> respond(conn, :not_found, "Tenant not found")
     end
   end
