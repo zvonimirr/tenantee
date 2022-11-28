@@ -10,6 +10,10 @@ export interface Property {
         currency: string;
     };
     tenants: Tenant[];
+    monthly_revenue: {
+        amount: number;
+        currency: string;
+    };
 }
 
 export interface PropertyList {
@@ -17,7 +21,7 @@ export interface PropertyList {
 }
 
 export interface PropertyDto
-    extends Omit<Property, 'id' | 'price' | 'tenants'> {
+    extends Omit<Property, 'id' | 'price' | 'tenants' | 'monthly_revenue'> {
     price: number;
 }
 
