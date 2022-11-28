@@ -1,4 +1,4 @@
-import { Box, Button, Center, Select, Spinner, Stack } from '@chakra-ui/react';
+import { Box, Button, Center, Spinner, Stack } from '@chakra-ui/react';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
@@ -10,9 +10,9 @@ import {
     PreferenceApiService,
 } from '../services/api/PreferenceApiService';
 import { Preference, Preferences } from '../types/preferences';
-import countryToCurrency from 'country-to-currency';
-import { difference, uniq } from 'ramda';
+import { difference } from 'ramda';
 import { useNotification } from '../hooks/useNotification';
+import CurrencySelect from '../components/Form/CurrencySelect';
 
 interface PreferenceFormFields {
     name: string;
@@ -45,15 +45,6 @@ function Settings() {
     const isError = useMemo(() => error !== undefined, [error]);
 
     const preferences = useMemo(() => data?.preferences, [data]);
-    const currencyOptions = useMemo(() => {
-        const currencies = uniq(Object.values(countryToCurrency));
-        currencies.sort();
-
-        return currencies.map((currency) => ({
-            value: currency,
-            label: currency,
-        }));
-    }, []);
 
     const default_currency = watch('default_currency');
 
@@ -138,7 +129,7 @@ function Settings() {
                             label="Name"
                             placeholder="Landlord name..."
                             control={control}
-                            rules={{ required: 'Name can\'t be empty' }}
+                            rules={{ required: "Name can't be empty" }}
                         />
                         <GenericInput
                             name="open_exchange_app_id"
@@ -146,24 +137,19 @@ function Settings() {
                             placeholder="Open Exchange App ID..."
                             control={control}
                             rules={{
-                                required: 'Open Exchange App ID can\'t be empty',
+                                required: "Open Exchange App ID can't be empty",
                             }}
                         />
                         <label htmlFor="default_currency">
                             Default Currency
                         </label>
-                        <Select
+                        <CurrencySelect
                             name="default_currency"
                             value={default_currency}
-                            onChange={(e) => {
-                                setValue('default_currency', e.target.value);
-                            }}>
-                            {currencyOptions.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </Select>
+                            onChange={(value) => {
+                                setValue('default_currency', value);
+                            }}
+                        />
 
                         <Button
                             colorScheme="teal"

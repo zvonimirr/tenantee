@@ -12,15 +12,18 @@ import {
 } from '@chakra-ui/react';
 import { IconHome, IconPencil } from '@tabler/icons';
 import { useForm } from 'react-hook-form';
-import { PropertyDto } from '../../../types/property';
+import { Property, PropertyUpdateDto } from '../../../types/property';
 import GenericInput from '../../Form/GenericInput';
+import { useEffect, useState } from 'react';
+import countryToCurrency from 'country-to-currency';
 import getSymbolFromCurrency from 'currency-symbol-map';
 import CurrencySelect from '../../Form/CurrencySelect';
 
-interface AddPropertyModalProps {
+interface EditPropertyModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSubmit: (property: PropertyDto) => void;
+    onSubmit: (property: PropertyUpdateDto) => void;
+    property: Property | null;
 }
 
 const defaultValues = {
@@ -28,26 +31,49 @@ const defaultValues = {
     description: '',
     price: 0,
     location: '',
-    currency: 'USD',
+    currency: '',
 };
 
-function AddPropertyModal({
+function EditPropertyModal({
     isOpen,
     onClose,
     onSubmit,
-}: AddPropertyModalProps) {
-    const { handleSubmit, formState, control, setValue, watch } = useForm({
-        mode: 'onChange',
-        defaultValues,
-    });
+    property,
+}: EditPropertyModalProps) {
+    const { handleSubmit, formState, control, reset, watch, setValue } =
+        useForm({
+            mode: 'onChange',
+            defaultValues,
+        });
+
+    useEffect(() => {
+        if (property) {
+            reset({
+                name: property.name,
+                description: property.description,
+                price: property.price.amount,
+                location: property.location,
+                currency: property.price.currency,
+            });
+        }
+    }, [property]);
 
     const currency = watch('currency');
+
+    useEffect(() => {
+        if (country && Object.keys(countryToCurrency).includes(country)) {
+            setValue(
+                'currency',
+                countryToCurrency[country as keyof typeof countryToCurrency],
+            );
+        }
+    }, [country]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Add New Property</ModalHeader>
+                <ModalHeader>Update {property?.name}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <FormControl>
@@ -104,15 +130,17 @@ function AddPropertyModal({
                                     colorScheme="teal"
                                     disabled={
                                         !formState.isValid ||
-                                        formState.isSubmitting
+                                        formState.isSubmitting ||
+                                        property === null
                                     }
                                     onClick={handleSubmit((values) =>
                                         onSubmit({
                                             ...values,
                                             price: Number(values.price),
+                                            id: property?.id ?? 0,
                                         }),
                                     )}>
-                                    Add Property
+                                    Update Property
                                 </Button>
                             </Box>
                         </Stack>
@@ -123,4 +151,4 @@ function AddPropertyModal({
     );
 }
 
-export default AddPropertyModal;
+export default EditPropertyModal;
