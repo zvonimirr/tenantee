@@ -10,6 +10,10 @@ export interface Property {
         currency: string;
     };
     tenants: Tenant[];
+    monthly_revenue: {
+        amount: number;
+        currency: string;
+    };
 }
 
 export interface PropertyList {

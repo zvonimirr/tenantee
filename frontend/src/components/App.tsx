@@ -3,7 +3,7 @@ import Navigation from './Navigation/Navigation';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from '../pages/Home';
 import DrawerProvider from '../hooks/useDrawer';
-import { IconKey, IconSettings, IconUsers } from '@tabler/icons';
+import { IconHome, IconKey, IconSettings, IconUsers } from '@tabler/icons';
 import Label from './Navigation/Label';
 import { SWRConfig } from 'swr';
 import Properties from '../pages/Properties';
@@ -13,6 +13,10 @@ import Tenant from '../pages/Tenant';
 import Settings from '../pages/Settings';
 
 const links = [
+    {
+        href: '/',
+        label: <Label icon={<IconHome />} label="Home" />,
+    },
     {
         href: '/properties',
         label: <Label icon={<IconKey />} label="Properties" />,
