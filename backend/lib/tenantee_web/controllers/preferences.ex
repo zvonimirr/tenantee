@@ -6,7 +6,17 @@ defmodule TenanteeWeb.PreferencesController do
 
   def list(conn, _params) do
     with preferences <- Preferences.get_preferences() do
-      render(conn, "show.json", preferences: preferences)
+      render(conn, "show.json", %{preferences: preferences})
+    end
+  end
+
+  def get_by_name(conn, %{"name" => name}) do
+    case Preferences.get_preference(name) do
+      {:ok, nil} ->
+        respond(conn, :not_found, "Preference not found")
+
+      {:ok, preference} ->
+        render(conn, "show.json", %{preference: preference})
     end
   end
 
