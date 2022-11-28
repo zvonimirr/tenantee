@@ -14,10 +14,8 @@ import { IconHome, IconPencil } from '@tabler/icons';
 import { useForm } from 'react-hook-form';
 import { PropertyDto } from '../../../types/property';
 import GenericInput from '../../Form/GenericInput';
-import { useEffect, useState } from 'react';
-import countryToCurrency from 'country-to-currency';
 import getSymbolFromCurrency from 'currency-symbol-map';
-import CountrySelect from 'react-flags-select';
+import CurrencySelect from '../../Form/CurrencySelect';
 
 interface AddPropertyModalProps {
     isOpen: boolean;
@@ -38,22 +36,12 @@ function AddPropertyModal({
     onClose,
     onSubmit,
 }: AddPropertyModalProps) {
-    const { handleSubmit, formState, control, watch, setValue } = useForm({
+    const { handleSubmit, formState, control, setValue, watch } = useForm({
         mode: 'onChange',
         defaultValues,
     });
 
     const currency = watch('currency');
-    const [country, setCountry] = useState('US');
-
-    useEffect(() => {
-        if (country && Object.keys(countryToCurrency).includes(country)) {
-            setValue(
-                'currency',
-                countryToCurrency[country as keyof typeof countryToCurrency],
-            );
-        }
-    }, [country]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -102,10 +90,12 @@ function AddPropertyModal({
                                 }}
                                 rightAdornment={getSymbolFromCurrency(currency)}
                             />
-                            <CountrySelect
-                                searchable
-                                selected={country}
-                                onSelect={(country) => setCountry(country)}
+                            <CurrencySelect
+                                name="currency"
+                                value={currency}
+                                onChange={(value) =>
+                                    setValue('currency', value)
+                                }
                             />
                             <Box w="100%">
                                 <Button

@@ -21,7 +21,6 @@
     "ramda": "^0.28.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-flags-select": "^2.2.3",
     "react-hook-form": "^7.39.6",
     "react-router-dom": "^6.4.3",
     "react-select-currency": "^1.0.7",
