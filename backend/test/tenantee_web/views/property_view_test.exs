@@ -8,18 +8,12 @@ defmodule TenanteeWeb.PropertyViewTest do
     name: "Test Property",
     description: "Test Description",
     location: "Test Location",
-    price: %{
-      amount: Decimal.new(100),
-      currency: :USD
-    },
+    price: Money.new("100.00", :USD),
     inserted_at: ~N[2018-01-01 00:00:00],
     updated_at: ~N[2018-01-01 00:00:00],
     tenants: [],
     due_date_modifier: 0,
-    monthly_revenue: %{
-      amount: Decimal.new(0),
-      currency: :USD
-    }
+    monthly_revenue: Money.new("0.00", :USD)
   }
 
   test "renders error.json" do

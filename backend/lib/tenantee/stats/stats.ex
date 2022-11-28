@@ -10,6 +10,7 @@ defmodule Tenantee.Stats do
     with price <- Currency.convert(property.price),
          {:ok, revenue} <- Money.mult(price, Enum.count(property.tenants)) do
       revenue
+      |> Money.round(currency_digits: 2)
     end
   end
 
@@ -17,8 +18,11 @@ defmodule Tenantee.Stats do
     with unpaid_rents <- Rent.get_unpaid_rents_by_tenant_id(tenant.id),
          properties <- Enum.map(unpaid_rents, &Property.get_property(&1.property_id)),
          [price | prices] <-
-           Enum.map(properties, fn {:ok, property} -> Currency.convert(property.price) end) do
-      Enum.reduce(prices, price, fn price, acc -> Money.add(price, acc) |> elem(1) end)
+           Enum.map(properties, fn {:ok, property} -> Currency.convert(property.price) end),
+         total_price <-
+           Enum.reduce(prices, price, fn price, acc -> Money.add(price, acc) |> elem(1) end) do
+      total_price
+      |> Money.round(currency_digits: 2)
     end
   end
 end

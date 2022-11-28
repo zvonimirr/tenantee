@@ -29,6 +29,20 @@ defmodule TenanteeWeb.TenantControllerTest do
       assert json_response(conn, 200)["id"] == id
     end
 
+    test "with debt", %{conn: conn} do
+      %{id: property_id} = Tenantee.Factory.Property.insert()
+      %{id: second_property_id} = Tenantee.Factory.Property.insert()
+
+      %{id: tenant_id} = Tenantee.Factory.Tenant.insert()
+      Tenantee.Factory.Rent.insert(property_id, tenant_id, due_date: ~D[2018-01-01])
+      Tenantee.Factory.Rent.insert(second_property_id, tenant_id, due_date: ~D[2018-01-01])
+
+      conn = get(conn, "/api/tenants/#{tenant_id}")
+      tenant = json_response(conn, 200)
+
+      assert Decimal.parse(tenant["debt"]["amount"]) > 0
+    end
+
     test "not found", %{conn: conn} do
       conn = get(conn, "/api/tenants/0")
 
@@ -101,8 +115,9 @@ defmodule TenanteeWeb.TenantControllerTest do
       Tenantee.Factory.Rent.insert(property_id, tenant_id)
 
       conn = get(conn, "/api/tenants/#{tenant_id}/rents/unpaid")
+      tenant = json_response(conn, 200)
 
-      assert json_response(conn, 200)["rents"] != []
+      assert tenant["rents"] != []
     end
 
     test "not found", %{conn: conn} do
