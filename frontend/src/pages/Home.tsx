@@ -1,12 +1,36 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Center, Spinner, Text } from '@chakra-ui/react';
+import useSWR from 'swr';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
+import {
+    preferenceApiService,
+    PreferenceApiService,
+} from '../services/api/PreferenceApiService';
+import { Preference } from '../types/preferences';
 
 function Home() {
+    const { data, isValidating } = useSWR<Preference>(
+        PreferenceApiService.getByNamePath('name'),
+        preferenceApiService.getPreference,
+    );
+
     return (
         <Box>
             <Breadcrumbs items={[]} />
-            <PageContainer>Homepage.</PageContainer>
+            <PageContainer>
+                {isValidating && (
+                    <Center>
+                        <Spinner size="lg" />
+                    </Center>
+                )}
+                {!isValidating && data && (
+                    <Text fontSize="xl">
+                        Hello,{' '}
+                        <span style={{ fontWeight: 'bold' }}>{data.value}</span>
+                        !
+                    </Text>
+                )}
+            </PageContainer>
         </Box>
     );
 }
