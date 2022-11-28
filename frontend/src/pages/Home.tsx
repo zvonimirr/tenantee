@@ -23,10 +23,12 @@ function Home() {
                         <Spinner size="lg" />
                     </Center>
                 )}
-                {!isValidating && data && (
+                {!isValidating && (
                     <Text fontSize="xl">
                         Hello,{' '}
-                        <span style={{ fontWeight: 'bold' }}>{data.value}</span>
+                        <span style={{ fontWeight: 'bold' }}>
+                            {data?.value ?? 'landlord'}
+                        </span>
                         !
                     </Text>
                 )}
