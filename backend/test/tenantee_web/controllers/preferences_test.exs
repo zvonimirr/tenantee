@@ -17,6 +17,25 @@ defmodule TenanteeWeb.PreferencesControllerTest do
     end
   end
 
+  describe "GET /api/preferences/:name" do
+    test "happy path", %{conn: conn} do
+      %Schema{}
+      |> Schema.changeset(%{
+        name: :default_currency,
+        value: "USD"
+      })
+      |> Repo.insert!()
+
+      conn = get(conn, "/api/preferences/default_currency")
+      assert json_response(conn, 200)["value"] == "USD"
+    end
+
+    test "not found", %{conn: conn} do
+      conn = get(conn, "/api/preferences/name")
+      assert json_response(conn, 404)["message"] == "Preference not found"
+    end
+  end
+
   describe "PUT /api/preferences" do
     test "happy create path", %{conn: conn} do
       conn =

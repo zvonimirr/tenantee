@@ -15,6 +15,18 @@ defmodule TenanteeWeb.Swagger.Preferences do
         response(200, "List of preferences", Schema.ref(:PreferenceList))
       end
 
+      swagger_path :get_by_name do
+        get("/api/preferences/{name}")
+        summary("Get preference by name")
+
+        parameters do
+          name(:path, :string, "Preference name", required: true)
+        end
+
+        response(200, "Preference", Schema.ref(:Preference))
+        response(404, "Preference not found")
+      end
+
       swagger_path :set do
         put("/api/preferences")
         summary("Set preference")

@@ -12,8 +12,9 @@ defmodule Tenantee.Preferences do
   end
 
   def get_preference(name, default \\ nil) do
-    with preferences <- Repo.all(from(p in Schema, where: p.name == ^name)),
-         [preference] <- preferences,
+    with atom_name <- String.to_existing_atom(name),
+         preferences <- get_preferences(),
+         [preference] <- preferences |> Enum.filter(&(&1.name == atom_name)),
          false <- is_nil(preference) do
       {:ok, preference}
     else
@@ -22,20 +23,16 @@ defmodule Tenantee.Preferences do
   end
 
   def set_preference(name, value) do
-    try do
-      case get_preference(name) do
-        {:ok, nil} ->
-          %Schema{}
-          |> Schema.changeset(%{name: name, value: value})
-          |> Repo.insert()
+    case get_preference(name) do
+      {:ok, nil} ->
+        %Schema{}
+        |> Schema.changeset(%{name: name, value: value})
+        |> Repo.insert()
 
-        {:ok, preference} ->
-          preference
-          |> Schema.changeset(%{value: value})
-          |> Repo.update()
-      end
-    rescue
-      Ecto.Query.CastError -> {:error, "Invalid name"}
+      {:ok, preference} ->
+        preference
+        |> Schema.changeset(%{value: value})
+        |> Repo.update()
     end
   end
 end

@@ -327,6 +327,36 @@
         ]
       }
     },
+    "/api/preferences/{name}": {
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.PreferencesController.get_by_name",
+        "parameters": [
+          {
+            "description": "Preference name",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Preference",
+            "schema": {
+              "$ref": "#/definitions/Preference"
+            }
+          },
+          "404": {
+            "description": "Preference not found"
+          }
+        },
+        "summary": "Get preference by name",
+        "tags": [
+          "Preferences"
+        ]
+      }
+    },
     "/api/properties": {
       "get": {
         "description": "",
