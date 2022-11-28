@@ -4,3 +4,7 @@ export interface Preference {
     name: PreferecnceName;
     value: string;
 }
+
+export interface Preferences {
+    preferences: Preference[];
+}
