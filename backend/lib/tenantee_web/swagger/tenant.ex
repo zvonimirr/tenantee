@@ -104,6 +104,8 @@ defmodule TenanteeWeb.Swagger.Tenant do
                 last_name(:string, "Tenant last name", required: true)
                 email(:string, "Email of tenant", required: true)
                 phone(:string, "Phone of tenant", required: true)
+                debt(Schema.ref(:Price), "Debt of tenant (only in response)")
+                unpaid_rents(Schema.ref(:Rent), "Unpaid rents (only in response)")
               end
             end,
           TenantList:
