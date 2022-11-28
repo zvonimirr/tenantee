@@ -8,8 +8,6 @@ defmodule Tenantee.Stats do
     with price <- Currency.convert(property.price),
          {:ok, revenue} <- Money.mult(price, Enum.count(property.tenants)) do
       revenue
-    else
-      _error -> Money.new!("0", property.price.currency)
     end
   end
 end
