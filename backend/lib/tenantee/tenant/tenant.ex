@@ -19,17 +19,9 @@ defmodule Tenantee.Tenant do
   @doc """
   Gets a single tenant.
   """
-  def get_tenant_by_id(id, preload \\ false) do
+  def get_tenant_by_id(id) do
     with tenant <- Repo.get(Schema, id) do
-      if tenant do
-        if preload do
-          {:ok, Repo.preload(tenant, :properties)}
-        else
-          {:ok, tenant}
-        end
-      else
-        {:error, :not_found}
-      end
+      if tenant, do: {:ok, tenant}, else: {:error, :not_found}
     end
   end
 

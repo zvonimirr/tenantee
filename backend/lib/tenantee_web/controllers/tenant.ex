@@ -24,7 +24,7 @@ defmodule TenanteeWeb.TenantController do
   end
 
   def find(conn, %{"id" => id}) do
-    case Tenant.get_tenant_by_id(id, true) do
+    case Tenant.get_tenant_by_id(id) do
       {:ok, tenant} ->
         conn
         |> render("show.json", %{tenant: tenant})
