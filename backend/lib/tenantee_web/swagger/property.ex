@@ -26,7 +26,7 @@ defmodule TenanteeWeb.Swagger.Property do
         summary("Find a property by ID")
 
         parameters do
-          property(:path, :string, "ID of property to fetch", required: true)
+          id(:path, :integer, "ID of property to fetch", required: true)
         end
 
         response(200, "Property found", Schema.ref(:Property))

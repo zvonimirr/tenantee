@@ -404,9 +404,9 @@
           {
             "description": "ID of property to fetch",
             "in": "path",
-            "name": "property",
+            "name": "id",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "responses": {
