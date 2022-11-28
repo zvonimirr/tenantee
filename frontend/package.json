@@ -17,7 +17,7 @@
     "@tabler/icons": "^1.112.0",
     "country-to-currency": "^1.0.6",
     "currency-symbol-map": "^5.1.0",
-    "framer-motion": "^7.6.7",
+    "framer-motion": "^7.6.12",
     "ramda": "^0.28.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
