@@ -381,11 +381,11 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "responses": {
-          "204": {
+          "200": {
             "description": "Property deleted"
           },
           "404": {
@@ -434,7 +434,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "Property to update",
@@ -476,7 +476,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "responses": {
@@ -506,18 +506,18 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "ID of tenant to remove",
             "in": "path",
             "name": "tenant",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "responses": {
-          "204": {
+          "200": {
             "description": "Tenant removed from property",
             "schema": {
               "$ref": "#/definitions/Property"
@@ -541,14 +541,14 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "string"
+            "type": "integer"
           },
           {
             "description": "ID of tenant to add",
             "in": "path",
             "name": "tenant",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "responses": {
@@ -751,7 +751,7 @@
           }
         ],
         "responses": {
-          "204": {
+          "200": {
             "description": "Tenant deleted"
           },
           "404": {
@@ -872,7 +872,7 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "type": "string"
+            "type": "integer"
           }
         ],
         "responses": {

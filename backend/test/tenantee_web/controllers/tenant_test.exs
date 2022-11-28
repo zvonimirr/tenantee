@@ -66,7 +66,7 @@ defmodule TenanteeWeb.TenantControllerTest do
 
       conn = delete(conn, "/api/tenants/#{id}")
 
-      assert json_response(conn, 204)["message"] == "Tenant deleted"
+      assert json_response(conn, 200)["message"] == "Tenant deleted"
     end
 
     test "not found", %{conn: conn} do
