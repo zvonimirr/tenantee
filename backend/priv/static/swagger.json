@@ -187,6 +187,10 @@
     "Tenant": {
       "description": "A tenant",
       "properties": {
+        "debt": {
+          "$ref": "#/definitions/Price",
+          "description": "Debt of tenant (only in response)"
+        },
         "email": {
           "description": "Email of tenant",
           "type": "string"
@@ -210,6 +214,10 @@
         "phone": {
           "description": "Phone of tenant",
           "type": "string"
+        },
+        "unpaid_rents": {
+          "$ref": "#/definitions/Rent",
+          "description": "Unpaid rents (only in response)"
         }
       },
       "required": [

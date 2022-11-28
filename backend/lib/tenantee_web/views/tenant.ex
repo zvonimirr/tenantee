@@ -2,6 +2,7 @@ defmodule TenanteeWeb.TenantView do
   use TenanteeWeb, :view
   alias TenanteeWeb.RentView
   alias Tenantee.Rent
+  alias Tenantee.Stats
 
   def render("show.json", %{tenants: tenants}) do
     %{
@@ -10,7 +11,9 @@ defmodule TenanteeWeb.TenantView do
   end
 
   def render("show.json", %{tenant: tenant}) do
-    %{
+    debt = Stats.get_debt(tenant)
+
+    map = %{
       id: tenant.id,
       name: tenant.first_name <> " " <> tenant.last_name,
       phone: tenant.phone,
@@ -21,6 +24,12 @@ defmodule TenanteeWeb.TenantView do
         })
         |> Map.get(:rents)
     }
+
+    if debt !== [] do
+      Map.put(map, :debt, debt)
+    else
+      map
+    end
   end
 
   def render("show_rent.json", %{rent: rent}) do
