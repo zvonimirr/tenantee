@@ -87,4 +87,13 @@ defmodule Tenantee.Property do
       {:error, error} -> {:error, error}
     end
   end
+
+  @doc """
+  Gets all properties that a tenant is associated with.
+  """
+  def get_properties_of_tenant(tenant_id) do
+    get_all_properties()
+    |> Enum.reject(&Enum.empty?(&1.tenants))
+    |> Enum.filter(&Enum.any?(&1.tenants, fn tenant -> tenant.id == tenant_id end))
+  end
 end
