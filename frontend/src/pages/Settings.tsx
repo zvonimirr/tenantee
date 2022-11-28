@@ -138,12 +138,16 @@ function Settings() {
                             label="Name"
                             placeholder="Landlord name..."
                             control={control}
+                            rules={{ required: "Name can't be empty" }}
                         />
                         <GenericInput
                             name="open_exchange_app_id"
                             label="Open Exchange App ID"
                             placeholder="Open Exchange App ID..."
                             control={control}
+                            rules={{
+                                required: "Open Exchange App ID can't be empty",
+                            }}
                         />
                         <label htmlFor="default_currency">
                             Default Currency
@@ -164,7 +168,11 @@ function Settings() {
                         <Button
                             colorScheme="teal"
                             onClick={handleSubmit(onSaveClick)}
-                            disabled={isLoading || formState.isSubmitting}>
+                            disabled={
+                                isLoading ||
+                                !formState.isValid ||
+                                formState.isSubmitting
+                            }>
                             Save
                         </Button>
                     </Stack>
