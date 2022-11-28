@@ -76,3 +76,5 @@ if config_env() == :prod do
 
   config :tenantee, TenanteeWeb.Endpoint, force_ssl: [hsts: true]
 end
+
+config :ex_money, default_cldr_backend: Tenantee.Cldr
