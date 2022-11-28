@@ -45,7 +45,7 @@ defmodule Tenantee.Utils.Currency do
     if not is_nil(app_id) and Map.has_key?(app_id, :value) do
       {:ok,
        %Money.ExchangeRates.Config{
-         retrieve_every: :never,
+         retrieve_every: 300_000,
          api_module: Money.ExchangeRates.OpenExchangeRates,
          callback_module: Money.ExchangeRates.Callback,
          log_levels: %{failure: :warn, info: :info, success: nil},
