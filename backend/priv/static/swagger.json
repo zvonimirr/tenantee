@@ -219,9 +219,19 @@
           "description": "Phone of tenant",
           "type": "string"
         },
+        "properties": {
+          "description": "Properties of a tenant (only in response)",
+          "items": {
+            "$ref": "#/definitions/Property"
+          },
+          "type": "array"
+        },
         "unpaid_rents": {
-          "$ref": "#/definitions/Rent",
-          "description": "Unpaid rents (only in response)"
+          "description": "Unpaid rents (only in response)",
+          "items": {
+            "$ref": "#/definitions/Rent"
+          },
+          "type": "array"
         }
       },
       "required": [

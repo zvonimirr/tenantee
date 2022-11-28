@@ -1,8 +1,10 @@
 defmodule TenanteeWeb.TenantView do
   use TenanteeWeb, :view
+  alias TenanteeWeb.PropertyView
   alias TenanteeWeb.RentView
   alias Tenantee.Rent
   alias Tenantee.Stats
+  alias Tenantee.Property
 
   def render("show.json", %{tenants: tenants}) do
     %{
@@ -14,11 +16,16 @@ defmodule TenanteeWeb.TenantView do
     debt = Stats.get_debt(tenant) |> get_money()
     income = Stats.get_income(tenant) |> get_money()
 
+    properties =
+      Property.get_properties_of_tenant(tenant.id)
+      |> Enum.map(&render(PropertyView, "show_without_tenants.json", %{property: &1}))
+
     %{
       id: tenant.id,
       name: tenant.first_name <> " " <> tenant.last_name,
       phone: tenant.phone,
       email: tenant.email,
+      properties: properties,
       unpaid_rents:
         render(RentView, "show.json", %{
           rents: Rent.get_unpaid_rents_by_tenant_id(tenant.id)
