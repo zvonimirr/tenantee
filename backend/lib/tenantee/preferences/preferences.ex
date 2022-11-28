@@ -4,7 +4,6 @@ defmodule Tenantee.Preferences do
   """
   alias Tenantee.Repo
   alias Tenantee.Preferences.Schema
-  import Ecto.Query
 
   def get_preferences do
     Repo.all(Schema)
@@ -12,9 +11,9 @@ defmodule Tenantee.Preferences do
   end
 
   def get_preference(name, default \\ nil) do
-    with atom_name <- String.to_existing_atom(name),
-         preferences <- get_preferences(),
-         [preference] <- preferences |> Enum.filter(&(&1.name == atom_name)),
+    with preferences <- get_preferences(),
+         [preference] <-
+           preferences |> Enum.filter(fn p -> Atom.to_string(p.name) == name end),
          false <- is_nil(preference) do
       {:ok, preference}
     else

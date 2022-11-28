@@ -203,6 +203,10 @@
           "description": "ID of tenant",
           "type": "integer"
         },
+        "income": {
+          "$ref": "#/definitions/Price",
+          "description": "Predicted income for this tenant (only in response)"
+        },
         "last_name": {
           "description": "Tenant last name",
           "type": "string"

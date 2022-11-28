@@ -43,6 +43,20 @@ defmodule TenanteeWeb.TenantControllerTest do
       assert Decimal.parse(tenant["debt"]["amount"]) > 0
     end
 
+    test "with income", %{conn: conn} do
+      %{id: property_id} = Tenantee.Factory.Property.insert()
+      %{id: second_property_id} = Tenantee.Factory.Property.insert()
+      %{id: tenant_id} = Tenantee.Factory.Tenant.insert()
+
+      put(conn, "/api/properties/#{property_id}/tenants/#{tenant_id}")
+      put(conn, "/api/properties/#{second_property_id}/tenants/#{tenant_id}")
+
+      conn = get(conn, "/api/tenants/#{tenant_id}")
+      tenant = json_response(conn, 200)
+
+      assert Decimal.parse(tenant["income"]["amount"]) > 0
+    end
+
     test "not found", %{conn: conn} do
       conn = get(conn, "/api/tenants/0")
 

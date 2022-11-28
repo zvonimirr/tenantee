@@ -11,9 +11,10 @@ defmodule TenanteeWeb.TenantView do
   end
 
   def render("show.json", %{tenant: tenant}) do
-    debt = Stats.get_debt(tenant)
+    debt = Stats.get_debt(tenant) |> get_money()
+    income = Stats.get_income(tenant) |> get_money()
 
-    map = %{
+    %{
       id: tenant.id,
       name: tenant.first_name <> " " <> tenant.last_name,
       phone: tenant.phone,
@@ -24,12 +25,9 @@ defmodule TenanteeWeb.TenantView do
         })
         |> Map.get(:rents)
     }
-
-    if debt !== [] do
-      Map.put(map, :debt, debt)
-    else
-      map
-    end
+    |> Map.put(:debt, debt)
+    |> Map.put(:income, income)
+    |> Map.filter(fn {_k, v} -> not is_nil(v) end)
   end
 
   def render("show_rent.json", %{rent: rent}) do
@@ -64,4 +62,7 @@ defmodule TenanteeWeb.TenantView do
   def render("error.json", %{message: message}) do
     %{error: message}
   end
+
+  defp get_money(%Money{} = m) when is_map(m), do: m
+  defp get_money(_), do: nil
 end
