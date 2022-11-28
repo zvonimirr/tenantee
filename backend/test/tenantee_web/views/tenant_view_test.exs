@@ -16,6 +16,7 @@ defmodule TenanteeWeb.TenantViewTest do
               |> Map.delete(:last_name)
               |> Map.put_new(:name, @tenant.first_name <> " " <> @tenant.last_name)
               |> Map.put_new(:unpaid_rents, [])
+              |> Map.put_new(:properties, [])
 
   test "renders error.json" do
     assert render(TenanteeWeb.TenantView, "error.json", %{message: "oops"}) ==

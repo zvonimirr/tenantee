@@ -8,7 +8,7 @@ defmodule TenanteeWeb.PropertyView do
     }
   end
 
-  def render("show.json", %{property: property}) do
+  def render("show_without_tenants.json", %{property: property}) do
     price = Tenantee.Utils.Currency.convert(property.price) |> Money.round(currency_digits: 2)
     monthly_revenue = Tenantee.Stats.get_monthly_revenue(property)
 
@@ -21,9 +21,15 @@ defmodule TenanteeWeb.PropertyView do
       monthly_revenue: monthly_revenue,
       due_date_modifier: property.due_date_modifier,
       inserted_at: property.inserted_at,
-      updated_at: property.updated_at,
+      updated_at: property.updated_at
+    }
+  end
+
+  def render("show.json", %{property: property}) do
+    %{
       tenants: render(TenantView, "show.json", %{tenants: property.tenants}) |> Map.get(:tenants)
     }
+    |> Map.merge(render("show_without_tenants.json", %{property: property}))
   end
 
   def render("show_rent.json", %{rent: rent}) do

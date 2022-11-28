@@ -9,6 +9,7 @@
 - Set & list preferences API method ([@zvonimirr](https://github.com/zvonimirr))
 - Implement on-the-fly currency conversion ([@zvonimirr](https://github.com/zvonimirr))
 - Properties and tenants now return monthly revenue prediction ([@zvonimirr](https://github.com/zvonimirr))
+- Tenants now return properties they belong to ([@zvonimirr](https://github.com/zvonimirr))
 
 ### UI
 - Rent status is now displayed ([@kovaj024](https://github.com/kovaj024))
