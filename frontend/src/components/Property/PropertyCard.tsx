@@ -3,9 +3,9 @@ import { Property } from '../../types/property';
 import { IconHome, IconPencil, IconTrash } from '@tabler/icons';
 interface PropertyCardProps {
     property: Property;
-    onClick: (property: Property) => void;
+    onClick?: (property: Property) => void;
     onDeleteClick: (property: Property) => void;
-    onEditClick: (property: Property) => void;
+    onEditClick?: (property: Property) => void;
 }
 
 function PropertyCard({
@@ -23,12 +23,16 @@ function PropertyCard({
                         cursor="pointer"
                         onClick={() => onDeleteClick(property)}
                     />
-                    <IconPencil
-                        cursor="pointer"
-                        onClick={() => onEditClick(property)}
-                    />
+                    {onEditClick && (
+                        <IconPencil
+                            cursor="pointer"
+                            onClick={() => onEditClick(property)}
+                        />
+                    )}
                 </Flex>
-                <Center cursor="pointer" onClick={() => onClick(property)}>
+                <Center
+                    cursor={onClick ? 'pointer' : undefined}
+                    onClick={() => onClick?.(property)}>
                     <Flex direction="column">
                         <IconHome size={128} />
                         <Stack spacing={2}>

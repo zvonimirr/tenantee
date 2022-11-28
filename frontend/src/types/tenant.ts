@@ -1,3 +1,4 @@
+import { Property } from './property';
 import { Rent } from './rent';
 
 export interface Tenant {
@@ -6,6 +7,7 @@ export interface Tenant {
     email?: string;
     phone?: string;
     unpaid_rents: Rent[];
+    properties: Property[];
 }
 
 export interface TenantList {
@@ -13,7 +15,7 @@ export interface TenantList {
 }
 
 export interface TenantDto
-    extends Omit<Tenant, 'id' | 'name' | 'unpaid_rents'> {
+    extends Omit<Tenant, 'id' | 'name' | 'properties' | 'unpaid_rents'> {
     first_name: string;
     last_name: string;
 }
