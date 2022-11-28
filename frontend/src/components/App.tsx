@@ -3,13 +3,14 @@ import Navigation from './Navigation/Navigation';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from '../pages/Home';
 import DrawerProvider from '../hooks/useDrawer';
-import { IconKey, IconUsers } from '@tabler/icons';
+import { IconKey, IconSettings, IconUsers } from '@tabler/icons';
 import Label from './Navigation/Label';
 import { SWRConfig } from 'swr';
 import Properties from '../pages/Properties';
 import Tenants from '../pages/Tenants';
 import Property from '../pages/Property';
 import Tenant from '../pages/Tenant';
+import Settings from '../pages/Settings';
 
 const links = [
     {
@@ -19,6 +20,10 @@ const links = [
     {
         href: '/tenants',
         label: <Label icon={<IconUsers />} label="Tenants" />,
+    },
+    {
+        href: '/settings',
+        label: <Label icon={<IconSettings />} label="Settings" />,
     },
 ];
 
@@ -42,7 +47,11 @@ const router = createBrowserRouter([
     {
         path: '/tenants/:id',
         element: <Tenant />,
-    }
+    },
+    {
+        path: '/settings',
+        element: <Settings />,
+    },
 ]);
 
 function App() {
