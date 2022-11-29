@@ -5,7 +5,7 @@
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/zvonimirr/tenantee/dev)
 ![GitHub](https://img.shields.io/github/license/zvonimirr/tenantee)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![Example](./example.gif)
@@ -63,6 +63,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center"><a href="https://github.com/kovaj024"><img src="https://avatars.githubusercontent.com/u/35566682?v=4?s=100" width="100px;" alt="Andrej Kovačić"/><br /><sub><b>Andrej Kovačić</b></sub></a><br /><a href="https://github.com/zvonimirr/tenantee/commits?author=kovaj024" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/jvince"><img src="https://avatars.githubusercontent.com/u/8256496?v=4?s=100" width="100px;" alt="jvince"/><br /><sub><b>jvince</b></sub></a><br /><a href="https://github.com/zvonimirr/tenantee/commits?author=jvince" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/lukaevet"><img src="https://avatars.githubusercontent.com/u/108657761?v=4?s=100" width="100px;" alt="Luka Evetovic"/><br /><sub><b>Luka Evetovic</b></sub></a><br /><a href="https://github.com/zvonimirr/tenantee/commits?author=lukaevet" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/MilaFazekas"><img src="https://avatars.githubusercontent.com/u/79193172?v=4?s=100" width="100px;" alt="Milly"/><br /><sub><b>Milly</b></sub></a><br /><a href="https://github.com/zvonimirr/tenantee/issues?q=author%3AMilaFazekas" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
