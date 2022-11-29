@@ -9,10 +9,11 @@ import {
     ModalHeader,
     ModalOverlay,
     Stack,
+    Text,
 } from '@chakra-ui/react';
-import { IconHome, IconPencil } from '@tabler/icons';
+import { IconCalendar, IconHome, IconPencil } from '@tabler/icons';
 import { useForm } from 'react-hook-form';
-import { PropertyDto } from '../../../types/property';
+import { calculateDueDateModifier, PropertyDto } from '../../../types/property';
 import GenericInput from '../../Form/GenericInput';
 import getSymbolFromCurrency from 'currency-symbol-map';
 import CurrencySelect from '../../Form/CurrencySelect';
@@ -29,6 +30,7 @@ const defaultValues = {
     price: 0,
     location: '',
     currency: 'USD',
+    due_date_modifier: 0,
 };
 
 function AddPropertyModal({
@@ -97,6 +99,25 @@ function AddPropertyModal({
                                     setValue('currency', value)
                                 }
                             />
+                            <GenericInput
+                                name="due_date_modifier"
+                                label="Due Date Modifier"
+                                placeholder="Due Date Modifier"
+                                control={control}
+                                type="number"
+                                rules={{
+                                    required: 'Due Date Modifier is required',
+                                    min: 0,
+                                    max: 25,
+                                }}
+                                leftAdornment={<IconCalendar />}
+                            />
+                            <Text fontSize="sm">
+                                Due date modifier is used when calculating the
+                                due date for a payment. It is the number of days
+                                after the start of the month that the payment is
+                                due. (Min: 0, Max: 25)
+                            </Text>
                             <Box w="100%">
                                 <Button
                                     id="submit"
@@ -110,6 +131,12 @@ function AddPropertyModal({
                                         onSubmit({
                                             ...values,
                                             price: Number(values.price),
+                                            due_date_modifier:
+                                                calculateDueDateModifier(
+                                                    Number(
+                                                        values.due_date_modifier,
+                                                    ),
+                                                ),
                                         }),
                                     )}>
                                     Add Property
