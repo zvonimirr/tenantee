@@ -1,6 +1,9 @@
 # Changelog
 
 ## 0.3.0
+### API
+- Properties now have a tax percentage field ([@zvonimirr](https://github.com/zvonimirr))
+
 ### UI
 - Add contact icons for tenants ([@MilaFazekas](https://github.com/MilaFazekas))
 

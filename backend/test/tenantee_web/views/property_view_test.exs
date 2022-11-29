@@ -9,6 +9,7 @@ defmodule TenanteeWeb.PropertyViewTest do
     description: "Test Description",
     location: "Test Location",
     price: Money.new("100.00", :USD),
+    tax_percentage: 0.1,
     inserted_at: ~N[2018-01-01 00:00:00],
     updated_at: ~N[2018-01-01 00:00:00],
     tenants: [],

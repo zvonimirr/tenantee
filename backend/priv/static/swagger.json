@@ -107,6 +107,10 @@
           "description": "Price of the property",
           "type": "integer"
         },
+        "tax_percentage": {
+          "description": "Tax percentage of the property",
+          "type": "float"
+        },
         "tenants": {
           "description": "Tenants of the property",
           "items": {
@@ -119,6 +123,7 @@
         "tenants",
         "currency",
         "monthly_revenue",
+        "tax_percentage",
         "price",
         "location",
         "name",

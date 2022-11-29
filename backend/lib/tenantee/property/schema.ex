@@ -13,6 +13,7 @@ defmodule Tenantee.Property.Schema do
     field :location, :string
     field :price, Money.Ecto.Composite.Type
     field :due_date_modifier, :integer, default: 5 * 24 * 60 * 60
+    field :tax_percentage, :decimal, default: 0.0
 
     many_to_many :tenants, Tenant,
       join_through: "property_tenants",
@@ -36,7 +37,7 @@ defmodule Tenantee.Property.Schema do
 
   def changeset(property, attrs) do
     property
-    |> cast(attrs, [:name, :description, :location, :price, :due_date_modifier])
+    |> cast(attrs, [:name, :description, :location, :price, :due_date_modifier, :tax_percentage])
     |> cast_assoc(:tenants)
     |> validate_required([:name, :location, :price])
   end
