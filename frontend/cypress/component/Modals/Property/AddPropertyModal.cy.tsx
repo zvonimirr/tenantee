@@ -13,7 +13,7 @@ describe('AddPropertyModal', () => {
         cy.get('#submit').should('be.disabled');
 
         cy.get('input').each((input) => {
-            cy.wrap(input).type('123');
+            cy.wrap(input).type('12');
         });
 
         cy.get('#submit').should('not.be.disabled');
@@ -45,17 +45,18 @@ describe('AddPropertyModal', () => {
         );
 
         cy.get('input').each((input) => {
-            cy.wrap(input).type('123');
+            cy.wrap(input).type('12');
         });
 
         cy.get('#submit').click();
 
         cy.wrap(onSubmit).should('have.been.calledWith', {
-            name: '123',
-            description: '123',
-            location: '123',
-            price: 123,
+            name: '12',
+            description: '12',
+            location: '12',
+            price: 12,
             currency: 'USD',
+            due_date_modifier: 12 * 60 * 60 * 24,
         });
     });
 });

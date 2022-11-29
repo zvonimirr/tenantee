@@ -21,6 +21,11 @@ describe('PropertyCard', () => {
                         currency: 'USD',
                     },
                     tenants: [],
+                    monthly_revenue: {
+                        amount: 100,
+                        currency: 'USD',
+                    },
+                    due_date_modifier: 0,
                 }}
             />,
         );

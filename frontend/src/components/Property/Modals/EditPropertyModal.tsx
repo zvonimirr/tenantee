@@ -9,10 +9,16 @@ import {
     ModalHeader,
     ModalOverlay,
     Stack,
+    Text,
 } from '@chakra-ui/react';
-import { IconHome, IconPencil } from '@tabler/icons';
+import { IconCalendar, IconHome, IconPencil } from '@tabler/icons';
 import { useForm } from 'react-hook-form';
-import { Property, PropertyUpdateDto } from '../../../types/property';
+import {
+    calculateDueDateModifier,
+    getNumberOfDaysFromDueDateModifier,
+    Property,
+    PropertyUpdateDto,
+} from '../../../types/property';
 import GenericInput from '../../Form/GenericInput';
 import { useEffect } from 'react';
 import getSymbolFromCurrency from 'currency-symbol-map';
@@ -31,6 +37,7 @@ const defaultValues = {
     price: 0,
     location: '',
     currency: '',
+    due_date_modifier: 0,
 };
 
 function EditPropertyModal({
@@ -53,6 +60,9 @@ function EditPropertyModal({
                 price: property.price.amount,
                 location: property.location,
                 currency: property.price.currency,
+                due_date_modifier: getNumberOfDaysFromDueDateModifier(
+                    property.due_date_modifier,
+                ),
             });
         }
     }, [property]);
@@ -113,6 +123,25 @@ function EditPropertyModal({
                                     setValue('currency', value)
                                 }
                             />
+                            <GenericInput
+                                name="due_date_modifier"
+                                label="Due Date Modifier"
+                                placeholder="Due Date Modifier"
+                                control={control}
+                                type="number"
+                                rules={{
+                                    required: 'Due Date Modifier is required',
+                                    min: 0,
+                                    max: 25,
+                                }}
+                                leftAdornment={<IconCalendar />}
+                            />
+                            <Text fontSize="sm">
+                                Due date modifier is used when calculating the
+                                due date for a payment. It is the number of days
+                                after the start of the month that the payment is
+                                due. (Min: 0, Max: 25)
+                            </Text>
                             <Box w="100%">
                                 <Button
                                     id="submit"
@@ -128,6 +157,10 @@ function EditPropertyModal({
                                             ...values,
                                             price: Number(values.price),
                                             id: property?.id ?? 0,
+                                            due_date_modifier:
+                                                calculateDueDateModifier(
+                                                    values.due_date_modifier,
+                                                ),
                                         }),
                                     )}>
                                     Update Property

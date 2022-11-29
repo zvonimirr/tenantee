@@ -60,13 +60,17 @@ defmodule TenanteeWeb.PropertyController do
     with true <- Map.keys(params) -- ["id"] != [],
          currency <- Map.get(params, "currency", "USD"),
          :ok <- Currency.valid?(currency),
-         property_params <-
-           Map.replace_lazy(params, "price", fn price -> Money.new(price, currency) end)
-           |> Map.delete("id"),
+         price <- Map.get(params, "price"),
+         {:ok, updated_price} <- get_updated_price(price, currency),
+         property_params <- Map.replace(params, "price", updated_price),
+         property_params <- Map.delete(property_params, "id"),
          {:ok, _property} <- Property.get_property(id),
          {:ok, updated_property} <- Property.update_property(id, property_params) do
       render(conn, "show.json", %{property: updated_property})
     else
+      {:error, "Invalid price"} ->
+        respond(conn, :unprocessable_entity, "Invalid price")
+
       {:error, "Invalid currency"} ->
         respond(conn, :unprocessable_entity, "Invalid currency")
 
@@ -115,6 +119,21 @@ defmodule TenanteeWeb.PropertyController do
       render(conn, "show_rent.json", %{rents: rents})
     else
       {:error, :not_found} -> respond(conn, :not_found, "Property not found")
+    end
+  end
+
+  defp get_updated_price(price, currency) when is_binary(price) do
+    case price |> Decimal.parse() do
+      :error -> {:error, "Invalid price"}
+      {updated_price, _junk} -> {:ok, Money.from_float(Decimal.to_float(updated_price), currency)}
+    end
+  end
+
+  defp get_updated_price(price, currency) when is_number(price) do
+    if is_float(price) do
+      {:ok, Money.from_float(price, currency)}
+    else
+      {:ok, Money.new(price, currency)}
     end
   end
 end

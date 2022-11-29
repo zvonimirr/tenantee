@@ -19,6 +19,7 @@
 - Remove React Select Currency ([@zvonimirr](https://github.com/zvonimirr))
 - Allow adding/removing tenant to a property from the tenant overview page ([@kovaj024](https://github.com/kovaj024))
 - Turn home page into stats page ([@zvonimirr](https://github.com/zvonimirr))
+- Allow setting the due date modifier from the UI ([@zvonimirr](https://github.com/zvonimirr))
 
 ## 0.1.0
 

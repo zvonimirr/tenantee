@@ -60,11 +60,7 @@ function TenantPage() {
         [tenantError],
     );
 
-    const {
-        data: allPropertiesData,
-        error: allPropertiesError,
-        isValidating: isValidatingAllProperties,
-    } = useSWR<PropertyList>(
+    const { data: allPropertiesData } = useSWR<PropertyList>(
         PropertyApiService.listPropertiesPath,
         propertyApiService.getProperties,
     );
@@ -72,16 +68,6 @@ function TenantPage() {
     const allProperties = useMemo(
         () => allPropertiesData?.properties,
         [allPropertiesData],
-    );
-    const isAllPropertiesError = useMemo(
-        () => allPropertiesError !== undefined,
-        [allPropertiesError],
-    );
-    const isLoadingAllProperties = useMemo(
-        () =>
-            allProperties !== undefined ||
-            (isValidatingAllProperties && isAllPropertiesError),
-        [allProperties, isValidatingAllProperties, isAllPropertiesError],
     );
 
     const {

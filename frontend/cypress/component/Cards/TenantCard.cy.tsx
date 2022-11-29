@@ -14,6 +14,7 @@ describe('TenantCard', () => {
                     id: 1,
                     name: 'Test Tenant',
                     unpaid_rents: [],
+                    properties: [],
                 }}
             />,
         );
@@ -50,6 +51,7 @@ describe('TenantCard', () => {
                             due_date,
                         },
                     ],
+                    properties: [],
                 }}
             />,
         );
@@ -78,6 +80,7 @@ describe('TenantCard', () => {
                             due_date,
                         },
                     ],
+                    properties: [],
                 }}
             />,
         );

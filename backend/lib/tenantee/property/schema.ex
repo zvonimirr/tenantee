@@ -36,7 +36,7 @@ defmodule Tenantee.Property.Schema do
 
   def changeset(property, attrs) do
     property
-    |> cast(attrs, [:name, :description, :location, :price])
+    |> cast(attrs, [:name, :description, :location, :price, :due_date_modifier])
     |> cast_assoc(:tenants)
     |> validate_required([:name, :location, :price])
   end
