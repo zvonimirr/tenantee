@@ -65,7 +65,21 @@ defmodule TenanteeWeb.PropertyControllerTest do
           "name" => "Updated Property",
           "location" => "Updated Location",
           "currency" => "USD",
-          "price" => 1000
+          "price" => "1000"
+        })
+
+      assert json_response(conn, 200)["name"] == "Updated Property"
+    end
+
+    test "happy path (float price)", %{conn: conn} do
+      %{id: id} = Tenantee.Factory.Property.insert()
+
+      conn =
+        patch(conn, "/api/properties/#{id}", %{
+          "name" => "Updated Property",
+          "location" => "Updated Location",
+          "currency" => "USD",
+          "price" => 10.50
         })
 
       assert json_response(conn, 200)["name"] == "Updated Property"
@@ -79,10 +93,24 @@ defmodule TenanteeWeb.PropertyControllerTest do
           "name" => "Updated Property",
           "location" => "Updated Location",
           "currency" => "invalid",
-          "price" => 1000
+          "price" => 1000.52
         })
 
       assert json_response(conn, 422)["message"] == "Invalid currency"
+    end
+
+    test "invalid price", %{conn: conn} do
+      %{id: id} = Tenantee.Factory.Property.insert()
+
+      conn =
+        patch(conn, "/api/properties/#{id}", %{
+          "name" => "Updated Property",
+          "location" => "Updated Location",
+          "currency" => "USD",
+          "price" => "invalid"
+        })
+
+      assert json_response(conn, 422)["message"] == "Invalid price"
     end
 
     test "invalid params", %{conn: conn} do
