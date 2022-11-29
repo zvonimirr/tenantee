@@ -63,7 +63,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center"><a href="https://github.com/kovaj024"><img src="https://avatars.githubusercontent.com/u/35566682?v=4?s=100" width="100px;" alt="Andrej Kovačić"/><br /><sub><b>Andrej Kovačić</b></sub></a><br /><a href="https://github.com/zvonimirr/tenantee/commits?author=kovaj024" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/jvince"><img src="https://avatars.githubusercontent.com/u/8256496?v=4?s=100" width="100px;" alt="jvince"/><br /><sub><b>jvince</b></sub></a><br /><a href="https://github.com/zvonimirr/tenantee/commits?author=jvince" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/lukaevet"><img src="https://avatars.githubusercontent.com/u/108657761?v=4?s=100" width="100px;" alt="Luka Evetovic"/><br /><sub><b>Luka Evetovic</b></sub></a><br /><a href="https://github.com/zvonimirr/tenantee/commits?author=lukaevet" title="Code">💻</a></td>
-      <td align="center"><a href="https://github.com/MilaFazekas"><img src="https://avatars.githubusercontent.com/u/79193172?v=4?s=100" width="100px;" alt="Milly"/><br /><sub><b>Milly</b></sub></a><br /><a href="https://github.com/zvonimirr/tenantee/issues?q=author%3AMilaFazekas" title="Bug reports">🐛</a></td>
+      <td align="center"><a href="https://github.com/MilaFazekas"><img src="https://avatars.githubusercontent.com/u/79193172?v=4?s=100" width="100px;" alt="Milly"/><br /><sub><b>Milly</b></sub></a><br /><a href="https://github.com/zvonimirr/tenantee/issues?q=author%3AMilaFazekas" title="Bug reports">🐛</a> <a href="https://github.com/zvonimirr/tenantee/commits?author=MilaFazekas" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
