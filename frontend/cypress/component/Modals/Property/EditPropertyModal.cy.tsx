@@ -10,6 +10,11 @@ const mockProperty = {
         currency: 'USD',
     },
     tenants: [],
+    monthly_revenue: {
+        amount: 100,
+        currency: 'USD',
+    },
+    due_date_modifier: 0,
 };
 
 describe('EditPropertyModal', () => {
@@ -26,7 +31,7 @@ describe('EditPropertyModal', () => {
         cy.get('#submit').should('be.disabled');
 
         cy.get('input').each((input) => {
-            cy.wrap(input).type('123');
+            cy.wrap(input).type('12');
         });
 
         cy.get('#submit').should('not.be.disabled');
@@ -67,6 +72,7 @@ describe('EditPropertyModal', () => {
             price: 100,
             location: 'Test Location',
             currency: 'USD',
+            due_date_modifier: 0,
         });
     });
 });
