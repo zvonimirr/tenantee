@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0
+### UI
+- Add contact icons for tenants ([@MilaFazekas](https://github.com/MilaFazekas))
+
 ## 0.2.0
 ### API
 - Rent system API (cron, listing etc.) ([@zvonimirr](https://github.com/zvonimirr))
