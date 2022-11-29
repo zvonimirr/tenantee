@@ -71,5 +71,6 @@ defmodule TenanteeWeb.TenantView do
   end
 
   defp get_money(%Money{} = m) when is_map(m), do: m
-  defp get_money(_), do: nil
+
+  defp get_money(_money), do: nil
 end

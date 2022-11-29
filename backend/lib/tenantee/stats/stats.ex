@@ -5,6 +5,7 @@ defmodule Tenantee.Stats do
   alias Tenantee.Utils.Currency
   alias Tenantee.Rent
   alias Tenantee.Property
+  alias Tenantee.Preferences
 
   def get_monthly_revenue(property) do
     with price <- property.price,
@@ -17,34 +18,29 @@ defmodule Tenantee.Stats do
 
   def get_debt(tenant) do
     with unpaid_rents <- Rent.get_unpaid_rents_by_tenant_id(tenant.id),
-         properties <-
-           Enum.map(unpaid_rents, &Property.get_property(&1.property_id))
-           |> Enum.reject(fn {status, _} -> status != :ok end),
-         prices <- Enum.map(properties, fn {:ok, p} -> p.price end),
-         converted_prices <- Enum.map(prices, &Currency.convert/1),
-         [price | other_prices] <- converted_prices,
-         total_price <-
-           Enum.reduce(other_prices, price, fn price, total_price ->
-             with {:ok, added_price} <- Money.add(price, total_price) do
-               added_price
-             end
-           end) do
-      Money.round(total_price, currency_digits: 2)
+         properties <- Enum.map(unpaid_rents, &Property.get_property(&1.property_id)),
+         properties <- Enum.reject(properties, fn {status, _} -> status != :ok end),
+         prices <- Enum.map(properties, fn {:ok, p} -> Currency.convert(p.price) end),
+         {:ok, currency} <- Preferences.get_preference(:default_currency, :USD),
+         total_price <- sum_money(prices, currency) do
+      if Decimal.gt?(total_price.amount, Decimal.new(0)) do
+        Money.round(total_price, currency_digits: 2)
+      else
+        nil
+      end
     end
   end
 
   def get_income(tenant) do
     with properties <- Property.get_properties_of_tenant(tenant.id),
-         prices <- Enum.map(properties, & &1.price),
-         converted_prices <- Enum.map(prices, &Currency.convert/1),
-         [price | other_prices] <- converted_prices,
-         total_price <-
-           Enum.reduce(other_prices, price, fn price, total_price ->
-             with {:ok, added_price} <- Money.add(price, total_price) do
-               added_price
-             end
-           end) do
-      Money.round(total_price, currency_digits: 2)
+         prices <- Enum.map(properties, &Currency.convert(&1.price)),
+         {:ok, currency} <- Preferences.get_preference(:default_currency, :USD),
+         total_price <- sum_money(prices, currency) do
+      if Decimal.gt?(total_price.amount, Decimal.new(0)) do
+        Money.round(total_price, currency_digits: 2)
+      else
+        nil
+      end
     end
   end
 
@@ -55,4 +51,18 @@ defmodule Tenantee.Stats do
   end
 
   defp apply_tax(income, _tax_percentage), do: {:ok, income}
+
+  defp sum_money([], currency), do: Money.new("0", currency)
+
+  defp sum_money([money], _currency), do: money
+
+  defp sum_money(moneys, _currency) do
+    [money | other_moneys] = moneys
+
+    Enum.reduce(other_moneys, money, fn money, total_money ->
+      with {:ok, added_money} <- Money.add(money, total_money) do
+        added_money
+      end
+    end)
+  end
 end
