@@ -1,6 +1,5 @@
 defmodule TenanteeWeb.TenantViewTest do
   use TenanteeWeb.ConnCase, async: true
-
   import Phoenix.View
 
   @tenant %{
