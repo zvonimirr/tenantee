@@ -1,19 +1,18 @@
 import { Tenant } from './tenant';
 
+interface Price {
+    amount: number;
+    currency: string;
+}
+
 export interface Property {
     id: number;
     name: string;
     description?: string;
     location: string;
-    price: {
-        amount: number;
-        currency: string;
-    };
+    price: Price;
     tenants: Tenant[];
-    monthly_revenue: {
-        amount: number;
-        currency: string;
-    };
+    monthly_revenue: Price;
 }
 
 export interface PropertyList {
