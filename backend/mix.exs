@@ -57,7 +57,8 @@ defmodule Tenantee.MixProject do
       {:oban, "~> 2.13"},
       {:ex_money, "~> 5.0"},
       {:ex_money_sql, "~> 1.7"},
-      {:ecto_enum, "~> 1.4"}
+      {:ecto_enum, "~> 1.4"},
+      {:dialyxir, "~> 1.2", only: [:dev], runtime: false}
     ]
   end
 
