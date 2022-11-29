@@ -127,6 +127,7 @@ defmodule TenanteeWeb.Swagger.Property do
                 description(:string, "Description of the property")
                 location(:string, "Location of the property", required: true)
                 price(:integer, "Price of the property", required: true)
+                tax_percentage(:float, "Tax percentage of the property", required: true)
 
                 monthly_revenue(Schema.ref(:Price), "Monthly revenue of the property",
                   required: true

@@ -19,6 +19,7 @@ defmodule TenanteeWeb.PropertyView do
       location: property.location,
       price: price,
       monthly_revenue: monthly_revenue,
+      tax_percentage: property.tax_percentage,
       due_date_modifier: property.due_date_modifier,
       inserted_at: property.inserted_at,
       updated_at: property.updated_at
