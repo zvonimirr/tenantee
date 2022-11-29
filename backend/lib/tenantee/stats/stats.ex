@@ -9,8 +9,9 @@ defmodule Tenantee.Stats do
   def get_monthly_revenue(property) do
     with price <- property.price,
          converted_price <- Currency.convert(price),
-         {:ok, revenue} <- Money.mult(converted_price, Enum.count(property.tenants)) do
-      Money.round(revenue, currency_digits: 2)
+         {:ok, revenue} <- Money.mult(converted_price, Enum.count(property.tenants)),
+         {:ok, taxed_revenue} <- apply_tax(revenue, property.tax_percentage) do
+      Money.round(taxed_revenue, currency_digits: 2)
     end
   end
 
@@ -46,4 +47,12 @@ defmodule Tenantee.Stats do
       Money.round(total_price, currency_digits: 2)
     end
   end
+
+  defp apply_tax(income, tax_percentage) when is_number(tax_percentage) and tax_percentage > 0 do
+    with {:ok, tax} <- Money.mult(income, tax_percentage / 100) do
+      Money.sub(income, tax)
+    end
+  end
+
+  defp apply_tax(income, _tax_percentage), do: {:ok, income}
 end

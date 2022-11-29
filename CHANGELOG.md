@@ -3,6 +3,7 @@
 ## 0.3.0
 ### API
 - Properties now have a tax percentage field ([@zvonimirr](https://github.com/zvonimirr))
+- Tax percentage is applied when calculating monthly revenue ([@zvonimirr](https://github.com/zvonimirr))
 
 ### UI
 - Add contact icons for tenants ([@MilaFazekas](https://github.com/MilaFazekas))
