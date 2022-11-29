@@ -1,5 +1,5 @@
-import { Card, CardBody, Center, Flex, Stack, Text } from '@chakra-ui/react';
-import { IconPencil, IconTrash, IconUser } from '@tabler/icons';
+import {  Card, CardBody, Center, Flex, Stack, Text } from '@chakra-ui/react';
+import { IconMail, IconPencil, IconPhone, IconTrash, IconUser } from '@tabler/icons';
 import { useMemo } from 'react';
 import { Tenant } from '../../types/tenant';
 
@@ -43,18 +43,32 @@ function TenantCard({
     return (
         <Card>
             <CardBody>
-                <Flex gap={2}>
-                    <IconTrash
-                        color="red"
-                        cursor="pointer"
-                        onClick={() => onDeleteClick(tenant)}
-                    />
-                    {onEditClick && (
-                        <IconPencil
+                <Flex gap={2} justifyContent="space-between">
+                    <Flex gap={2}>
+                        <IconTrash
+                            color="red"
                             cursor="pointer"
-                            onClick={() => onEditClick(tenant)}
+                            onClick={() => onDeleteClick(tenant)}
                         />
-                    )}
+                        {onEditClick && (
+                            <IconPencil
+                                cursor="pointer"
+                                onClick={() => onEditClick(tenant)}
+                            />
+                        )}
+                    </Flex>
+                    <Flex gap={2}>
+                        {tenant.email && (
+                            <a href={`mailto:${tenant.email}`}>  <IconMail
+                                cursor="pointer"
+                            /></a>
+                        )}
+                        {tenant.phone && (
+                            <a href={`tel:${tenant.phone}`}> <IconPhone 
+                                cursor="pointer"
+                            /></a> 
+                        )}
+                    </Flex>
                 </Flex>
                 <Center cursor="pointer" onClick={() => onClick(tenant)}>
                     <Flex direction="column">
