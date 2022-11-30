@@ -13,6 +13,7 @@ defmodule TenanteeWeb.PropertyViewTest do
     inserted_at: ~N[2018-01-01 00:00:00],
     updated_at: ~N[2018-01-01 00:00:00],
     tenants: [],
+    expenses: [],
     due_date_modifier: 0,
     monthly_revenue: Money.new("0.00", :USD)
   }

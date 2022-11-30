@@ -17,7 +17,7 @@ defmodule Tenantee.Property do
            %Schema{}
            |> Schema.changeset(attrs)
            |> Repo.insert() do
-      {:ok, Repo.preload(property, :tenants)}
+      {:ok, Repo.preload(property, [:tenants, :expenses])}
     end
   end
 
@@ -49,7 +49,7 @@ defmodule Tenantee.Property do
          changeset <-
            Schema.changeset(property, attrs),
          {:ok, updated_property} <- Repo.update(changeset) do
-      {:ok, Repo.preload(updated_property, :tenants)}
+      {:ok, Repo.preload(updated_property, [:tenants, :expenses])}
     end
   end
 

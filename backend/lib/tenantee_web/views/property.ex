@@ -1,6 +1,7 @@
 defmodule TenanteeWeb.PropertyView do
   use TenanteeWeb, :view
   alias TenanteeWeb.TenantView
+  alias TenanteeWeb.ExpenseView
 
   def render("show.json", %{properties: properties}) do
     %{
@@ -28,7 +29,8 @@ defmodule TenanteeWeb.PropertyView do
 
   def render("show.json", %{property: property}) do
     %{
-      tenants: render(TenantView, "show.json", %{tenants: property.tenants}) |> Map.get(:tenants)
+      tenants: render(TenantView, "show.json", %{tenants: property.tenants}) |> Map.get(:tenants),
+      expenses: Enum.map(property.expenses, &render(ExpenseView, "show.json", %{expense: &1}))
     }
     |> Map.merge(render("show_without_tenants.json", %{property: property}))
   end
