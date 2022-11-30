@@ -55,7 +55,7 @@ defmodule TenanteeWeb.Router do
     end
 
     scope "/expenses" do
-      post "/:property_id", ExpenseController, :add
+      post "/:id", ExpenseController, :add
       get "/:id", ExpenseController, :find
       patch "/:id", ExpenseController, :update
       delete "/:id", ExpenseController, :delete_by_id

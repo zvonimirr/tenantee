@@ -7,7 +7,7 @@ defmodule TenanteeWeb.ExpenseController do
   def add(
         conn,
         %{
-          "property_id" => id,
+          "id" => id,
           "amount" => %{
             "amount" => expense,
             "currency" => currency
@@ -16,15 +16,16 @@ defmodule TenanteeWeb.ExpenseController do
       ) do
     with {:ok, amount} <- get_price(expense, currency),
          params <- Map.replace(params, "amount", amount),
-         {:ok, expense} <- Expense.create_expense(id, params) do
+         params <- Map.put_new(params, "property_id", id),
+         params <- Map.delete(params, "id"),
+         {:ok, expense} <- Expense.create_expense(params) do
       conn
       |> put_status(:created)
       |> render("show.json", %{expense: expense})
-    else
-      {:error, _error} ->
-        respond(conn, :unprocessable_entity, "Invalid parameters")
     end
   end
+
+  def add(conn, _params), do: respond(conn, :unprocessable_entity, "Invalid parameters")
 
   def find(conn, %{"id" => id}) do
     case Expense.get_expense(id) do
@@ -47,10 +48,12 @@ defmodule TenanteeWeb.ExpenseController do
       conn
       |> render("show.json", %{expense: expense})
     else
-      {:error, _error} ->
-        respond(conn, :unprocessable_entity, "Invalid parameters")
+      {:error, :not_found} -> respond(conn, :not_found, "Expense not found")
+      {:error, "Invalid price"} -> respond(conn, :unprocessable_entity, "Invalid price")
     end
   end
+
+  def update(conn, _params), do: respond(conn, :unprocessable_entity, "Invalid parameters")
 
   def delete_by_id(conn, %{"id" => id}) do
     case Expense.delete_expense(id) do

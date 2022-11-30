@@ -10,10 +10,10 @@ defmodule Tenantee.Expense do
   @doc """
   Creates a new expense.
   """
-  def create_expense(property_id, attrs) do
+  def create_expense(attrs) do
     with {:ok, expense} <-
            %Schema{}
-           |> Schema.changeset(Map.merge(attrs, %{property_id: property_id}))
+           |> Schema.changeset(attrs)
            |> Repo.insert() do
       {:ok, expense}
     end
