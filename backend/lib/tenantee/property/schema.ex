@@ -6,6 +6,7 @@ defmodule Tenantee.Property.Schema do
   use Ecto.Schema
   import Ecto.Changeset
   alias Tenantee.Tenant.Schema, as: Tenant
+  alias Tenantee.Expense.Schema, as: Expense
 
   schema "properties" do
     field :name, :string
@@ -19,6 +20,8 @@ defmodule Tenantee.Property.Schema do
       join_through: "property_tenants",
       join_keys: [property_id: :id, tenant_id: :id],
       on_replace: :delete
+
+    has_many :expenses, {"property_expenses", Expense}, on_replace: :delete
 
     timestamps()
   end
