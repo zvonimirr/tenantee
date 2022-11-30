@@ -146,6 +146,13 @@ defmodule TenanteeWeb.Swagger.Property do
                   items: Schema.ref(:Tenant),
                   required: true
                 )
+
+                expenses(
+                  :array,
+                  "Expenses of the property",
+                  items: Schema.ref(:Expense),
+                  required: true
+                )
               end
             end,
           PropertyList:

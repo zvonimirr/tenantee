@@ -17,8 +17,8 @@ defmodule Tenantee.Expense.Schema do
 
   def changeset(expense, attrs) do
     expense
-    |> cast(attrs, [:amount, :description])
+    |> cast(attrs, [:amount, :description, :property_id])
     |> cast_assoc(:property)
-    |> validate_required([:amount])
+    |> validate_required([:amount, :property_id])
   end
 end
