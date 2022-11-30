@@ -6,6 +6,7 @@
 - Tax percentage is applied when calculating monthly revenue ([@zvonimirr](https://github.com/zvonimirr))
 - Fix improper CORS origin match ([@zvonimirr](https://github.com/zvonimirr))
 - Expenses CRUD ([@zvonimirr](https://github.com/zvonimirr))
+- Properties now return a list of expenses ([@zvonimirr](https://github.com/zvonimirr))
 
 ### UI
 - Add contact icons for tenants ([@MilaFazekas](https://github.com/MilaFazekas))
