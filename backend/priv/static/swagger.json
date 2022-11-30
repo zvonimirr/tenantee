@@ -3,6 +3,34 @@
     "application/json"
   ],
   "definitions": {
+    "Expense": {
+      "description": "An expense",
+      "properties": {
+        "amount": {
+          "$ref": "#/definitions/Price",
+          "description": "The amount of the expense"
+        },
+        "date": {
+          "description": "The date of the expense",
+          "type": "string"
+        },
+        "description": {
+          "description": "The description of the expense",
+          "type": "string"
+        },
+        "id": {
+          "description": "The expense id",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "date",
+        "amount",
+        "id"
+      ],
+      "title": "Expense",
+      "type": "object"
+    },
     "HealthCheck": {
       "description": "Health check response",
       "example": {
@@ -272,9 +300,148 @@
   "info": {
     "description": "API for the Tenantee platform",
     "title": "Tenantee API",
-    "version": "0.2.0"
+    "version": "0.3.0"
   },
   "paths": {
+    "/api/expenses/{id}": {
+      "delete": {
+        "description": "",
+        "operationId": "TenanteeWeb.ExpenseController.delete_by_id",
+        "parameters": [
+          {
+            "description": "Expense ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Expense deleted"
+          },
+          "404": {
+            "description": "Expense not found"
+          }
+        },
+        "summary": "Delete an expense",
+        "tags": [
+          "Expense"
+        ]
+      },
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.ExpenseController.find",
+        "parameters": [
+          {
+            "description": "Expense ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expense found",
+            "schema": {
+              "$ref": "#/definitions/Expense"
+            }
+          },
+          "404": {
+            "description": "Expense not found"
+          }
+        },
+        "summary": "Find expense by ID",
+        "tags": [
+          "Expense"
+        ]
+      },
+      "patch": {
+        "description": "",
+        "operationId": "TenanteeWeb.ExpenseController.update",
+        "parameters": [
+          {
+            "description": "Expense ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Amount",
+            "in": "body",
+            "name": "amount",
+            "required": true,
+            "schema": "float"
+          },
+          {
+            "description": "Description",
+            "in": "body",
+            "name": "description",
+            "required": false,
+            "schema": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expense updated",
+            "schema": {
+              "$ref": "#/definitions/Expense"
+            }
+          },
+          "422": {
+            "description": "Could not update expense"
+          }
+        },
+        "summary": "Update an expense",
+        "tags": [
+          "Expense"
+        ]
+      },
+      "post": {
+        "description": "",
+        "operationId": "TenanteeWeb.ExpenseController.add",
+        "parameters": [
+          {
+            "description": "Property ID",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Amount",
+            "in": "body",
+            "name": "amount",
+            "required": true,
+            "schema": "float"
+          },
+          {
+            "description": "Description",
+            "in": "body",
+            "name": "description",
+            "required": false,
+            "schema": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expense created",
+            "schema": {
+              "$ref": "#/definitions/Expense"
+            }
+          },
+          "422": {
+            "description": "Invalid request"
+          }
+        },
+        "summary": "Add a new expense",
+        "tags": [
+          "Expense"
+        ]
+      }
+    },
     "/api/health-check": {
       "get": {
         "description": "Returns a 200 OK if the service is up and running",
@@ -978,6 +1145,10 @@
     {
       "description": "Preferences management",
       "name": "Preferences"
+    },
+    {
+      "description": "Expense management",
+      "name": "Expense"
     }
   ]
 }

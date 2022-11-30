@@ -61,8 +61,8 @@ defmodule TenanteeWeb.PropertyController do
          currency <- Map.get(params, "currency", "USD"),
          :ok <- Currency.valid?(currency),
          price <- Map.get(params, "price"),
-         {:ok, updated_price} <- get_updated_price(price, currency),
-         property_params <- Map.replace(params, "price", updated_price),
+         {:ok, price} <- get_price(price, currency),
+         property_params <- Map.replace(params, "price", price),
          property_params <- Map.delete(property_params, "id"),
          {:ok, _property} <- Property.get_property(id),
          {:ok, updated_property} <- Property.update_property(id, property_params) do
@@ -122,14 +122,14 @@ defmodule TenanteeWeb.PropertyController do
     end
   end
 
-  defp get_updated_price(price, currency) when is_binary(price) do
+  defp get_price(price, currency) when is_binary(price) do
     case price |> Decimal.parse() do
       :error -> {:error, "Invalid price"}
-      {updated_price, _junk} -> {:ok, Money.from_float(Decimal.to_float(updated_price), currency)}
+      {price, _junk} -> {:ok, Money.from_float(Decimal.to_float(price), currency)}
     end
   end
 
-  defp get_updated_price(price, currency) when is_number(price) do
+  defp get_price(price, currency) when is_number(price) do
     if is_float(price) do
       {:ok, Money.from_float(price, currency)}
     else
