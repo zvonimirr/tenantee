@@ -53,6 +53,13 @@ defmodule TenanteeWeb.Router do
       get "/:name", PreferencesController, :get_by_name
       put "/", PreferencesController, :set
     end
+
+    scope "/expenses" do
+      post "/:id", ExpenseController, :add
+      get "/:id", ExpenseController, :find
+      patch "/:id", ExpenseController, :update
+      delete "/:id", ExpenseController, :delete_by_id
+    end
   end
 
   # coveralls-ignore-start
@@ -86,6 +93,10 @@ defmodule TenanteeWeb.Router do
         %{
           name: "Preferences",
           description: "Preferences management"
+        },
+        %{
+          name: "Expense",
+          description: "Expense management"
         }
       ]
     }
