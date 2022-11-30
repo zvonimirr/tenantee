@@ -21,7 +21,7 @@ defmodule Tenantee.Property.Schema do
       join_keys: [property_id: :id, tenant_id: :id],
       on_replace: :delete
 
-    has_many :expenses, {"property_expenses", Expense}, on_replace: :delete
+    has_many :expenses, Expense, foreign_key: :property_id, on_replace: :delete
 
     timestamps()
   end
