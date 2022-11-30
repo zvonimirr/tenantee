@@ -26,7 +26,9 @@ defmodule Tenantee.Property do
   """
   def get_property(id) do
     with property <- Repo.get(Schema, id) do
-      if property, do: {:ok, Repo.preload(property, :tenants)}, else: {:error, :not_found}
+      if property,
+        do: {:ok, Repo.preload(property, [:tenants, :expenses])},
+        else: {:error, :not_found}
     end
   end
 
@@ -35,7 +37,7 @@ defmodule Tenantee.Property do
   """
   def get_all_properties do
     Repo.all(Schema)
-    |> Repo.preload([:tenants])
+    |> Repo.preload([:tenants, :expenses])
   end
 
   @doc """
