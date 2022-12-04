@@ -56,6 +56,7 @@ defmodule TenanteeWeb.Router do
 
     scope "/expenses" do
       post "/:id", ExpenseController, :add
+      get "/monthly", ExpenseController, :monthly
       get "/:id", ExpenseController, :find
       patch "/:id", ExpenseController, :update
       delete "/:id", ExpenseController, :delete_by_id

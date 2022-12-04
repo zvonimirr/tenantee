@@ -30,6 +30,17 @@ defmodule Tenantee.Expense do
   end
 
   @doc """
+  Get all expenses that were created in current month.
+  """
+  def get_monthly_expenses do
+    from(e in Schema,
+      where: fragment("EXTRACT(MONTH FROM inserted_at) = EXTRACT(MONTH FROM NOW())")
+    )
+    |> Repo.all()
+    |> Enum.map(&Repo.preload(&1, :property))
+  end
+
+  @doc """
   Updates an expense.
   """
   def update_expense(expense_id, attrs) do

@@ -21,14 +21,33 @@
         "id": {
           "description": "The expense id",
           "type": "integer"
+        },
+        "property": {
+          "$ref": "#/definitions/Property",
+          "description": "The property the expense belongs to"
         }
       },
       "required": [
+        "property",
         "date",
         "amount",
         "id"
       ],
       "title": "Expense",
+      "type": "object"
+    },
+    "ExpenseList": {
+      "description": "A list of expenses",
+      "properties": {
+        "expenses": {
+          "description": "The list of expenses",
+          "items": {
+            "$ref": "#/definitions/Expense"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Expense List",
       "type": "object"
     },
     "HealthCheck": {
@@ -311,6 +330,25 @@
     "version": "0.3.0"
   },
   "paths": {
+    "/api/expenses/monthly": {
+      "get": {
+        "description": "",
+        "operationId": "TenanteeWeb.ExpenseController.monthly",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Monthly expenses",
+            "schema": {
+              "$ref": "#/definitions/ExpenseList"
+            }
+          }
+        },
+        "summary": "Get monthly expenses",
+        "tags": [
+          "Expense"
+        ]
+      }
+    },
     "/api/expenses/{id}": {
       "delete": {
         "description": "",
