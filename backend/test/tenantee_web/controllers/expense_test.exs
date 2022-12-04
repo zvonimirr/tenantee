@@ -31,6 +31,21 @@ defmodule TenanteeWeb.ExpenseControllerTest do
     end
   end
 
+  test "GET /api/expenses/monthly", %{conn: conn} do
+    empty_conn = get(conn, "/api/expenses/monthly")
+
+    assert json_response(empty_conn, 200) == %{
+             "expenses" => []
+           }
+
+    %{id: property_id} = Tenantee.Factory.Property.insert()
+    %{id: expense_id} = Tenantee.Factory.Expense.insert(property_id)
+
+    conn = get(conn, "/api/expenses/monthly")
+
+    assert List.first(json_response(conn, 200)["expenses"])["id"] == expense_id
+  end
+
   describe "GET /api/expenses/:id" do
     test "happy path", %{conn: conn} do
       %{id: property_id} = Tenantee.Factory.Property.insert()
