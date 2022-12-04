@@ -22,6 +22,13 @@ defmodule TenanteeWeb.Swagger.Expense do
         response(422, "Invalid request")
       end
 
+      swagger_path :monthly do
+        get("/api/expenses/monthly")
+        summary("Get monthly expenses")
+
+        response(200, "Monthly expenses", Schema.ref(:ExpenseList))
+      end
+
       swagger_path :find do
         get("/api/expenses/{id}")
         summary("Find expense by ID")
@@ -72,6 +79,19 @@ defmodule TenanteeWeb.Swagger.Expense do
                 amount(Schema.ref(:Price), "The amount of the expense", required: true)
                 description(:string, "The description of the expense")
                 date(:string, "The date of the expense", required: true)
+
+                property(Schema.ref(:Property), "The property the expense belongs to",
+                  required: true
+                )
+              end
+            end,
+          ExpenseList:
+            swagger_schema do
+              title("Expense List")
+              description("A list of expenses")
+
+              properties do
+                expenses(:array, "The list of expenses", items: Schema.ref(:Expense))
               end
             end
         }

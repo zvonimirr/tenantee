@@ -65,6 +65,9 @@ defmodule TenanteeWeb.ExpenseController do
     end
   end
 
+  def monthly(conn, _params),
+    do: render(conn, "show.json", %{expenses: Expense.get_monthly_expenses()})
+
   defp get_price(price, currency) when is_binary(price) do
     case price |> Decimal.parse() do
       :error -> {:error, "Invalid price"}
