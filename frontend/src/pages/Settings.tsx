@@ -165,6 +165,8 @@ function Settings() {
                             <label htmlFor="dark_mode">Dark Mode</label>
                             <Checkbox
                                 name="dark_mode"
+                                size="lg"
+                                colorScheme="teal"
                                 defaultChecked={colorMode === 'dark'}
                                 onChange={toggleColorMode}
                             />
