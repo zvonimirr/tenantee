@@ -71,7 +71,7 @@ function TenantCard({
                     </Flex>
                 </Flex>
                 <Center cursor="pointer" onClick={() => onClick(tenant)}>
-                    <Flex direction="column">
+                    <Flex direction="column" alignItems="center">
                         <IconUser size={128} color={iconColor} />
                         <Stack spacing={2}>
                             <Text textAlign="center" fontWeight="bold">
