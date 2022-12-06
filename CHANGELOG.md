@@ -11,6 +11,7 @@
 ### UI
 - Add contact icons for tenants ([@MilaFazekas](https://github.com/MilaFazekas))
 - Tenant names are now aligned properly ([@MilaFazekas](https://github.com/MilaFazekas))
+- Dark mode support ([@zvonimirr](https://github.com/zvonimirr))
 
 ## 0.2.0
 ### API
