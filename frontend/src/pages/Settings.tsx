@@ -1,4 +1,13 @@
-import { Box, Button, Center, Spinner, Stack } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Center,
+    Checkbox,
+    Flex,
+    Spinner,
+    Stack,
+    useColorMode,
+} from '@chakra-ui/react';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
@@ -21,6 +30,7 @@ interface PreferenceFormFields {
 }
 
 function Settings() {
+    const { colorMode, toggleColorMode } = useColorMode();
     const { showSuccess, showError } = useNotification();
     const { control, watch, setValue, reset, handleSubmit, formState } =
         useForm<PreferenceFormFields>({
@@ -151,6 +161,16 @@ function Settings() {
                             }}
                         />
 
+                        <Flex direction="row" gap={2}>
+                            <label htmlFor="dark_mode">Dark Mode</label>
+                            <Checkbox
+                                name="dark_mode"
+                                size="lg"
+                                colorScheme="teal"
+                                defaultChecked={colorMode === 'dark'}
+                                onChange={toggleColorMode}
+                            />
+                        </Flex>
                         <Button
                             colorScheme="teal"
                             onClick={handleSubmit(onSaveClick)}
