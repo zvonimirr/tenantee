@@ -17,9 +17,10 @@ import { Preference } from '../types/preferences';
 import { Property, PropertyList } from '../types/property';
 
 function Home() {
-    const { result: preference, isLoading } = useFetch<Preference, Preference>(
+    const { result: preference, isLoading } = useFetch<Preference, string>(
         PreferenceApiService.getByNamePath('name'),
         preferenceApiService.getPreference,
+        'value',
     );
 
     const { result: properties, isLoading: isLoadingProperties } = useFetch<
@@ -55,7 +56,7 @@ function Home() {
                     <Text fontSize="xl">
                         Hello,{' '}
                         <span style={{ fontWeight: 'bold' }}>
-                            {preference?.value ?? 'landlord'}
+                            {preference ?? 'landlord'}
                         </span>
                         !
                     </Text>
