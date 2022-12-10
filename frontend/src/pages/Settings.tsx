@@ -136,7 +136,7 @@ function Settings() {
                             label="Name"
                             placeholder="Landlord name..."
                             control={control}
-                            rules={{ required: "Name can't be empty" }}
+                            rules={{ required: 'Name can\'t be empty' }}
                         />
                         <GenericInput
                             name="open_exchange_app_id"
@@ -144,7 +144,7 @@ function Settings() {
                             placeholder="Open Exchange App ID..."
                             control={control}
                             rules={{
-                                required: "Open Exchange App ID can't be empty",
+                                required: 'Open Exchange App ID can\'t be empty',
                             }}
                         />
                         <label htmlFor="default_currency">

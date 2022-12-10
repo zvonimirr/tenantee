@@ -62,7 +62,7 @@ function Home() {
                 )}
                 {!isLoading && properties && isEmpty(properties) && (
                     <Text fontSize="xl">
-                        {"You don't have any properties yet. "}
+                        {'You don\'t have any properties yet. '}
                         <span
                             style={{
                                 fontWeight: 'bold',

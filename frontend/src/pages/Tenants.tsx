@@ -11,8 +11,7 @@ import {
 } from '@chakra-ui/react';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
-import useSWR from 'swr';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNotification } from '../hooks/useNotification';
 import {
     Tenant,
@@ -207,14 +206,14 @@ function Tenants() {
                             !isLoading &&
                             tenants &&
                             isEmpty(tenants) && (
-                                <GridItem colSpan={3}>
-                                    <Text fontSize="lg" textAlign="center">
-                                        {
-                                            "You don't have any tenants yet. Click the button below to add one."
-                                        }
-                                    </Text>
-                                </GridItem>
-                            )}
+                            <GridItem colSpan={3}>
+                                <Text fontSize="lg" textAlign="center">
+                                    {
+                                        'You don\'t have any tenants yet. Click the button below to add one.'
+                                    }
+                                </Text>
+                            </GridItem>
+                        )}
                     </Grid>
                     <Center>
                         <Button

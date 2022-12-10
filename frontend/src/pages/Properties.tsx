@@ -11,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
-import useSWR from 'swr';
 import {
     propertyApiService,
     PropertyApiService,
@@ -211,14 +210,14 @@ function Properties() {
                             !isLoading &&
                             properties &&
                             isEmpty(properties) && (
-                                <GridItem colSpan={3}>
-                                    <Text fontSize="lg" textAlign="center">
-                                        {
-                                            "You don't have any properties yet. Click the button below to add one."
-                                        }
-                                    </Text>
-                                </GridItem>
-                            )}
+                            <GridItem colSpan={3}>
+                                <Text fontSize="lg" textAlign="center">
+                                    {
+                                        'You don\'t have any properties yet. Click the button below to add one.'
+                                    }
+                                </Text>
+                            </GridItem>
+                        )}
                     </Grid>
                     <Center>
                         <Button
