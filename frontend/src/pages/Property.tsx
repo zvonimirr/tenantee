@@ -54,7 +54,12 @@ function PropertyPage() {
     const { result: tenants, isLoading: isTenantsLoading } = useFetch<
         TenantList,
         Tenant[]
-    >(TenantApiService.listTenantsPath(), tenantApiService.getTenants);
+    >(
+        TenantApiService.listTenantsPath(),
+        tenantApiService.getTenants,
+        'tenants',
+    );
+
     const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
 
     const selectRef = useRef<HTMLSelectElement>(null);
