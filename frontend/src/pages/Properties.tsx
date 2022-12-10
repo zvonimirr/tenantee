@@ -11,7 +11,6 @@ import {
 } from '@chakra-ui/react';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
-import useSWR from 'swr';
 import {
     propertyApiService,
     PropertyApiService,
@@ -24,18 +23,26 @@ import {
 } from '../types/property';
 import PropertyCard from '../components/Property/PropertyCard';
 import { useNavigate } from 'react-router-dom';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import AddPropertyModal from '../components/Property/Modals/AddPropertyModal';
 import ConfirmModal from '../components/Modals/ConfirmModal';
 import { useNotification } from '../hooks/useNotification';
 import { isEmpty } from 'ramda';
 import EditPropertyModal from '../components/Property/Modals/EditPropertyModal';
+import { useFetch } from '../hooks/useFetch';
 
 function Properties() {
-    const { data, error, isValidating, mutate } = useSWR<PropertyList>(
-        PropertyApiService.listPropertiesPath,
+    const {
+        result: properties,
+        isError,
+        isLoading,
+        mutate,
+    } = useFetch<PropertyList, Property[]>(
+        PropertyApiService.listPropertiesPath(),
         propertyApiService.getProperties,
+        'properties',
     );
+
     const navigate = useNavigate();
     const [selectedProperty, setSelectedProperty] = useState<Property | null>(
         null,
@@ -56,13 +63,6 @@ function Properties() {
         onClose: closeConfirmModal,
     } = useDisclosure();
     const { showError, showSuccess } = useNotification();
-
-    const isLoading = useMemo(
-        () => data === undefined || (isValidating && error !== undefined),
-        [data, isValidating, error],
-    );
-
-    const isError = useMemo(() => error !== undefined, [error]);
 
     const onPropertyCardClick = useCallback(
         (property: Property) => navigate(`/properties/${property.id}`),
@@ -189,8 +189,8 @@ function Properties() {
                         )}
                         {!isError &&
                             !isLoading &&
-                            data &&
-                            data.properties.map((property) => (
+                            properties &&
+                            properties.map((property) => (
                                 <GridItem key={property.id}>
                                     <PropertyCard
                                         property={property}
@@ -208,8 +208,8 @@ function Properties() {
                             ))}
                         {!isError &&
                             !isLoading &&
-                            data &&
-                            isEmpty(data.properties) && (
+                            properties &&
+                            isEmpty(properties) && (
                             <GridItem colSpan={3}>
                                 <Text fontSize="lg" textAlign="center">
                                     {

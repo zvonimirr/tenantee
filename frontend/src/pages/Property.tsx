@@ -14,11 +14,11 @@ import { IconArrowBack, IconHome, IconMoneybag } from '@tabler/icons';
 import { isEmpty, prop } from 'ramda';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import useSWR from 'swr';
 import ConfirmModal from '../components/Modals/ConfirmModal';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
 import TenantCard from '../components/Tenant/TenantCard';
+import { useFetch } from '../hooks/useFetch';
 import { useNotification } from '../hooks/useNotification';
 import {
     propertyApiService,
@@ -42,23 +42,22 @@ function PropertyPage() {
     );
 
     const {
-        data: property,
-        error,
-        isValidating,
+        result: property,
+        isError: isPropertyError,
+        isLoading: isPropertyLoading,
         mutate,
-    } = useSWR<Property>(
+    } = useFetch<Property, Property>(
         PropertyApiService.getPropertyPath(Number(id)),
         propertyApiService.getProperty,
     );
-    const { data: tenants, isValidating: isValidatingTenants } =
-        useSWR<TenantList>(
-            TenantApiService.listTenantsPath,
-            tenantApiService.getTenants,
-        );
 
-    const isLoading = useMemo(
-        () => property === undefined || (isValidating && error !== undefined),
-        [property, isValidating, error],
+    const { result: tenants, isLoading: isTenantsLoading } = useFetch<
+        TenantList,
+        Tenant[]
+    >(
+        TenantApiService.listTenantsPath(),
+        tenantApiService.getTenants,
+        'tenants',
     );
 
     const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
@@ -76,17 +75,14 @@ function PropertyPage() {
         onClose: closeConfirmRemoveModal,
     } = useDisclosure();
 
-    const isError = useMemo(() => error !== undefined, [error]);
     const tenantOptions = useMemo(() => {
-        if (!tenants?.tenants || !property) {
+        if (!tenants || !property) {
             return [];
         }
 
         const tenantIds = property.tenants.map(prop('id'));
 
-        return tenants.tenants.filter(
-            (tenant) => !tenantIds.includes(tenant.id),
-        );
+        return tenants.filter((tenant) => !tenantIds.includes(tenant.id));
     }, [tenants, property]);
 
     const breadcrumbs = useMemo(
@@ -181,12 +177,12 @@ function PropertyPage() {
             />
             <Breadcrumbs items={breadcrumbs} />
             <PageContainer>
-                {isLoading && (
+                {isPropertyLoading && (
                     <Center>
                         <Spinner size="lg" />
                     </Center>
                 )}
-                {!isLoading && !isError && property && (
+                {!isPropertyError && !isPropertyError && property && (
                     <Stack spacing={1}>
                         <Flex gap={2} alignItems="center">
                             <IconArrowBack
@@ -239,7 +235,7 @@ function PropertyPage() {
                                     openConfirmAddModal();
                                 }}
                                 isDisabled={
-                                    isValidatingTenants ||
+                                    isTenantsLoading ||
                                     isEmpty(tenantOptions) ||
                                     selectedTenant !== null
                                 }>

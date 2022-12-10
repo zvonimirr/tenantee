@@ -8,9 +8,8 @@ import {
     Stack,
     useColorMode,
 } from '@chakra-ui/react';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import useSWR from 'swr';
 import GenericInput from '../components/Form/GenericInput';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
@@ -22,6 +21,7 @@ import { Preference, Preferences } from '../types/preferences';
 import { difference } from 'ramda';
 import { useNotification } from '../hooks/useNotification';
 import CurrencySelect from '../components/Form/CurrencySelect';
+import { useFetch } from '../hooks/useFetch';
 
 interface PreferenceFormFields {
     name: string;
@@ -42,19 +42,16 @@ function Settings() {
             },
         });
 
-    const { data, error, isValidating, mutate } = useSWR<Preferences>(
+    const {
+        result: preferences,
+        isError,
+        isLoading,
+        mutate,
+    } = useFetch<Preferences, Preference[]>(
         PreferenceApiService.listPreferencesPath(),
         preferenceApiService.getPreferences,
+        'preferences',
     );
-
-    const isLoading = useMemo(
-        () => data === undefined || (isValidating && error !== undefined),
-        [data, error, isValidating],
-    );
-
-    const isError = useMemo(() => error !== undefined, [error]);
-
-    const preferences = useMemo(() => data?.preferences, [data]);
 
     const default_currency = watch('default_currency');
 

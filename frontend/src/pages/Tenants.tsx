@@ -11,8 +11,7 @@ import {
 } from '@chakra-ui/react';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
-import useSWR from 'swr';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNotification } from '../hooks/useNotification';
 import {
     Tenant,
@@ -30,12 +29,20 @@ import { isEmpty } from 'ramda';
 import AddTenantModal from '../components/Tenant/Modals/AddTenantModal';
 import EditTenantModal from '../components/Tenant/Modals/EditTenantModal';
 import { useNavigate } from 'react-router-dom';
+import { useFetch } from '../hooks/useFetch';
 
 function Tenants() {
-    const { data, error, isValidating, mutate } = useSWR<TenantList>(
-        TenantApiService.listTenantsPath,
+    const {
+        result: tenants,
+        isLoading,
+        isError,
+        mutate,
+    } = useFetch<TenantList, Tenant[]>(
+        TenantApiService.listTenantsPath(),
         tenantApiService.getTenants,
+        'tenants',
     );
+
     const navigate = useNavigate();
     const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
     const {
@@ -54,13 +61,6 @@ function Tenants() {
         onClose: closeConfirmModal,
     } = useDisclosure();
     const { showError, showSuccess } = useNotification();
-
-    const isLoading = useMemo(
-        () => data === undefined || (isValidating && error !== undefined),
-        [data, isValidating, error],
-    );
-
-    const isError = useMemo(() => error !== undefined, [error]);
 
     const onTenantCardClick = useCallback(
         (tenant: Tenant) => navigate(`/tenants/${tenant.id}`),
@@ -185,8 +185,8 @@ function Tenants() {
                         )}
                         {!isError &&
                             !isLoading &&
-                            data &&
-                            data.tenants.map((tenant) => (
+                            tenants &&
+                            tenants.map((tenant) => (
                                 <GridItem key={tenant.id}>
                                     <TenantCard
                                         tenant={tenant}
@@ -204,8 +204,8 @@ function Tenants() {
                             ))}
                         {!isError &&
                             !isLoading &&
-                            data &&
-                            isEmpty(data.tenants) && (
+                            tenants &&
+                            isEmpty(tenants) && (
                             <GridItem colSpan={3}>
                                 <Text fontSize="lg" textAlign="center">
                                     {
