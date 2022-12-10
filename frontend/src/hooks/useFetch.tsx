@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import useSWR, { Fetcher } from 'swr';
 
-export function useFetch<T>(
+export function useFetch<T, K>(
     url: string | null,
     fetcher: Fetcher<T>,
     key: keyof T | null = null,
@@ -21,10 +21,10 @@ export function useFetch<T>(
         }
 
         if (key) {
-            return data[key];
+            return data[key] as K;
         }
 
-        return data;
+        return data as K;
     }, [data, key, isError, isLoading]);
 
     return {
