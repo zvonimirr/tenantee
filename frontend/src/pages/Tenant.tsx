@@ -15,11 +15,11 @@ import { IconArrowBack } from '@tabler/icons';
 import { isEmpty } from 'ramda';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import useSWR from 'swr';
 import ConfirmModal from '../components/Modals/ConfirmModal';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
 import PropertyCard from '../components/Property/PropertyCard';
+import { useFetch } from '../hooks/useFetch';
 import { useNotification } from '../hooks/useNotification';
 import {
     PropertyApiService,
@@ -40,44 +40,30 @@ function TenantPage() {
     const { showError, showSuccess } = useNotification();
 
     const {
-        data: tenant,
-        error: tenantError,
-        isValidating: isValidatingTenant,
+        result: tenant,
+        isError: isTenantError,
+        isLoading: isTenantLoading,
         mutate: mutateTenant,
-    } = useSWR<Tenant>(
+    } = useFetch<Tenant, Tenant>(
         TenantApiService.getTenantPath(Number(id)),
         tenantApiService.getTenant,
     );
 
-    const isLoadingTenant = useMemo(
-        () =>
-            tenant === undefined ||
-            (isValidatingTenant && tenantError !== undefined),
-        [tenant, isValidatingTenant, tenantError],
-    );
-    const isTenantError = useMemo(
-        () => tenantError !== undefined,
-        [tenantError],
-    );
-
-    const { data: allPropertiesData } = useSWR<PropertyList>(
-        PropertyApiService.listPropertiesPath,
-        propertyApiService.getProperties,
-    );
-
-    const allProperties = useMemo(
-        () => allPropertiesData?.properties,
-        [allPropertiesData],
-    );
-
     const {
-        data: rentData,
-        error: rentError,
-        isValidating: isValidatingRent,
+        result: rents,
+        isError: isRentsError,
+        isLoading: isRentsLoading,
         mutate: mutateRents,
-    } = useSWR<RentList>(
+    } = useFetch<RentList, Rent[]>(
         tenant ? RentApiService.getRentsByTenantIdPath(tenant.id) : null,
         rentApiService.getRents,
+        'rents',
+    );
+
+    const { result: allProperties } = useFetch<PropertyList, Property[]>(
+        PropertyApiService.listPropertiesPath(),
+        propertyApiService.getProperties,
+        'properties',
     );
 
     const {
@@ -91,14 +77,6 @@ function TenantPage() {
         onClose: closeConfirmRemoveModal,
     } = useDisclosure();
 
-    const isLoadingRents = useMemo(
-        () =>
-            rentData === undefined ||
-            (isValidatingRent && rentError !== undefined),
-        [rentData, isValidatingRent, rentError],
-    );
-    const isRentError = useMemo(() => rentError !== undefined, [rentError]);
-    const rents = useMemo(() => rentData?.rents, [rentData]);
     const properties = useMemo(() => tenant?.properties, [tenant]);
 
     const [selectedProperty, setSelectedProperty] = useState<Property | null>(
@@ -218,12 +196,12 @@ function TenantPage() {
             />
             <Breadcrumbs items={breadcrumbs} />
             <PageContainer>
-                {isLoadingTenant && (
+                {isTenantLoading && (
                     <Center>
                         <Spinner size="lg" />
                     </Center>
                 )}
-                {!isLoadingTenant && !isTenantError && tenant && (
+                {!isTenantLoading && !isTenantError && tenant && (
                     <Stack spacing={1}>
                         <Flex gap={2} alignItems="center">
                             <IconArrowBack
@@ -235,12 +213,12 @@ function TenantPage() {
                                 {tenant.name}
                             </Text>
                         </Flex>
-                        {isLoadingRents && (
+                        {isRentsLoading && (
                             <Center>
                                 <Spinner size="lg" />
                             </Center>
                         )}
-                        {!isLoadingRents && !isRentError && rents && (
+                        {!isRentsLoading && !isRentsError && rents && (
                             <Stack spacing={1}>
                                 <Text fontSize="xl">Rents:</Text>
                                 {isEmpty(rents) && <Text>No rents found</Text>}
@@ -266,12 +244,12 @@ function TenantPage() {
                                 })}
                             </Stack>
                         )}
-                        {isLoadingTenant && (
+                        {isRentsLoading && (
                             <Center>
                                 <Spinner size="lg" />
                             </Center>
                         )}
-                        {!isLoadingTenant && !isTenantError && properties && (
+                        {!isTenantLoading && !isTenantError && properties && (
                             <Stack spacing={1}>
                                 <Text fontSize="xl">Properties:</Text>
                                 {isEmpty(properties) && (
