@@ -45,8 +45,8 @@ function TenantPage() {
         isLoading: isTenantLoading,
         mutate: mutateTenant,
     } = useFetch<Tenant, Tenant>(
-        [id],
-        tenantApiService.get
+        TenantApiService.getTenantPath(Number(id)),
+        tenantApiService.getTenant,
     );
 
     const {

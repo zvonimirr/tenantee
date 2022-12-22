@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import useSWR, { Fetcher } from 'swr';
 
 type FetcherUrl = string | [...unknown[]] | null;
@@ -34,32 +34,4 @@ export function useFetch<T = ReturnType<Fetcher>>(
     }, [onError]);
 
     return rest;
-
-    // const { data, error, isValidating, mutate } = useSWR<T>(resolveUrl(url), fetcher);
-
-    // const isLoading = useMemo(
-    //     () => data === undefined || (isValidating && error !== undefined),
-    //     [data, error, isValidating],
-    // );
-
-    // const isError = useMemo(() => error !== undefined, [error]);
-
-    // const result = useMemo(() => {
-    //     // if (isError || isLoading || !data) {
-    //     //     return undefined;
-    //     // }
-
-    //     // if (key) {
-    //     //     return data?.[key];
-    //     // }
-
-    //     return data;
-    // }, [data, isError, isLoading]);
-
-    // return {
-    //     result,
-    //     isLoading,
-    //     isError,
-    //     mutate,
-    // };
 }

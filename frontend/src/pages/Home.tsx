@@ -5,31 +5,24 @@ import { Link } from 'react-router-dom';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
 import { useFetch } from '../hooks/useFetch';
-import {
-    preferenceApiService,
-    PreferenceApiService,
-} from '../services/api/PreferenceApiService';
-import {
-    propertyApiService,
-    PropertyApiService,
-} from '../services/api/PropertyApiService';
-import { Preference } from '../types/preferences';
-import { Property, PropertyList } from '../types/property';
+import { preferenceApiService } from '../services/api/PreferenceApiService';
+import { propertyApiService } from '../services/api/PropertyApiService';
 
 function Home() {
-    const { result: preference, isLoading } = useFetch<Preference, string>(
-        PreferenceApiService.getByNamePath('name'),
-        preferenceApiService.getPreference,
-        'value',
+    const { 
+        data: { value: preference } = { value: '' },
+        isLoading
+    } = useFetch(
+        [preferenceApiService.apiRoute, 'default_currency'],
+        preferenceApiService.get
     );
 
-    const { result: properties, isLoading: isLoadingProperties } = useFetch<
-        PropertyList,
-        Property[]
-    >(
-        PropertyApiService.listPropertiesPath(),
-        propertyApiService.getProperties,
-        'properties',
+    const { 
+        data: { properties } = { properties: [] },
+        isLoading: isLoadingProperties 
+    } = useFetch(
+        [propertyApiService.apiRoute],
+        propertyApiService.list
     );
 
     const monthlyRevenue = useMemo(() => {
