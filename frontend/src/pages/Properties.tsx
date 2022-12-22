@@ -1,46 +1,25 @@
-import {
-    Box,
-    Button,
-    Center,
-    Grid,
-    GridItem,
-    Spinner,
-    Stack,
-    Text,
-    useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Button, Center, Grid, GridItem, Spinner, Stack, Text, useDisclosure } from '@chakra-ui/react';
+import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ConfirmModal from '../components/Modals/ConfirmModal';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
-import {
-    propertyApiService,
-    PropertyApiService,
-} from '../services/api/PropertyApiService';
-import {
-    Property,
-    PropertyDto,
-    PropertyList,
-    PropertyUpdateDto,
-} from '../types/property';
-import PropertyCard from '../components/Property/PropertyCard';
-import { useNavigate } from 'react-router-dom';
-import { useCallback, useEffect, useState } from 'react';
 import AddPropertyModal from '../components/Property/Modals/AddPropertyModal';
-import ConfirmModal from '../components/Modals/ConfirmModal';
-import { useNotification } from '../hooks/useNotification';
-import { isEmpty } from 'ramda';
 import EditPropertyModal from '../components/Property/Modals/EditPropertyModal';
+import PropertyCard from '../components/Property/PropertyCard';
 import { useFetch } from '../hooks/useFetch';
+import { useNotification } from '../hooks/useNotification';
+import { propertyApiService } from '../services/api/PropertyApiService';
+import { Property, PropertyDto, PropertyUpdateDto } from '../types/property';
 
 function Properties() {
     const {
-        result: properties,
-        isError,
+        data: { properties } = { properties: [] },
         isLoading,
         mutate,
-    } = useFetch<PropertyList, Property[]>(
-        PropertyApiService.listPropertiesPath(),
-        propertyApiService.getProperties,
-        'properties',
+    } = useFetch(
+        propertyApiService.apiRoute,
+        propertyApiService.list
     );
 
     const navigate = useNavigate();
@@ -72,9 +51,9 @@ function Properties() {
     const onAddPropertySubmit = useCallback(
         async (property: PropertyDto) => {
             try {
-                await propertyApiService.addNewProperty(
-                    PropertyApiService.addNewPropertyPath(),
-                    property,
+                await propertyApiService.add(
+                    propertyApiService.apiRoute,
+                    property
                 );
 
                 showSuccess(
@@ -97,8 +76,8 @@ function Properties() {
     const onEditPropertySubmit = useCallback(
         async (property: PropertyUpdateDto) => {
             try {
-                await propertyApiService.updateProperty(
-                    PropertyApiService.updatePropertyPath(property.id),
+                await propertyApiService.update(
+                    propertyApiService.apiRoute,
                     property,
                 );
 
@@ -123,9 +102,7 @@ function Properties() {
     const onPropertyDeleteClick = useCallback(async () => {
         if (selectedProperty) {
             try {
-                await propertyApiService.deleteProperty(
-                    PropertyApiService.deletePropertyPath(selectedProperty.id),
-                );
+                await propertyApiService.delete(propertyApiService.apiRoute, selectedProperty.id);
 
                 showSuccess(
                     'Property deleted',
@@ -143,15 +120,6 @@ function Properties() {
             }
         }
     }, [mutate, selectedProperty]);
-
-    useEffect(() => {
-        if (isError) {
-            showError(
-                'Error',
-                'An error occurred while trying to load your properties',
-            );
-        }
-    }, [isError]);
 
     return (
         <Box>
@@ -187,29 +155,23 @@ function Properties() {
                                 </Center>
                             </GridItem>
                         )}
-                        {!isError &&
-                            !isLoading &&
-                            properties &&
-                            properties.map((property) => (
-                                <GridItem key={property.id}>
-                                    <PropertyCard
-                                        property={property}
-                                        onClick={onPropertyCardClick}
-                                        onDeleteClick={(property) => {
-                                            setSelectedProperty(property);
-                                            openConfirmModal();
-                                        }}
-                                        onEditClick={(property) => {
-                                            setSelectedProperty(property);
-                                            openEditPropertyModal();
-                                        }}
-                                    />
-                                </GridItem>
-                            ))}
-                        {!isError &&
-                            !isLoading &&
-                            properties &&
-                            isEmpty(properties) && (
+                        {properties.map((property) => (
+                            <GridItem key={property.id}>
+                                <PropertyCard
+                                    property={property}
+                                    onClick={onPropertyCardClick}
+                                    onDeleteClick={(property) => {
+                                        setSelectedProperty(property);
+                                        openConfirmModal();
+                                    }}
+                                    onEditClick={(property) => {
+                                        setSelectedProperty(property);
+                                        openEditPropertyModal();
+                                    }}
+                                />
+                            </GridItem>
+                        ))}
+                        {!properties.length && (
                             <GridItem colSpan={3}>
                                 <Text fontSize="lg" textAlign="center">
                                     {

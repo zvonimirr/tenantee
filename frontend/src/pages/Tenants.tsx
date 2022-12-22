@@ -1,50 +1,39 @@
-import {
-    Box,
-    Button,
-    Center,
-    Grid,
-    GridItem,
-    Spinner,
-    Stack,
-    Text,
-    useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Button, Center, Grid, GridItem, Spinner, Stack, Text, useDisclosure } from '@chakra-ui/react';
+import { useCallback, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ConfirmModal from '../components/Modals/ConfirmModal';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
-import { useCallback, useEffect, useState } from 'react';
-import { useNotification } from '../hooks/useNotification';
-import {
-    Tenant,
-    TenantDto,
-    TenantList,
-    TenantUpdateDto,
-} from '../types/tenant';
-import {
-    tenantApiService,
-    TenantApiService,
-} from '../services/api/TenantApiService';
-import TenantCard from '../components/Tenant/TenantCard';
-import ConfirmModal from '../components/Modals/ConfirmModal';
-import { isEmpty } from 'ramda';
 import AddTenantModal from '../components/Tenant/Modals/AddTenantModal';
 import EditTenantModal from '../components/Tenant/Modals/EditTenantModal';
-import { useNavigate } from 'react-router-dom';
+import TenantCard from '../components/Tenant/TenantCard';
 import { useFetch } from '../hooks/useFetch';
+import { useNotification } from '../hooks/useNotification';
+import { tenantApiService } from '../services/api/TenantApiService';
+import { Tenant, TenantDto, TenantUpdateDto } from '../types/tenant';
 
 function Tenants() {
+    const { showError, showSuccess } = useNotification();
+
     const {
-        result: tenants,
+        data: { tenants } = { tenants: [] },
         isLoading,
-        isError,
         mutate,
-    } = useFetch<TenantList, Tenant[]>(
-        TenantApiService.listTenantsPath(),
-        tenantApiService.getTenants,
-        'tenants',
+    } = useFetch(
+        tenantApiService.apiRoute,
+        tenantApiService.list,
+        useMemo(() => ({
+            onError: () => {
+                showError(
+                    'Error',
+                    'An error occurred while trying to fetch tenants',
+                );
+            }
+        }), [showError])
     );
 
     const navigate = useNavigate();
-    const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
+    const [selectedTenant, setSelectedTenant] = useState<Nullable<Tenant>>(null);
     const {
         isOpen: isAddNewTenantModalOpen,
         onOpen: openAddNewTenantModal,
@@ -60,7 +49,6 @@ function Tenants() {
         onOpen: openConfirmModal,
         onClose: closeConfirmModal,
     } = useDisclosure();
-    const { showError, showSuccess } = useNotification();
 
     const onTenantCardClick = useCallback(
         (tenant: Tenant) => navigate(`/tenants/${tenant.id}`),
@@ -70,10 +58,7 @@ function Tenants() {
     const onAddTenantSubmit = useCallback(
         async (tenant: TenantDto) => {
             try {
-                await tenantApiService.addTenant(
-                    TenantApiService.addTenantPath(),
-                    tenant,
-                );
+                await tenantApiService.add(tenantApiService.apiRoute, tenant);
 
                 showSuccess(
                     'Tenant added',
@@ -95,9 +80,9 @@ function Tenants() {
     const onEditTenantSubmit = useCallback(
         async (tenant: TenantUpdateDto) => {
             try {
-                await tenantApiService.updateTenant(
-                    TenantApiService.updateTenantPath(tenant.id),
-                    tenant,
+                await tenantApiService.update(
+                    tenantApiService.apiRoute,
+                    tenant
                 );
 
                 showSuccess(
@@ -121,9 +106,7 @@ function Tenants() {
     const onTenantDeleteClick = useCallback(async () => {
         if (selectedTenant) {
             try {
-                await tenantApiService.deleteTenant(
-                    TenantApiService.deleteTenantPath(selectedTenant.id),
-                );
+                await tenantApiService.delete(tenantApiService.apiRoute, selectedTenant.id);
 
                 showSuccess(
                     'Tenant deleted',
@@ -141,15 +124,6 @@ function Tenants() {
             }
         }
     }, [selectedTenant, showError, mutate, closeConfirmModal]);
-
-    useEffect(() => {
-        if (isError) {
-            showError(
-                'Error',
-                'An error occurred while trying to load your tenants',
-            );
-        }
-    }, [isError]);
 
     return (
         <Box>
@@ -183,29 +157,23 @@ function Tenants() {
                                 </Center>
                             </GridItem>
                         )}
-                        {!isError &&
-                            !isLoading &&
-                            tenants &&
-                            tenants.map((tenant) => (
-                                <GridItem key={tenant.id}>
-                                    <TenantCard
-                                        tenant={tenant}
-                                        onClick={onTenantCardClick}
-                                        onDeleteClick={(tenant) => {
-                                            setSelectedTenant(tenant);
-                                            openConfirmModal();
-                                        }}
-                                        onEditClick={(tenant) => {
-                                            setSelectedTenant(tenant);
-                                            openEditTenantModal();
-                                        }}
-                                    />
-                                </GridItem>
-                            ))}
-                        {!isError &&
-                            !isLoading &&
-                            tenants &&
-                            isEmpty(tenants) && (
+                        {tenants.map((tenant) => (
+                            <GridItem key={tenant.id}>
+                                <TenantCard
+                                    tenant={tenant}
+                                    onClick={onTenantCardClick}
+                                    onDeleteClick={(tenant) => {
+                                        setSelectedTenant(tenant);
+                                        openConfirmModal();
+                                    }}
+                                    onEditClick={(tenant) => {
+                                        setSelectedTenant(tenant);
+                                        openEditTenantModal();
+                                    }}
+                                />
+                            </GridItem>
+                        ))}
+                        {!tenants.length && (
                             <GridItem colSpan={3}>
                                 <Text fontSize="lg" textAlign="center">
                                     {
