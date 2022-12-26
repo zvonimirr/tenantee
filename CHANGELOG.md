@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0
+### API
+- Generalized and simplified using Service API's ([@jvince](https://github.com/jvince))
+
+### UI
+- Added `eslint-plugin-react-hooks` ([@jvince](https://github.com/jvince))
+- Refactored pages to use new Service API model ([@jvince](https://github.com/jvince))
+
 ## 0.3.0
 ### API
 - Properties now have a tax percentage field ([@zvonimirr](https://github.com/zvonimirr))
