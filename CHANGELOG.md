@@ -12,6 +12,8 @@
 - Add contact icons for tenants ([@MilaFazekas](https://github.com/MilaFazekas))
 - Tenant names are now aligned properly ([@MilaFazekas](https://github.com/MilaFazekas))
 - Dark mode support ([@zvonimirr](https://github.com/zvonimirr))
+- Generalized and simplified using Service API's ([@jvince](https://github.com/jvince))
+- Refactored pages to use new Service API model ([@jvince](https://github.com/jvince))
 
 ## 0.2.0
 ### API

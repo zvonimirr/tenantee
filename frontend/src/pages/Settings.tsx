@@ -1,27 +1,15 @@
-import {
-    Box,
-    Button,
-    Center,
-    Checkbox,
-    Flex,
-    Spinner,
-    Stack,
-    useColorMode,
-} from '@chakra-ui/react';
+import { Box, Button, Center, Checkbox, Flex, Spinner, Stack, useColorMode } from '@chakra-ui/react';
+import { difference } from 'ramda';
 import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import CurrencySelect from '../components/Form/CurrencySelect';
 import GenericInput from '../components/Form/GenericInput';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
-import {
-    preferenceApiService,
-    PreferenceApiService,
-} from '../services/api/PreferenceApiService';
-import { Preference, Preferences } from '../types/preferences';
-import { difference } from 'ramda';
-import { useNotification } from '../hooks/useNotification';
-import CurrencySelect from '../components/Form/CurrencySelect';
 import { useFetch } from '../hooks/useFetch';
+import { useNotification } from '../hooks/useNotification';
+import { preferenceApiService } from '../services/api/PreferenceApiService';
+import { Preference } from '../types/preferences';
 
 interface PreferenceFormFields {
     name: string;
@@ -43,15 +31,14 @@ function Settings() {
         });
 
     const {
-        result: preferences,
-        isError,
+        data: { preferences } = { preferences: [] },
         isLoading,
         mutate,
-    } = useFetch<Preferences, Preference[]>(
-        PreferenceApiService.listPreferencesPath(),
-        preferenceApiService.getPreferences,
-        'preferences',
+    } = useFetch(
+        preferenceApiService.apiRoute,
+        preferenceApiService.list,
     );
+
 
     const default_currency = watch('default_currency');
 
@@ -67,13 +54,13 @@ function Settings() {
                         ?.value ?? '',
             });
         }
-    }, [preferences]);
+    }, [preferences, reset]);
 
     const onPreferenceChange = useCallback(async (preference: Preference) => {
         try {
-            await preferenceApiService.setPreference(
-                PreferenceApiService.setPreferencePath(),
-                preference,
+            await preferenceApiService.set(
+                preferenceApiService.apiRoute,
+                preference
             );
 
             showSuccess(
@@ -86,7 +73,7 @@ function Settings() {
                 `Error while trying to set ${preference.name} to ${preference.value}`,
             );
         }
-    }, []);
+    }, [showError, showSuccess]);
 
     const onSaveClick = useCallback(
         async (values: PreferenceFormFields) => {
@@ -118,7 +105,7 @@ function Settings() {
                 mutate();
             }
         },
-        [preferences],
+        [mutate, onPreferenceChange, preferences, showSuccess],
     );
     return (
         <Box>
@@ -129,7 +116,7 @@ function Settings() {
                         <Spinner size="lg" />
                     </Center>
                 )}
-                {!isLoading && !isError && preferences && (
+                {!isLoading && preferences.length && (
                     <Stack>
                         <GenericInput
                             name="name"

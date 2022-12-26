@@ -1,36 +1,37 @@
-import { useMemo } from 'react';
+import { useEffect } from 'react';
 import useSWR, { Fetcher } from 'swr';
 
-export function useFetch<T, K>(
-    url: string | null,
+type FetcherUrl = string | [...unknown[]] | null;
+
+interface UseFetchOptions {
+    onError?: (error: Error) => void;
+}
+
+function resolveUrl(arg: FetcherUrl): [string?, ...unknown[]] {
+    if (arg === null || (Array.isArray(arg) && !arg.length)) {
+        return [];
+    }
+
+    if (typeof arg === 'string') {
+        return [arg];
+    }
+
+    return arg;
+}
+
+export function useFetch<T = ReturnType<Fetcher>>(
+    url: FetcherUrl = [],
     fetcher: Fetcher<T>,
-    key: keyof T | null = null,
+    options: UseFetchOptions = {},
 ) {
-    const { data, error, isValidating, mutate } = useSWR<T>(url, fetcher);
+    const response = useSWR<T>(resolveUrl(url), fetcher);
+    const { onError } = options;
 
-    const isLoading = useMemo(
-        () => data === undefined || (isValidating && error !== undefined),
-        [data, error, isValidating],
-    );
-
-    const isError = useMemo(() => error !== undefined, [error]);
-
-    const result = useMemo(() => {
-        if (isError || isLoading || !data) {
-            return undefined;
+    useEffect(() => {
+        if (onError instanceof Function && response.error instanceof Error) {
+            onError(response.error);
         }
+    }, [response.error, onError]);
 
-        if (key) {
-            return data[key] as K;
-        }
-
-        return data as K;
-    }, [data, key, isError, isLoading]);
-
-    return {
-        result,
-        isLoading,
-        isError,
-        mutate,
-    };
+    return { ...response, isError: response.error instanceof Error };
 }

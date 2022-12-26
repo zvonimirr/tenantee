@@ -4,7 +4,7 @@ export class HttpService {
         return await response.json();
     }
 
-    static async post<T>(url: string, body: T): Promise<T> {
+    static async post<T, K = T>(url: string, body: T): Promise<K> {
         const response = await fetch(`${import.meta.env.VITE_API_URL}${url}`, {
             method: 'POST',
             headers: {
@@ -15,7 +15,7 @@ export class HttpService {
         return await response.json();
     }
 
-    static async put<T>(url: string, body: T): Promise<T> {
+    static async put<T, K = T>(url: string, body: T): Promise<K> {
         const response = await fetch(`${import.meta.env.VITE_API_URL}${url}`, {
             method: 'PUT',
             headers: {
@@ -26,7 +26,7 @@ export class HttpService {
         return await response.json();
     }
 
-    static async patch<T>(url: string, body: T): Promise<T> {
+    static async patch<T, K = T>(url: string, body: T): Promise<K> {
         const response = await fetch(`${import.meta.env.VITE_API_URL}${url}`, {
             method: 'PATCH',
             headers: {

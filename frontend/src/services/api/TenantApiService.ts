@@ -1,38 +1,14 @@
-import {
-    TenantDto,
-    TenantList,
-    Tenant,
-    TenantUpdateDto,
-} from '../../types/tenant';
+import { Tenant, TenantUpdateDto } from '../../types/tenant';
 import { HttpService } from './HttpService';
+import { ModelApiCallbackArgs, ModelApiService } from './ModelApiService';
+import { RentApiService } from './RentApiService';
 
-export class TenantApiService extends HttpService {
-    public static readonly listTenantsPath = () => '/api/tenants';
-    public static readonly addTenantPath = () => '/api/tenants';
-    public static readonly getTenantPath = (id: number) => `/api/tenants/${id}`;
-    public static readonly updateTenantPath = (id: number) =>
-        `/api/tenants/${id}`;
-    public static readonly deleteTenantPath = (id: number) =>
-        `/api/tenants/${id}`;
+export class TenantApiService extends ModelApiService<Tenant, 'tenant', TenantUpdateDto> {
+    public apiRoute = '/api/tenants';
 
-    async getTenants(path: string) {
-        return HttpService.get<TenantList>(path);
-    }
-
-    async getTenant(path: string) {
-        return HttpService.get<Tenant>(path);
-    }
-
-    async addTenant(path: string, tenant: TenantDto) {
-        return HttpService.post<TenantDto>(path, tenant);
-    }
-
-    async updateTenant(path: string, tenant: TenantUpdateDto) {
-        return HttpService.patch<TenantDto>(path, tenant);
-    }
-
-    async deleteTenant(path: string) {
-        return HttpService.delete(path);
+    async rents([url, ...rest]: ModelApiCallbackArgs): ReturnType<RentApiService['list']> {
+        const [id] = rest;
+        return HttpService.get(`${url}/${id}/rents`);
     }
 }
 
