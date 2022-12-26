@@ -1,17 +1,15 @@
 import { HttpService } from './HttpService';
 
-type ModelList<T, N extends string> = Listable<T, Plural<N>>;
+export type ModelList<T, N extends string> = Listable<T, Plural<N>>;
 
-type Args = [string, ...unknown[]];
-
-type Id = string | number;
+export type ModelApiCallbackArgs = [string, ...unknown[]];
 
 type NewModel<T> =  Omit<T, 'id'>;
 
 export abstract class ModelApiService<T, N extends string, K = T> {
     public abstract apiRoute: string;
 
-    async get([url, ...rest]: Args): Promise<T> {
+    async get([url, ...rest]: ModelApiCallbackArgs): Promise<T> {
         const [id] = rest;
 
         if (typeof id !== 'string' && typeof id !== 'number') {
@@ -25,8 +23,8 @@ export abstract class ModelApiService<T, N extends string, K = T> {
         return HttpService.post(url, body);
     }
 
-    async update(url: string, body: K): Promise<K> {
-        return HttpService.patch(url, body);
+    async update(url: string, body: K extends { id: Id } ? K : never): Promise<K> {
+        return HttpService.patch(`${url}/${body.id}`, body);
     }
 
     async delete(url: string, id: Id): Promise<void> {
