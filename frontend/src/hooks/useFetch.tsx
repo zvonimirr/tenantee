@@ -24,14 +24,14 @@ export function useFetch<T = ReturnType<Fetcher>>(
     fetcher: Fetcher<T>,
     options: UseFetchOptions = {},
 ) {
-    const { error, ...rest } = useSWR<T>(resolveUrl(url), fetcher);
+    const response = useSWR<T>(resolveUrl(url), fetcher);
     const { onError } = options;
 
     useEffect(() => {
-        if (onError instanceof Function && error instanceof Error) {
-            onError(error);
+        if (onError instanceof Function && response.error instanceof Error) {
+            onError(response.error);
         }
-    }, [onError]);
+    }, [response.error, onError]);
 
-    return rest;
+    return { ...response, isError: response.error instanceof Error };
 }
