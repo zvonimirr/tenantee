@@ -1,15 +1,4 @@
-import {
-    Box,
-    Center,
-    Flex,
-    Grid,
-    GridItem,
-    Select,
-    Spinner,
-    Stack,
-    Text,
-    useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Center, Flex, Grid, GridItem, Select, Spinner, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import { IconArrowBack, IconHome, IconMoneybag } from '@tabler/icons';
 import { isEmpty, prop } from 'ramda';
 import { useCallback, useMemo, useRef, useState } from 'react';
@@ -20,16 +9,9 @@ import PageContainer from '../components/PageContainer';
 import TenantCard from '../components/Tenant/TenantCard';
 import { useFetch } from '../hooks/useFetch';
 import { useNotification } from '../hooks/useNotification';
-import {
-    propertyApiService,
-    PropertyApiService,
-} from '../services/api/PropertyApiService';
-import {
-    tenantApiService,
-    TenantApiService,
-} from '../services/api/TenantApiService';
-import { Property } from '../types/property';
-import { Tenant, TenantList } from '../types/tenant';
+import { propertyApiService } from '../services/api/PropertyApiService';
+import { tenantApiService } from '../services/api/TenantApiService';
+import { Tenant } from '../types/tenant';
 
 function PropertyPage() {
     const { id } = useParams();
@@ -42,23 +24,19 @@ function PropertyPage() {
     );
 
     const {
-        result: property,
+        data: property,
         isError: isPropertyError,
         isLoading: isPropertyLoading,
         mutate,
-    } = useFetch<Property, Property>(
-        PropertyApiService.getPropertyPath(Number(id)),
-        propertyApiService.getProperty,
+    } = useFetch(
+        [propertyApiService.apiRoute, id],
+        propertyApiService.get
     );
 
-    const { result: tenants, isLoading: isTenantsLoading } = useFetch<
-        TenantList,
-        Tenant[]
-    >(
-        TenantApiService.listTenantsPath(),
-        tenantApiService.getTenants,
-        'tenants',
-    );
+    const {
+        data: { tenants } = { tenants: [] },
+        isLoading: isTenantsLoading
+    } = useFetch(tenantApiService.apiRoute, tenantApiService.list);
 
     const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
 
@@ -102,12 +80,7 @@ function PropertyPage() {
     const onTenantAddSubmit = useCallback(async () => {
         if (property && selectedTenant && selectRef.current) {
             try {
-                await propertyApiService.addTenantToProperty(
-                    PropertyApiService.addTenantToPropertyPath(
-                        property.id,
-                        selectedTenant.id,
-                    ),
-                );
+                await propertyApiService.addTenant(property.id, selectedTenant.id);
 
                 showSuccess(
                     'Tenant added',
@@ -125,39 +98,36 @@ function PropertyPage() {
                 closeConfirmAddModal();
             }
         }
-    }, [selectedTenant, property, mutate]);
+    }, [property, selectedTenant, showSuccess, showError, mutate, closeConfirmAddModal]);
 
     const onTenantAddCancel = useCallback(() => {
         setSelectedTenant(null);
         closeConfirmAddModal();
-    }, []);
+    }, [closeConfirmAddModal]);
 
     const onTenantRemoveSubmit = useCallback(async () => {
-        if (selectedTenant) {
+        if (selectedTenant && id) {
             try {
-                await propertyApiService.removeTenantFromProperty(
-                    PropertyApiService.removeTenantFromPropertyPath(
-                        Number(id),
-                        selectedTenant.id,
-                    ),
-                );
+                await propertyApiService.removeTenant(id, selectedTenant.id);
 
                 showSuccess(
                     'Tenant removed',
                     `${selectedTenant.name} was removed from the property`,
                 );
-            } catch (e) {
+            }
+            catch (e) {
                 showError(
                     'Error',
                     'An error occurred while trying to remove the tenant from the property',
                 );
-            } finally {
+            }
+            finally {
                 setSelectedTenant(null);
                 closeConfirmRemoveModal();
                 mutate();
             }
         }
-    }, [selectedTenant, mutate]);
+    }, [selectedTenant, id, showSuccess, showError, closeConfirmRemoveModal, mutate]);
 
     return (
         <Box>

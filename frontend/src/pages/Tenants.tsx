@@ -74,7 +74,7 @@ function Tenants() {
                 closeAddNewTenantModal();
             }
         },
-        [mutate],
+        [closeAddNewTenantModal, mutate, showError, showSuccess],
     );
 
     const onEditTenantSubmit = useCallback(
@@ -100,7 +100,7 @@ function Tenants() {
                 mutate();
             }
         },
-        [mutate, selectedTenant],
+        [closeEditTenantModal, mutate, selectedTenant?.name, showError, showSuccess],
     );
 
     const onTenantDeleteClick = useCallback(async () => {
@@ -123,7 +123,7 @@ function Tenants() {
                 closeConfirmModal();
             }
         }
-    }, [selectedTenant, showError, mutate, closeConfirmModal]);
+    }, [selectedTenant, showSuccess, showError, mutate, closeConfirmModal]);
 
     return (
         <Box>

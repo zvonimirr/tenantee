@@ -9,7 +9,7 @@ import {
     Spinner,
     Stack,
     Text,
-    useDisclosure,
+    useDisclosure
 } from '@chakra-ui/react';
 import { IconArrowBack } from '@tabler/icons';
 import { isEmpty } from 'ramda';
@@ -21,18 +21,11 @@ import PageContainer from '../components/PageContainer';
 import PropertyCard from '../components/Property/PropertyCard';
 import { useFetch } from '../hooks/useFetch';
 import { useNotification } from '../hooks/useNotification';
-import {
-    PropertyApiService,
-    propertyApiService,
-} from '../services/api/PropertyApiService';
-import { rentApiService, RentApiService } from '../services/api/RentApiService';
-import {
-    tenantApiService,
-    TenantApiService,
-} from '../services/api/TenantApiService';
-import { Property, PropertyList } from '../types/property';
-import { Rent, RentList } from '../types/rent';
-import { Tenant } from '../types/tenant';
+import { propertyApiService } from '../services/api/PropertyApiService';
+import { rentApiService } from '../services/api/RentApiService';
+import { tenantApiService } from '../services/api/TenantApiService';
+import { Property } from '../types/property';
+import { Rent } from '../types/rent';
 
 function TenantPage() {
     const { id } = useParams();
@@ -40,31 +33,31 @@ function TenantPage() {
     const { showError, showSuccess } = useNotification();
 
     const {
-        result: tenant,
+        data: tenant,
         isError: isTenantError,
         isLoading: isTenantLoading,
         mutate: mutateTenant,
-    } = useFetch<Tenant, Tenant>(
-        TenantApiService.getTenantPath(Number(id)),
-        tenantApiService.getTenant,
+    } = useFetch(
+        [tenantApiService.apiRoute, id],
+        tenantApiService.get,
     );
 
     const {
-        result: rents,
+        data: { rents } = { rents: [] },
         isError: isRentsError,
         isLoading: isRentsLoading,
-        mutate: mutateRents,
-    } = useFetch<RentList, Rent[]>(
-        tenant ? RentApiService.getRentsByTenantIdPath(tenant.id) : null,
-        rentApiService.getRents,
-        'rents',
+        mutate: mutateRents
+    } = useFetch(
+        [
+            tenant?.id ? tenantApiService.apiRoute : null,
+            tenant?.id
+        ],
+        tenantApiService.rents
     );
 
-    const { result: allProperties } = useFetch<PropertyList, Property[]>(
-        PropertyApiService.listPropertiesPath(),
-        propertyApiService.getProperties,
-        'properties',
-    );
+    const {
+        data: { properties: allProperties } = { properties: [] }
+    } = useFetch(propertyApiService.apiRoute, propertyApiService.list);
 
     const {
         isOpen: isConfirmAddModalOpen,
@@ -100,10 +93,9 @@ function TenantPage() {
     );
 
     const onRentStatusUpdate = useCallback(async (rent: Rent) => {
+        console.log(rent);
         try {
-            await rentApiService.updateRent(
-                RentApiService.markRentPath(rent.id, !rent.paid),
-            );
+            await rentApiService.mark(rent.id, !rent.paid);
             showSuccess(
                 'Rent status updated',
                 'Successfully updated the status of the rent',
@@ -116,17 +108,12 @@ function TenantPage() {
         } finally {
             mutateRents();
         }
-    }, []);
+    }, [mutateRents, showError, showSuccess]);
 
     const onTenantAddSubmit = useCallback(async () => {
         if (tenant && selectedProperty && selectRef.current) {
             try {
-                await propertyApiService.addTenantToProperty(
-                    PropertyApiService.addTenantToPropertyPath(
-                        selectedProperty.id,
-                        tenant.id,
-                    ),
-                );
+                await propertyApiService.addTenant(selectedProperty.id,tenant.id);
 
                 showSuccess(
                     'Tenant added',
@@ -144,17 +131,12 @@ function TenantPage() {
                 closeConfirmAddModal();
             }
         }
-    }, [tenant, selectedProperty]);
+    }, [tenant, selectedProperty, showSuccess, showError, mutateTenant, closeConfirmAddModal]);
 
     const onTenantRemoveSubmit = useCallback(async () => {
         if (selectedProperty && tenant) {
             try {
-                await propertyApiService.removeTenantFromProperty(
-                    PropertyApiService.removeTenantFromPropertyPath(
-                        selectedProperty.id,
-                        tenant.id,
-                    ),
-                );
+                await propertyApiService.removeTenant(selectedProperty.id, tenant.id);
 
                 showSuccess(
                     'Tenant removed',
@@ -171,12 +153,12 @@ function TenantPage() {
                 mutateTenant();
             }
         }
-    }, [tenant, selectedProperty]);
+    }, [selectedProperty, tenant, showSuccess, showError, closeConfirmRemoveModal, mutateTenant]);
 
     const onTenantAddCancel = useCallback(() => {
         setSelectedProperty(null);
         closeConfirmAddModal();
-    }, []);
+    }, [closeConfirmAddModal]);
 
     return (
         <Box>

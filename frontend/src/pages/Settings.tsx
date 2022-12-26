@@ -54,7 +54,7 @@ function Settings() {
                         ?.value ?? '',
             });
         }
-    }, [preferences]);
+    }, [preferences, reset]);
 
     const onPreferenceChange = useCallback(async (preference: Preference) => {
         try {
@@ -73,7 +73,7 @@ function Settings() {
                 `Error while trying to set ${preference.name} to ${preference.value}`,
             );
         }
-    }, []);
+    }, [showError, showSuccess]);
 
     const onSaveClick = useCallback(
         async (values: PreferenceFormFields) => {
@@ -105,7 +105,7 @@ function Settings() {
                 mutate();
             }
         },
-        [preferences],
+        [mutate, onPreferenceChange, preferences, showSuccess],
     );
     return (
         <Box>

@@ -70,7 +70,7 @@ function Properties() {
                 closeAddNewPropertyModal();
             }
         },
-        [mutate],
+        [closeAddNewPropertyModal, mutate, showError, showSuccess],
     );
 
     const onEditPropertySubmit = useCallback(
@@ -96,7 +96,7 @@ function Properties() {
                 mutate();
             }
         },
-        [mutate, selectedProperty],
+        [closeEditPropertyModal, mutate, selectedProperty?.name, showError, showSuccess],
     );
 
     const onPropertyDeleteClick = useCallback(async () => {
@@ -119,7 +119,7 @@ function Properties() {
                 closeConfirmModal();
             }
         }
-    }, [mutate, selectedProperty]);
+    }, [closeConfirmModal, mutate, selectedProperty, showError, showSuccess]);
 
     return (
         <Box>
