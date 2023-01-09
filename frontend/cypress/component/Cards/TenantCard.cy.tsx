@@ -62,8 +62,8 @@ describe('TenantCard', () => {
     it('should render overdue rent', () => {
         const due_Date = new Date();
         due_Date.setDate(due_Date.getDate() - 5);
-
-        const due_date = `${due_Date.getFullYear()}-${due_Date.getMonth()}-${due_Date.getDay()}`;
+        // Calculate due_date to YYYY-MM-DD format
+        const due_date = due_Date.toISOString().split('T')[0];
 
         cy.mount(
             <TenantCard
