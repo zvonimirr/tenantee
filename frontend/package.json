@@ -15,7 +15,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@tabler/icons": "^1.119.0",
-    "country-to-currency": "^1.0.6",
+    "country-to-currency": "^1.0.7",
     "currency-symbol-map": "^5.1.0",
     "framer-motion": "^8.4.3",
     "ramda": "^0.28.0",
