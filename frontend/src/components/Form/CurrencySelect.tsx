@@ -1,7 +1,6 @@
 import { Select } from '@chakra-ui/react';
-import { useMemo } from 'react';
 import countryToCurrency from 'country-to-currency';
-import { uniq } from 'ramda';
+import { uniq, sort } from 'ramda';
 
 interface CurrencySelectProps {
     name: string;
@@ -9,16 +8,17 @@ interface CurrencySelectProps {
     onChange: (value: string) => void;
 }
 
-function CurrencySelect({ name, value, onChange }: CurrencySelectProps) {
-    const options = useMemo(() => {
-        const currencies = uniq(Object.values(countryToCurrency));
-        currencies.sort();
+const currencies = sort<string>(
+    (a, b) => a.localeCompare(b),
+    uniq(Object.values(countryToCurrency)),
+);
 
-        return currencies.map((currency) => ({
-            value: currency,
-            label: currency,
-        }));
-    }, []);
+const options = currencies.map((currency) => ({
+    value: currency,
+    label: currency,
+}));
+
+function CurrencySelect({ name, value, onChange }: CurrencySelectProps) {
     return (
         <Select
             name={name}

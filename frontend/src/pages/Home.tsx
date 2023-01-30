@@ -7,23 +7,21 @@ import PageContainer from '../components/PageContainer';
 import { useFetch } from '../hooks/useFetch';
 import { preferenceApiService } from '../services/api/PreferenceApiService';
 import { propertyApiService } from '../services/api/PropertyApiService';
+import { formatMoney } from '../utils/money';
 
 function Home() {
     const {
         data: { value: name } = { value: 'landlord' },
-        isLoading: isLoadingName
+        isLoading: isLoadingName,
     } = useFetch(
         [preferenceApiService.apiRoute, 'name'],
-        preferenceApiService.get
+        preferenceApiService.get,
     );
 
     const {
         data: { properties } = { properties: [] },
-        isLoading: isLoadingProperties
-    } = useFetch(
-        [propertyApiService.apiRoute],
-        propertyApiService.list
-    );
+        isLoading: isLoadingProperties,
+    } = useFetch([propertyApiService.apiRoute], propertyApiService.list);
 
     const isLoading = isLoadingName || isLoadingProperties;
 
@@ -58,7 +56,7 @@ function Home() {
                         </Text>
                         {!properties.length && (
                             <Text fontSize="xl">
-                                {'You don\'t have any properties yet. '}
+                                {"You don't have any properties yet. "}
                                 <span
                                     style={{
                                         fontWeight: 'bold',
@@ -83,9 +81,13 @@ function Home() {
                                 <Text fontSize="xl">
                                     Your monthly revenue is{' '}
                                     <span style={{ fontWeight: 'bold' }}>
-                                        ~{monthlyRevenue}
-                                    </span>{' '}
-                                    {properties[0].monthly_revenue.currency}.
+                                        ~
+                                        {formatMoney(
+                                            monthlyRevenue,
+                                            properties[0].monthly_revenue
+                                                .currency,
+                                        )}
+                                    </span>
                                 </Text>
                             </Box>
                         )}

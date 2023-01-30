@@ -23,6 +23,7 @@ import { useNotification } from '../hooks/useNotification';
 import { propertyApiService } from '../services/api/PropertyApiService';
 import { tenantApiService } from '../services/api/TenantApiService';
 import { Tenant } from '../types/tenant';
+import { formatMoney } from '../utils/money';
 
 function PropertyPage() {
     const { id } = useParams();
@@ -193,8 +194,10 @@ function PropertyPage() {
                         <Flex gap={2} alignItems="center">
                             <IconMoneybag size={20} />
                             <Text>
-                                {property.price.amount}{' '}
-                                {property.price.currency}
+                                {formatMoney(
+                                    property.price.amount,
+                                    property.price.currency,
+                                )}
                             </Text>
                         </Flex>
                         <Grid templateColumns="repeat(3, 1fr)" gap={6}>
