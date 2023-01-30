@@ -50,7 +50,7 @@ function EditTenantModal({
                 phone: tenant.phone,
             });
         }
-    }, [tenant]);
+    }, [tenant, reset]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
