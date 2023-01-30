@@ -56,7 +56,7 @@ function Home() {
                         </Text>
                         {!properties.length && (
                             <Text fontSize="xl">
-                                {"You don't have any properties yet. "}
+                                {'You don\'t have any properties yet. '}
                                 <span
                                     style={{
                                         fontWeight: 'bold',
