@@ -21,8 +21,8 @@ describe('TenantCard', () => {
 
         cy.get('.chakra-text').should('have.text', 'Test Tenant');
         cy.get('.chakra-text').click();
-        cy.get('.icon-tabler-pencil').click();
-        cy.get('.icon-tabler-trash').click();
+        cy.get('.tabler-icon-pencil').click();
+        cy.get('.tabler-icon-trash').click();
 
         cy.wrap(onDeleteClick).should('have.been.called');
         cy.wrap(onEditClick).should('have.been.called');

@@ -4,7 +4,7 @@ import {
     BreadcrumbItem,
     BreadcrumbLink,
 } from '@chakra-ui/react';
-import { IconChevronRight, IconMenu2 } from '@tabler/icons';
+import { IconChevronRight, IconMenu2 } from '@tabler/icons-react';
 import { ReactNode } from 'react';
 import { useDrawer } from '../../hooks/useDrawer';
 
