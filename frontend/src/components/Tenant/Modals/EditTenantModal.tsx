@@ -10,7 +10,7 @@ import {
     ModalOverlay,
     Stack,
 } from '@chakra-ui/react';
-import { IconPencil, IconPhone } from '@tabler/icons';
+import { IconPencil, IconPhone } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Tenant, TenantUpdateDto } from '../../../types/tenant';

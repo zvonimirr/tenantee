@@ -9,9 +9,9 @@ import {
     Spinner,
     Stack,
     Text,
-    useDisclosure
+    useDisclosure,
 } from '@chakra-ui/react';
-import { IconArrowBack } from '@tabler/icons';
+import { IconArrowBack } from '@tabler/icons-react';
 import { isEmpty } from 'ramda';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -37,27 +37,20 @@ function TenantPage() {
         isError: isTenantError,
         isLoading: isTenantLoading,
         mutate: mutateTenant,
-    } = useFetch(
-        [tenantApiService.apiRoute, id],
-        tenantApiService.get,
-    );
+    } = useFetch([tenantApiService.apiRoute, id], tenantApiService.get);
 
     const {
         data: { rents } = { rents: [] },
         isError: isRentsError,
         isLoading: isRentsLoading,
-        mutate: mutateRents
+        mutate: mutateRents,
     } = useFetch(
-        [
-            tenant?.id ? tenantApiService.apiRoute : null,
-            tenant?.id
-        ],
-        tenantApiService.rents
+        [tenant?.id ? tenantApiService.apiRoute : null, tenant?.id],
+        tenantApiService.rents,
     );
 
-    const {
-        data: { properties: allProperties } = { properties: [] }
-    } = useFetch(propertyApiService.apiRoute, propertyApiService.list);
+    const { data: { properties: allProperties } = { properties: [] } } =
+        useFetch(propertyApiService.apiRoute, propertyApiService.list);
 
     const {
         isOpen: isConfirmAddModalOpen,
@@ -92,28 +85,34 @@ function TenantPage() {
         [tenant],
     );
 
-    const onRentStatusUpdate = useCallback(async (rent: Rent) => {
-        console.log(rent);
-        try {
-            await rentApiService.mark(rent.id, !rent.paid);
-            showSuccess(
-                'Rent status updated',
-                'Successfully updated the status of the rent',
-            );
-        } catch {
-            showError(
-                'Error',
-                'An error occured while trying to update the rent status.',
-            );
-        } finally {
-            mutateRents();
-        }
-    }, [mutateRents, showError, showSuccess]);
+    const onRentStatusUpdate = useCallback(
+        async (rent: Rent) => {
+            console.log(rent);
+            try {
+                await rentApiService.mark(rent.id, !rent.paid);
+                showSuccess(
+                    'Rent status updated',
+                    'Successfully updated the status of the rent',
+                );
+            } catch {
+                showError(
+                    'Error',
+                    'An error occured while trying to update the rent status.',
+                );
+            } finally {
+                mutateRents();
+            }
+        },
+        [mutateRents, showError, showSuccess],
+    );
 
     const onTenantAddSubmit = useCallback(async () => {
         if (tenant && selectedProperty && selectRef.current) {
             try {
-                await propertyApiService.addTenant(selectedProperty.id,tenant.id);
+                await propertyApiService.addTenant(
+                    selectedProperty.id,
+                    tenant.id,
+                );
 
                 showSuccess(
                     'Tenant added',
@@ -131,12 +130,22 @@ function TenantPage() {
                 closeConfirmAddModal();
             }
         }
-    }, [tenant, selectedProperty, showSuccess, showError, mutateTenant, closeConfirmAddModal]);
+    }, [
+        tenant,
+        selectedProperty,
+        showSuccess,
+        showError,
+        mutateTenant,
+        closeConfirmAddModal,
+    ]);
 
     const onTenantRemoveSubmit = useCallback(async () => {
         if (selectedProperty && tenant) {
             try {
-                await propertyApiService.removeTenant(selectedProperty.id, tenant.id);
+                await propertyApiService.removeTenant(
+                    selectedProperty.id,
+                    tenant.id,
+                );
 
                 showSuccess(
                     'Tenant removed',
@@ -153,7 +162,14 @@ function TenantPage() {
                 mutateTenant();
             }
         }
-    }, [selectedProperty, tenant, showSuccess, showError, closeConfirmRemoveModal, mutateTenant]);
+    }, [
+        selectedProperty,
+        tenant,
+        showSuccess,
+        showError,
+        closeConfirmRemoveModal,
+        mutateTenant,
+    ]);
 
     const onTenantAddCancel = useCallback(() => {
         setSelectedProperty(null);

@@ -11,7 +11,7 @@ import {
     Stack,
     Text,
 } from '@chakra-ui/react';
-import { IconCalendar, IconHome, IconPencil } from '@tabler/icons';
+import { IconCalendar, IconHome, IconPencil } from '@tabler/icons-react';
 import { useForm } from 'react-hook-form';
 import {
     calculateDueDateModifier,

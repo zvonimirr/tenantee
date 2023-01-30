@@ -1,6 +1,6 @@
 import { Card, CardBody, Center, Flex, Stack, Text } from '@chakra-ui/react';
 import { Property } from '../../types/property';
-import { IconHome, IconPencil, IconTrash } from '@tabler/icons';
+import { IconHome, IconPencil, IconTrash } from '@tabler/icons-react';
 interface PropertyCardProps {
     property: Property;
     onClick?: (property: Property) => void;

@@ -1,5 +1,16 @@
-import { Box, Center, Flex, Grid, GridItem, Select, Spinner, Stack, Text, useDisclosure } from '@chakra-ui/react';
-import { IconArrowBack, IconHome, IconMoneybag } from '@tabler/icons';
+import {
+    Box,
+    Center,
+    Flex,
+    Grid,
+    GridItem,
+    Select,
+    Spinner,
+    Stack,
+    Text,
+    useDisclosure,
+} from '@chakra-ui/react';
+import { IconArrowBack, IconHome, IconMoneybag } from '@tabler/icons-react';
 import { isEmpty, prop } from 'ramda';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -28,15 +39,10 @@ function PropertyPage() {
         isError: isPropertyError,
         isLoading: isPropertyLoading,
         mutate,
-    } = useFetch(
-        [propertyApiService.apiRoute, id],
-        propertyApiService.get
-    );
+    } = useFetch([propertyApiService.apiRoute, id], propertyApiService.get);
 
-    const {
-        data: { tenants } = { tenants: [] },
-        isLoading: isTenantsLoading
-    } = useFetch(tenantApiService.apiRoute, tenantApiService.list);
+    const { data: { tenants } = { tenants: [] }, isLoading: isTenantsLoading } =
+        useFetch(tenantApiService.apiRoute, tenantApiService.list);
 
     const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
 
@@ -80,7 +86,10 @@ function PropertyPage() {
     const onTenantAddSubmit = useCallback(async () => {
         if (property && selectedTenant && selectRef.current) {
             try {
-                await propertyApiService.addTenant(property.id, selectedTenant.id);
+                await propertyApiService.addTenant(
+                    property.id,
+                    selectedTenant.id,
+                );
 
                 showSuccess(
                     'Tenant added',
@@ -98,7 +107,14 @@ function PropertyPage() {
                 closeConfirmAddModal();
             }
         }
-    }, [property, selectedTenant, showSuccess, showError, mutate, closeConfirmAddModal]);
+    }, [
+        property,
+        selectedTenant,
+        showSuccess,
+        showError,
+        mutate,
+        closeConfirmAddModal,
+    ]);
 
     const onTenantAddCancel = useCallback(() => {
         setSelectedTenant(null);
@@ -114,20 +130,25 @@ function PropertyPage() {
                     'Tenant removed',
                     `${selectedTenant.name} was removed from the property`,
                 );
-            }
-            catch (e) {
+            } catch (e) {
                 showError(
                     'Error',
                     'An error occurred while trying to remove the tenant from the property',
                 );
-            }
-            finally {
+            } finally {
                 setSelectedTenant(null);
                 closeConfirmRemoveModal();
                 mutate();
             }
         }
-    }, [selectedTenant, id, showSuccess, showError, closeConfirmRemoveModal, mutate]);
+    }, [
+        selectedTenant,
+        id,
+        showSuccess,
+        showError,
+        closeConfirmRemoveModal,
+        mutate,
+    ]);
 
     return (
         <Box>

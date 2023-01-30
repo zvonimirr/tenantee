@@ -3,7 +3,12 @@ import Navigation from './Navigation/Navigation';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from '../pages/Home';
 import DrawerProvider from '../hooks/useDrawer';
-import { IconHome, IconKey, IconSettings, IconUsers } from '@tabler/icons';
+import {
+    IconHome,
+    IconKey,
+    IconSettings,
+    IconUsers,
+} from '@tabler/icons-react';
 import Label from './Navigation/Label';
 import { SWRConfig } from 'swr';
 import Properties from '../pages/Properties';

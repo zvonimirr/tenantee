@@ -5,7 +5,7 @@ import {
     IconPhone,
     IconTrash,
     IconUser,
-} from '@tabler/icons';
+} from '@tabler/icons-react';
 import { useMemo } from 'react';
 import { Tenant } from '../../types/tenant';
 
