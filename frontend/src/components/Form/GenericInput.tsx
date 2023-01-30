@@ -7,20 +7,20 @@ import {
     InputRightElement,
 } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 
-interface GenericInputProps {
-    name: string;
+interface GenericInputProps<T extends FieldValues, K> {
+    name: Path<T>;
     placeholder: string;
     label: string;
-    control: Control<any, any>;
+    control: Control<T, K>;
     type?: 'text' | 'number' | 'email' | 'password' | 'tel';
-    rules?: Record<string, any>;
+    rules?: Record<string, unknown>;
     rightAdornment?: ReactNode;
     leftAdornment?: ReactNode;
 }
 
-function GenericInput({
+const GenericInput = <T extends FieldValues, K>({
     placeholder,
     label,
     name,
@@ -29,7 +29,7 @@ function GenericInput({
     leftAdornment,
     rightAdornment,
     rules = {},
-}: GenericInputProps) {
+}: GenericInputProps<T, K>) => {
     return (
         <Controller
             control={control}
@@ -38,18 +38,18 @@ function GenericInput({
             render={({ field, fieldState }) => (
                 <Box>
                     <FormLabel>
-                        {label}
-                        {rules.required && (
-                            <span style={{ color: 'red' }}>*</span>
-                        )}
+                        <>
+                            {label}
+                            {rules.required && (
+                                <span style={{ color: 'red' }}>*</span>
+                            )}
+                        </>
                     </FormLabel>
                     <InputGroup>
                         {rightAdornment && (
-                            <InputRightElement
-                                pointerEvents="none"
-                                // eslint-disable-next-line react/no-children-prop
-                                children={rightAdornment}
-                            />
+                            <InputRightElement pointerEvents="none">
+                                {rightAdornment}
+                            </InputRightElement>
                         )}
                         <Input
                             {...field}
@@ -61,17 +61,15 @@ function GenericInput({
                             errorBorderColor="crimson"
                         />
                         {leftAdornment && (
-                            <InputLeftElement
-                                pointerEvents="none"
-                                // eslint-disable-next-line react/no-children-prop
-                                children={leftAdornment}
-                            />
+                            <InputLeftElement pointerEvents="none">
+                                {leftAdornment}
+                            </InputLeftElement>
                         )}
                     </InputGroup>
                 </Box>
             )}
         />
     );
-}
+};
 
 export default GenericInput;

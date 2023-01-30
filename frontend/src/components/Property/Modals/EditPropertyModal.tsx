@@ -65,7 +65,7 @@ function EditPropertyModal({
                 ),
             });
         }
-    }, [property]);
+    }, [property, reset]);
 
     const currency = watch('currency');
 
