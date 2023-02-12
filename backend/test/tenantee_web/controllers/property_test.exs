@@ -168,8 +168,14 @@ defmodule TenanteeWeb.PropertyControllerTest do
 
       conn = put(conn, "/api/properties/#{id}/tenants/#{tenant}")
 
+      tax =
+        price.amount
+        |> Decimal.sub(Decimal.mult(price.amount, Decimal.from_float(0.1)))
+        |> Decimal.round(2)
+        |> Decimal.to_string()
+
       assert json_response(conn, 201)["monthly_revenue"]["amount"] ==
-               price.amount |> Decimal.round(2) |> Decimal.to_string()
+               tax
     end
 
     test "not found", %{conn: conn} do
