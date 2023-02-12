@@ -137,7 +137,7 @@ function AddPropertyModal({
                                     id="submit"
                                     w="100%"
                                     colorScheme="teal"
-                                    disabled={
+                                    isDisabled={
                                         !formState.isValid ||
                                         formState.isSubmitting
                                     }

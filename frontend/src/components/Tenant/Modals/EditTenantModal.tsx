@@ -98,7 +98,11 @@ function EditTenantModal({
                                 <Button
                                     w="100%"
                                     colorScheme="teal"
-                                    disabled={
+                                    isLoading={
+                                        tenant === null ||
+                                        formState.isSubmitting
+                                    }
+                                    isDisabled={
                                         !formState.isValid ||
                                         formState.isSubmitting ||
                                         tenant === null

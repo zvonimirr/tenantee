@@ -1,4 +1,13 @@
-import { Box, Button, Center, Checkbox, Flex, Spinner, Stack, useColorMode } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Center,
+    Checkbox,
+    Flex,
+    Spinner,
+    Stack,
+    useColorMode,
+} from '@chakra-ui/react';
 import { difference } from 'ramda';
 import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -34,11 +43,7 @@ function Settings() {
         data: { preferences } = { preferences: [] },
         isLoading,
         mutate,
-    } = useFetch(
-        preferenceApiService.apiRoute,
-        preferenceApiService.list,
-    );
-
+    } = useFetch(preferenceApiService.apiRoute, preferenceApiService.list);
 
     const default_currency = watch('default_currency');
 
@@ -56,24 +61,27 @@ function Settings() {
         }
     }, [preferences, reset]);
 
-    const onPreferenceChange = useCallback(async (preference: Preference) => {
-        try {
-            await preferenceApiService.set(
-                preferenceApiService.apiRoute,
-                preference
-            );
+    const onPreferenceChange = useCallback(
+        async (preference: Preference) => {
+            try {
+                await preferenceApiService.set(
+                    preferenceApiService.apiRoute,
+                    preference,
+                );
 
-            showSuccess(
-                'Preference set',
-                `Successfully set ${preference.name} to ${preference.value}`,
-            );
-        } catch {
-            showError(
-                'Error',
-                `Error while trying to set ${preference.name} to ${preference.value}`,
-            );
-        }
-    }, [showError, showSuccess]);
+                showSuccess(
+                    'Preference set',
+                    `Successfully set ${preference.name} to ${preference.value}`,
+                );
+            } catch {
+                showError(
+                    'Error',
+                    `Error while trying to set ${preference.name} to ${preference.value}`,
+                );
+            }
+        },
+        [showError, showSuccess],
+    );
 
     const onSaveClick = useCallback(
         async (values: PreferenceFormFields) => {
@@ -158,7 +166,8 @@ function Settings() {
                         <Button
                             colorScheme="teal"
                             onClick={handleSubmit(onSaveClick)}
-                            disabled={
+                            isLoading={isLoading}
+                            isDisabled={
                                 isLoading ||
                                 !formState.isValid ||
                                 formState.isSubmitting

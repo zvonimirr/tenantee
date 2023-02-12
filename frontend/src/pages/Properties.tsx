@@ -1,4 +1,14 @@
-import { Box, Button, Center, Grid, GridItem, Spinner, Stack, Text, useDisclosure } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Center,
+    Grid,
+    GridItem,
+    Spinner,
+    Stack,
+    Text,
+    useDisclosure,
+} from '@chakra-ui/react';
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ConfirmModal from '../components/Modals/ConfirmModal';
@@ -17,10 +27,7 @@ function Properties() {
         data: { properties } = { properties: [] },
         isLoading,
         mutate,
-    } = useFetch(
-        propertyApiService.apiRoute,
-        propertyApiService.list
-    );
+    } = useFetch(propertyApiService.apiRoute, propertyApiService.list);
 
     const navigate = useNavigate();
     const [selectedProperty, setSelectedProperty] = useState<Property | null>(
@@ -53,7 +60,7 @@ function Properties() {
             try {
                 await propertyApiService.add(
                     propertyApiService.apiRoute,
-                    property
+                    property,
                 );
 
                 showSuccess(
@@ -96,13 +103,22 @@ function Properties() {
                 mutate();
             }
         },
-        [closeEditPropertyModal, mutate, selectedProperty?.name, showError, showSuccess],
+        [
+            closeEditPropertyModal,
+            mutate,
+            selectedProperty?.name,
+            showError,
+            showSuccess,
+        ],
     );
 
     const onPropertyDeleteClick = useCallback(async () => {
         if (selectedProperty) {
             try {
-                await propertyApiService.delete(propertyApiService.apiRoute, selectedProperty.id);
+                await propertyApiService.delete(
+                    propertyApiService.apiRoute,
+                    selectedProperty.id,
+                );
 
                 showSuccess(
                     'Property deleted',
@@ -186,7 +202,8 @@ function Properties() {
                             colorScheme="teal"
                             width="sm"
                             onClick={openAddNewPropertyModal}
-                            disabled={isLoading}>
+                            isLoading={isLoading}
+                            isDisabled={isLoading}>
                             Add New Property
                         </Button>
                     </Center>
