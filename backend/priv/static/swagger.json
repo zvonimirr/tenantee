@@ -163,7 +163,7 @@
         },
         "tax_percentage": {
           "description": "Tax percentage of the property",
-          "type": "float"
+          "type": "number"
         },
         "tenants": {
           "description": "Tenants of the property",

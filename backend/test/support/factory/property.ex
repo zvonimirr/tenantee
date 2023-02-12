@@ -11,6 +11,7 @@ defmodule Tenantee.Factory.Property do
     location = Keyword.get(attrs, :location, "Location for #{name}")
     price = Keyword.get(attrs, :price, Money.new(Enum.random(100..1000), :USD))
     due_date_modifier = Keyword.get(attrs, :due_date_modifier, 5 * 24 * 60 * 60)
+    tax_percentage = Keyword.get(attrs, :tax_percentage, 10)
 
     %Schema{}
     |> Schema.changeset(%{
@@ -18,7 +19,8 @@ defmodule Tenantee.Factory.Property do
       description: description,
       location: location,
       price: price,
-      due_date_modifier: due_date_modifier
+      due_date_modifier: due_date_modifier,
+      tax_percentage: tax_percentage
     })
     |> Repo.insert!()
   end

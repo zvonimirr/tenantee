@@ -6,6 +6,7 @@ defmodule Tenantee.Stats do
   alias Tenantee.Rent
   alias Tenantee.Property
   alias Tenantee.Preferences
+  require Decimal
 
   def get_monthly_revenue(property) do
     with price <- property.price,
@@ -44,13 +45,16 @@ defmodule Tenantee.Stats do
     end
   end
 
-  defp apply_tax(income, tax_percentage) when is_number(tax_percentage) and tax_percentage > 0 do
-    with {:ok, tax} <- Money.mult(income, tax_percentage / 100) do
-      Money.sub(income, tax)
+  defp apply_tax(income, tax_percentage) do
+    if Decimal.is_decimal(tax_percentage) and Decimal.gt?(tax_percentage, Decimal.new(0)) do
+      with {:ok, tax} <-
+             Money.mult(income, Decimal.div(tax_percentage, 100) |> Decimal.to_float()) do
+        Money.sub(income, tax)
+      end
+    else
+      {:ok, income}
     end
   end
-
-  defp apply_tax(income, _tax_percentage), do: {:ok, income}
 
   defp sum_money([], currency), do: Money.new("0", currency)
 
