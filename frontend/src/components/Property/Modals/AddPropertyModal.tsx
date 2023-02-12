@@ -31,6 +31,7 @@ const defaultValues = {
     location: '',
     currency: 'USD',
     due_date_modifier: 0,
+    tax_percentage: 20,
 };
 
 function AddPropertyModal({
@@ -100,6 +101,19 @@ function AddPropertyModal({
                                 }
                             />
                             <GenericInput
+                                name="tax_percentage"
+                                label="Tax Percentage"
+                                placeholder="Tax Percentage"
+                                control={control}
+                                type="number"
+                                rules={{
+                                    required: 'Tax Percentage is required',
+                                    min: 0,
+                                    max: 100,
+                                }}
+                                leftAdornment={'%'}
+                            />
+                            <GenericInput
                                 name="due_date_modifier"
                                 label="Due Date Modifier"
                                 placeholder="Due Date Modifier"
@@ -131,6 +145,9 @@ function AddPropertyModal({
                                         onSubmit({
                                             ...values,
                                             price: Number(values.price),
+                                            tax_percentage: Number(
+                                                values.tax_percentage,
+                                            ),
                                             due_date_modifier:
                                                 calculateDueDateModifier(
                                                     Number(

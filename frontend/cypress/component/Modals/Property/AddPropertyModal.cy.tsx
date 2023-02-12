@@ -13,6 +13,7 @@ describe('AddPropertyModal', () => {
         cy.get('#submit').should('be.disabled');
 
         cy.get('input').each((input) => {
+            cy.wrap(input).clear();
             cy.wrap(input).type('12');
         });
 
@@ -45,6 +46,7 @@ describe('AddPropertyModal', () => {
         );
 
         cy.get('input').each((input) => {
+            cy.wrap(input).clear();
             cy.wrap(input).type('12');
         });
 
@@ -56,6 +58,7 @@ describe('AddPropertyModal', () => {
             location: '12',
             price: 12,
             currency: 'USD',
+            tax_percentage: 12,
             due_date_modifier: 12 * 60 * 60 * 24,
         });
     });
