@@ -162,7 +162,11 @@ function EditPropertyModal({
                                     id="submit"
                                     w="100%"
                                     colorScheme="teal"
-                                    disabled={
+                                    isLoading={
+                                        property === null ||
+                                        formState.isSubmitting
+                                    }
+                                    isDisabled={
                                         !formState.isValid ||
                                         formState.isSubmitting ||
                                         property === null

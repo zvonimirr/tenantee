@@ -1,4 +1,14 @@
-import { Box, Button, Center, Grid, GridItem, Spinner, Stack, Text, useDisclosure } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Center,
+    Grid,
+    GridItem,
+    Spinner,
+    Stack,
+    Text,
+    useDisclosure,
+} from '@chakra-ui/react';
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ConfirmModal from '../components/Modals/ConfirmModal';
@@ -22,18 +32,22 @@ function Tenants() {
     } = useFetch(
         tenantApiService.apiRoute,
         tenantApiService.list,
-        useMemo(() => ({
-            onError: () => {
-                showError(
-                    'Error',
-                    'An error occurred while trying to fetch tenants',
-                );
-            }
-        }), [showError])
+        useMemo(
+            () => ({
+                onError: () => {
+                    showError(
+                        'Error',
+                        'An error occurred while trying to fetch tenants',
+                    );
+                },
+            }),
+            [showError],
+        ),
     );
 
     const navigate = useNavigate();
-    const [selectedTenant, setSelectedTenant] = useState<Nullable<Tenant>>(null);
+    const [selectedTenant, setSelectedTenant] =
+        useState<Nullable<Tenant>>(null);
     const {
         isOpen: isAddNewTenantModalOpen,
         onOpen: openAddNewTenantModal,
@@ -82,7 +96,7 @@ function Tenants() {
             try {
                 await tenantApiService.update(
                     tenantApiService.apiRoute,
-                    tenant
+                    tenant,
                 );
 
                 showSuccess(
@@ -100,13 +114,22 @@ function Tenants() {
                 mutate();
             }
         },
-        [closeEditTenantModal, mutate, selectedTenant?.name, showError, showSuccess],
+        [
+            closeEditTenantModal,
+            mutate,
+            selectedTenant?.name,
+            showError,
+            showSuccess,
+        ],
     );
 
     const onTenantDeleteClick = useCallback(async () => {
         if (selectedTenant) {
             try {
-                await tenantApiService.delete(tenantApiService.apiRoute, selectedTenant.id);
+                await tenantApiService.delete(
+                    tenantApiService.apiRoute,
+                    selectedTenant.id,
+                );
 
                 showSuccess(
                     'Tenant deleted',
@@ -177,7 +200,7 @@ function Tenants() {
                             <GridItem colSpan={3}>
                                 <Text fontSize="lg" textAlign="center">
                                     {
-                                        'You don\'t have any tenants yet. Click the button below to add one.'
+                                        "You don't have any tenants yet. Click the button below to add one."
                                     }
                                 </Text>
                             </GridItem>
@@ -188,7 +211,8 @@ function Tenants() {
                             colorScheme="teal"
                             width="sm"
                             onClick={openAddNewTenantModal}
-                            disabled={isLoading}>
+                            isLoading={isLoading}
+                            isDisabled={isLoading}>
                             Add New Tenant
                         </Button>
                     </Center>

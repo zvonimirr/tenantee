@@ -76,7 +76,7 @@ function AddTenantModal({ isOpen, onClose, onSubmit }: AddTenantModalProps) {
                                 <Button
                                     w="100%"
                                     colorScheme="teal"
-                                    disabled={
+                                    isDisabled={
                                         !formState.isValid ||
                                         formState.isSubmitting
                                     }
