@@ -200,7 +200,7 @@ function Tenants() {
                             <GridItem colSpan={3}>
                                 <Text fontSize="lg" textAlign="center">
                                     {
-                                        "You don't have any tenants yet. Click the button below to add one."
+                                        'You don\'t have any tenants yet. Click the button below to add one.'
                                     }
                                 </Text>
                             </GridItem>
