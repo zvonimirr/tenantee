@@ -14,6 +14,7 @@ export interface Property {
     tenants: Tenant[];
     monthly_revenue: Price;
     due_date_modifier: number;
+    tax_percentage: number;
 }
 
 export interface PropertyList {

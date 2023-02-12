@@ -15,6 +15,7 @@ const mockProperty = {
         currency: 'USD',
     },
     due_date_modifier: 0,
+    tax_percentage: 0,
 };
 
 describe('EditPropertyModal', () => {
@@ -72,6 +73,7 @@ describe('EditPropertyModal', () => {
             price: 100,
             location: 'Test Location',
             currency: 'USD',
+            tax_percentage: 0,
             due_date_modifier: 0,
         });
     });

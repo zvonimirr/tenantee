@@ -38,6 +38,7 @@ const defaultValues = {
     location: '',
     currency: '',
     due_date_modifier: 0,
+    tax_percentage: 20,
 };
 
 function EditPropertyModal({
@@ -63,6 +64,7 @@ function EditPropertyModal({
                 due_date_modifier: getNumberOfDaysFromDueDateModifier(
                     property.due_date_modifier,
                 ),
+                tax_percentage: property.tax_percentage,
             });
         }
     }, [property, reset]);
@@ -124,6 +126,19 @@ function EditPropertyModal({
                                 }
                             />
                             <GenericInput
+                                name="tax_percentage"
+                                label="Tax Percentage"
+                                placeholder="Tax Percentage"
+                                control={control}
+                                type="number"
+                                rules={{
+                                    required: 'Tax Percentage is required',
+                                    min: 0,
+                                    max: 100,
+                                }}
+                                leftAdornment={'%'}
+                            />
+                            <GenericInput
                                 name="due_date_modifier"
                                 label="Due Date Modifier"
                                 placeholder="Due Date Modifier"
@@ -157,6 +172,9 @@ function EditPropertyModal({
                                             ...values,
                                             price: Number(values.price),
                                             id: property?.id ?? 0,
+                                            tax_percentage: Number(
+                                                values.tax_percentage,
+                                            ),
                                             due_date_modifier:
                                                 calculateDueDateModifier(
                                                     values.due_date_modifier,
