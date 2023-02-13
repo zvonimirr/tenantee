@@ -1,7 +1,7 @@
 # Security Policy
 
 ## Reporting a Vulnerability
-If you discover a security vulnerability, please send an email to zvonimirr@example.com to notify the Tenantee security team. The security team will work with you to acknowledge receipt of the report and to resolve the vulnerability as quickly as possible.
+If you discover a security vulnerability, please send an email to zvonimir.rudinski@noubis.com to notify the Tenantee security team. The security team will work with you to acknowledge receipt of the report and to resolve the vulnerability as quickly as possible.
 
 ## Secure Development Process
 The Tenantee team takes security seriously and follows the best practices for secure software development. This includes regular code reviews, automated security testing, and security training for all team members.
