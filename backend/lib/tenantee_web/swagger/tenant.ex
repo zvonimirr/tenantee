@@ -102,8 +102,6 @@ defmodule TenanteeWeb.Swagger.Tenant do
                 name(:string, "Name of tenant (only in response)", required: true)
                 first_name(:string, "Tenant first name", required: true)
                 last_name(:string, "Tenant last name", required: true)
-                email(:string, "Email of tenant", required: true)
-                phone(:string, "Phone of tenant", required: true)
                 debt(Schema.ref(:Price), "Debt of tenant (only in response)")
                 income(Schema.ref(:Price), "Predicted income for this tenant (only in response)")
 

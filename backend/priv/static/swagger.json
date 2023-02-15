@@ -251,10 +251,6 @@
           "$ref": "#/definitions/Price",
           "description": "Debt of tenant (only in response)"
         },
-        "email": {
-          "description": "Email of tenant",
-          "type": "string"
-        },
         "first_name": {
           "description": "Tenant first name",
           "type": "string"
@@ -275,10 +271,6 @@
           "description": "Name of tenant (only in response)",
           "type": "string"
         },
-        "phone": {
-          "description": "Phone of tenant",
-          "type": "string"
-        },
         "properties": {
           "description": "Properties of a tenant (only in response)",
           "items": {
@@ -295,8 +287,6 @@
         }
       },
       "required": [
-        "phone",
-        "email",
         "last_name",
         "first_name",
         "name",

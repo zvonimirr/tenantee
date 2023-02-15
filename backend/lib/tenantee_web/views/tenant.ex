@@ -23,8 +23,6 @@ defmodule TenanteeWeb.TenantView do
     %{
       id: tenant.id,
       name: tenant.first_name <> " " <> tenant.last_name,
-      phone: tenant.phone,
-      email: tenant.email,
       properties: properties,
       unpaid_rents:
         render(RentView, "show.json", %{
