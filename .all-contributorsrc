@@ -55,6 +55,15 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "mithindev",
+      "name": "MITHIN DEV ",
+      "avatar_url": "https://avatars.githubusercontent.com/u/109973775?v=4",
+      "profile": "http://mithin.hashnode.dev",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
