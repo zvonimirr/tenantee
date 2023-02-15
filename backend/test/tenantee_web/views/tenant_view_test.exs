@@ -5,7 +5,8 @@ defmodule TenanteeWeb.TenantViewTest do
   @tenant %{
     id: 1,
     first_name: "John",
-    last_name: "Doe"
+    last_name: "Doe",
+    communications: []
   }
 
   @api_tenant @tenant

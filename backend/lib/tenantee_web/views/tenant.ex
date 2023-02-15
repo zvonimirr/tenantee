@@ -2,6 +2,7 @@ defmodule TenanteeWeb.TenantView do
   use TenanteeWeb, :view
   alias TenanteeWeb.PropertyView
   alias TenanteeWeb.RentView
+  alias TenanteeWeb.CommunicationView
   alias Tenantee.Rent
   alias Tenantee.Stats
   alias Tenantee.Property
@@ -20,15 +21,23 @@ defmodule TenanteeWeb.TenantView do
       Property.get_properties_of_tenant(tenant.id)
       |> Enum.map(&render(PropertyView, "show_without_tenants.json", %{property: &1}))
 
+    communications =
+      if not Ecto.assoc_loaded?(tenant.communications),
+        do: nil,
+        else:
+          render(CommunicationView, "show.json", %{communications: tenant.communications})
+          |> Map.get(:communications)
+
+    unpaid_rents =
+      render(RentView, "show.json", %{rents: Rent.get_unpaid_rents_by_tenant_id(tenant.id)})
+      |> Map.get(:rents)
+
     %{
       id: tenant.id,
       name: tenant.first_name <> " " <> tenant.last_name,
       properties: properties,
-      unpaid_rents:
-        render(RentView, "show.json", %{
-          rents: Rent.get_unpaid_rents_by_tenant_id(tenant.id)
-        })
-        |> Map.get(:rents)
+      communications: communications,
+      unpaid_rents: unpaid_rents
     }
     |> Map.put(:debt, debt)
     |> Map.put(:income, income)

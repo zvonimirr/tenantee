@@ -92,6 +92,17 @@ defmodule TenanteeWeb.Swagger.Tenant do
 
       def swagger_definitions do
         %{
+          Communication:
+            swagger_schema do
+              title("Communication channel")
+              description("A communication channel")
+
+              properties do
+                id(:integer, "ID of communication channel", required: true)
+                type(:string, "Type of communication channel", required: true)
+                value(:string, "Value of communication channel", required: true)
+              end
+            end,
           Tenant:
             swagger_schema do
               title("Tenant")
@@ -104,6 +115,10 @@ defmodule TenanteeWeb.Swagger.Tenant do
                 last_name(:string, "Tenant last name", required: true)
                 debt(Schema.ref(:Price), "Debt of tenant (only in response)")
                 income(Schema.ref(:Price), "Predicted income for this tenant (only in response)")
+
+                communications(:array, "Communication channels of tenant",
+                  items: Schema.ref(:Communication)
+                )
 
                 unpaid_rents(:array, "Unpaid rents (only in response)",
                   items: Schema.ref(:Rent),

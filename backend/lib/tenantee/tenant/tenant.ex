@@ -21,7 +21,7 @@ defmodule Tenantee.Tenant do
   """
   def get_tenant_by_id(id) do
     with tenant <- Repo.get(Schema, id) do
-      if tenant, do: {:ok, tenant}, else: {:error, :not_found}
+      if tenant, do: {:ok, tenant |> Repo.preload(:communications)}, else: {:error, :not_found}
     end
   end
 
@@ -29,7 +29,7 @@ defmodule Tenantee.Tenant do
   Gets a list of all tenants.
   """
   def get_all_tenants do
-    Repo.all(Schema)
+    Repo.all(Schema) |> Repo.preload(:communications)
   end
 
   @doc """
@@ -39,7 +39,7 @@ defmodule Tenantee.Tenant do
     with {:ok, tenant} <- get_tenant_by_id(id),
          changeset <- Schema.changeset(tenant, attrs),
          {:ok, updated_tenant} <- Repo.update(changeset) do
-      {:ok, updated_tenant}
+      {:ok, updated_tenant |> Repo.preload(:communications)}
     else
       {:error, :not_found} ->
         {:error, :not_found}

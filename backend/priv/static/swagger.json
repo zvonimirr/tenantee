@@ -3,6 +3,30 @@
     "application/json"
   ],
   "definitions": {
+    "Communication": {
+      "description": "A communication channel",
+      "properties": {
+        "id": {
+          "description": "ID of communication channel",
+          "type": "integer"
+        },
+        "type": {
+          "description": "Type of communication channel",
+          "type": "string"
+        },
+        "value": {
+          "description": "Value of communication channel",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "type",
+        "id"
+      ],
+      "title": "Communication channel",
+      "type": "object"
+    },
     "Expense": {
       "description": "An expense",
       "properties": {
@@ -247,6 +271,13 @@
     "Tenant": {
       "description": "A tenant",
       "properties": {
+        "communications": {
+          "description": "Communication channels of tenant",
+          "items": {
+            "$ref": "#/definitions/Communication"
+          },
+          "type": "array"
+        },
         "debt": {
           "$ref": "#/definitions/Price",
           "description": "Debt of tenant (only in response)"

@@ -191,7 +191,8 @@ defmodule TenanteeWeb.PropertyControllerTest do
 
       %{id: tenant} = Tenantee.Factory.Tenant.insert()
 
-      put(conn, "/api/properties/#{id}/tenants/#{tenant}")
+      conn = put(conn, "/api/properties/#{id}/tenants/#{tenant}")
+
       conn = delete(conn, "/api/properties/#{id}/tenants/#{tenant}")
 
       assert json_response(conn, 200)["tenants"] == []
