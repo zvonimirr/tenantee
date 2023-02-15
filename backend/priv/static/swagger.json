@@ -1123,6 +1123,85 @@
         ]
       }
     },
+    "/api/tenants/{id}/communications": {
+      "post": {
+        "description": "",
+        "operationId": "TenanteeWeb.TenantController.add_communication",
+        "parameters": [
+          {
+            "description": "ID of tenant to add communication channel to",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "Communication channel to add",
+            "in": "body",
+            "name": "communication",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Communication"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Communication channel added",
+            "schema": {
+              "$ref": "#/definitions/Tenant"
+            }
+          },
+          "404": {
+            "description": "Tenant not found"
+          },
+          "422": {
+            "description": "Invalid communication channel"
+          }
+        },
+        "summary": "Add a communication channel to a tenant",
+        "tags": [
+          "Tenant"
+        ]
+      }
+    },
+    "/api/tenants/{id}/communications/{communication_id}": {
+      "delete": {
+        "description": "",
+        "operationId": "TenanteeWeb.TenantController.remove_communication",
+        "parameters": [
+          {
+            "description": "ID of tenant to remove communication channel from",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "description": "ID of communication channel to remove",
+            "in": "path",
+            "name": "communication_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Communication channel removed",
+            "schema": {
+              "$ref": "#/definitions/Tenant"
+            }
+          },
+          "404": {
+            "description": "Tenant or communication channel not found"
+          }
+        },
+        "summary": "Remove a communication channel from a tenant",
+        "tags": [
+          "Tenant"
+        ]
+      }
+    },
     "/api/tenants/{id}/rents": {
       "get": {
         "description": "",

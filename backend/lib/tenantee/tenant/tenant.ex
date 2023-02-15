@@ -64,13 +64,13 @@ defmodule Tenantee.Tenant do
   def add_communication(id, type, value) do
     with {:ok, tenant} <- get_tenant_by_id(id),
          {:ok, communication} <-
-           Repo.insert(
-             CommunicationSchema.changeset(%CommunicationSchema{}, %{
-               type: type,
-               value: value,
-               tenant: tenant |> Map.from_struct()
-             })
-           ) do
+           %CommunicationSchema{}
+           |> CommunicationSchema.changeset(%{
+             type: type,
+             value: value,
+             tenant: tenant |> Map.from_struct()
+           })
+           |> Repo.insert() do
       Schema.add_communication(tenant, communication)
       |> Repo.update()
     else
@@ -84,8 +84,7 @@ defmodule Tenantee.Tenant do
   def remove_communication(tenant_id, communication_id) do
     with {:ok, tenant} <- get_tenant_by_id(tenant_id),
          communication when not is_nil(communication) <-
-           Repo.get(CommunicationSchema, communication_id),
-         {:ok, _} <- Repo.delete(communication) do
+           Repo.get(CommunicationSchema, communication_id) do
       Schema.remove_communication(tenant, communication)
       |> Repo.update()
     else

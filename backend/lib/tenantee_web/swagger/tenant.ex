@@ -90,6 +90,39 @@ defmodule TenanteeWeb.Swagger.Tenant do
         response(404, "Tenant not found")
       end
 
+      swagger_path :add_communication do
+        post("/api/tenants/{id}/communications")
+        summary("Add a communication channel to a tenant")
+
+        parameters do
+          id(:path, :integer, "ID of tenant to add communication channel to", required: true)
+
+          communication(:body, Schema.ref(:Communication), "Communication channel to add",
+            required: true
+          )
+        end
+
+        response(201, "Communication channel added", Schema.ref(:Tenant))
+        response(422, "Invalid communication channel")
+        response(404, "Tenant not found")
+      end
+
+      swagger_path :remove_communication do
+        delete("/api/tenants/{id}/communications/{communication_id}")
+        summary("Remove a communication channel from a tenant")
+
+        parameters do
+          id(:path, :integer, "ID of tenant to remove communication channel from", required: true)
+
+          communication_id(:path, :integer, "ID of communication channel to remove",
+            required: true
+          )
+        end
+
+        response(200, "Communication channel removed", Schema.ref(:Tenant))
+        response(404, "Tenant or communication channel not found")
+      end
+
       def swagger_definitions do
         %{
           Communication:

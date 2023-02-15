@@ -16,7 +16,10 @@ defmodule Tenantee.Tenant.Schema do
       join_through: "property_tenants",
       join_keys: [property_id: :id, tenant_id: :id]
 
-    has_many :communications, Communication, foreign_key: :tenant_id, on_delete: :delete_all
+    has_many :communications, Communication,
+      foreign_key: :tenant_id,
+      on_replace: :delete,
+      on_delete: :delete_all
 
     timestamps()
   end
