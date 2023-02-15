@@ -140,4 +140,53 @@ defmodule TenanteeWeb.TenantControllerTest do
       assert json_response(conn, 404)["message"] == "Tenant not found"
     end
   end
+
+  describe "POST /api/tenants/:id/communications" do
+    test "happy path", %{conn: conn} do
+      %{id: tenant_id} = Tenantee.Factory.Tenant.insert()
+
+      conn =
+        post(conn, "/api/tenants/#{tenant_id}/communications", %{
+          type: "email",
+          value: "test@test.email"
+        })
+
+      assert json_response(conn, 201)["communications"] != []
+    end
+
+    test "unprocessable entity", %{conn: conn} do
+      %{id: tenant_id} = Tenantee.Factory.Tenant.insert()
+
+      conn = post(conn, "/api/tenants/#{tenant_id}/communications", %{})
+
+      assert json_response(conn, 422)["message"] == "Invalid communication"
+    end
+
+    test "not found", %{conn: conn} do
+      conn =
+        post(conn, "/api/tenants/0/communications", %{
+          type: "email",
+          value: "test@test.com"
+        })
+
+      assert json_response(conn, 404)["message"] == "Tenant not found"
+    end
+  end
+
+  describe "DELETE /api/tenants/:id/communications/:communication_id" do
+    test "happy path", %{conn: conn} do
+      %{id: tenant_id} = Tenantee.Factory.Tenant.insert()
+      %{id: communication_id} = Tenantee.Factory.Communication.insert(tenant_id)
+
+      conn = delete(conn, "/api/tenants/#{tenant_id}/communications/#{communication_id}")
+
+      assert json_response(conn, 200)["id"] == tenant_id
+    end
+
+    test "not found", %{conn: conn} do
+      conn = delete(conn, "/api/tenants/0/communications/0")
+
+      assert json_response(conn, 404)["message"] == "Tenant not found"
+    end
+  end
 end

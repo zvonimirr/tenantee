@@ -38,6 +38,9 @@ defmodule TenanteeWeb.Router do
       delete "/:id", TenantController, :delete_by_id
       get "/:id/rents", TenantController, :all_rents
       get "/:id/rents/unpaid", TenantController, :unpaid_rents
+
+      post "/:id/communications", TenantController, :add_communication
+      delete "/:id/communications/:communication", TenantController, :remove_communication
     end
 
     scope "/rent" do

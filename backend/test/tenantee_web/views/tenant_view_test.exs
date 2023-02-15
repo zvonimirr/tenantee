@@ -6,8 +6,7 @@ defmodule TenanteeWeb.TenantViewTest do
     id: 1,
     first_name: "John",
     last_name: "Doe",
-    email: "jdoe@test.com",
-    phone: "555-555-5555"
+    communications: []
   }
 
   @api_tenant @tenant

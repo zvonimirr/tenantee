@@ -35,7 +35,10 @@ defmodule Tenantee.Property.Schema do
   def remove_tenant(property, tenant) do
     property
     |> change()
-    |> put_assoc(:tenants, property.tenants -- [tenant])
+    |> put_assoc(
+      :tenants,
+      Enum.reject(property.tenants, &(&1.id == tenant.id))
+    )
   end
 
   def changeset(property, attrs) do

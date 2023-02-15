@@ -90,8 +90,52 @@ defmodule TenanteeWeb.Swagger.Tenant do
         response(404, "Tenant not found")
       end
 
+      swagger_path :add_communication do
+        post("/api/tenants/{id}/communications")
+        summary("Add a communication channel to a tenant")
+
+        parameters do
+          id(:path, :integer, "ID of tenant to add communication channel to", required: true)
+
+          communication(:body, Schema.ref(:Communication), "Communication channel to add",
+            required: true
+          )
+        end
+
+        response(201, "Communication channel added", Schema.ref(:Tenant))
+        response(422, "Invalid communication channel")
+        response(404, "Tenant not found")
+      end
+
+      swagger_path :remove_communication do
+        delete("/api/tenants/{id}/communications/{communication_id}")
+        summary("Remove a communication channel from a tenant")
+
+        parameters do
+          id(:path, :integer, "ID of tenant to remove communication channel from", required: true)
+
+          communication_id(:path, :integer, "ID of communication channel to remove",
+            required: true
+          )
+        end
+
+        response(200, "Communication channel removed", Schema.ref(:Tenant))
+        response(404, "Tenant or communication channel not found")
+      end
+
       def swagger_definitions do
         %{
+          Communication:
+            swagger_schema do
+              title("Communication channel")
+              description("A communication channel")
+
+              properties do
+                id(:integer, "ID of communication channel", required: true)
+                type(:string, "Type of communication channel", required: true)
+                value(:string, "Value of communication channel", required: true)
+              end
+            end,
           Tenant:
             swagger_schema do
               title("Tenant")
@@ -102,10 +146,12 @@ defmodule TenanteeWeb.Swagger.Tenant do
                 name(:string, "Name of tenant (only in response)", required: true)
                 first_name(:string, "Tenant first name", required: true)
                 last_name(:string, "Tenant last name", required: true)
-                email(:string, "Email of tenant", required: true)
-                phone(:string, "Phone of tenant", required: true)
                 debt(Schema.ref(:Price), "Debt of tenant (only in response)")
                 income(Schema.ref(:Price), "Predicted income for this tenant (only in response)")
+
+                communications(:array, "Communication channels of tenant",
+                  items: Schema.ref(:Communication)
+                )
 
                 unpaid_rents(:array, "Unpaid rents (only in response)",
                   items: Schema.ref(:Rent),

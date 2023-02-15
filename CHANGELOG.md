@@ -7,6 +7,7 @@
 - Fix improper CORS origin match ([@zvonimirr](https://github.com/zvonimirr))
 - Expenses CRUD ([@zvonimirr](https://github.com/zvonimirr))
 - Properties now return a list of expenses ([@zvonimirr](https://github.com/zvonimirr))
+- Added communication channels for tenants ([@zvonimirr](https://github.com/zvonimirr))
 
 ### UI
 - Add contact icons for tenants ([@MilaFazekas](https://github.com/MilaFazekas))
