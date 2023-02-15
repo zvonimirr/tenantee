@@ -26,4 +26,19 @@ defmodule Tenantee.Tenant.Schema do
     |> cast(attrs, [:first_name, :last_name])
     |> validate_required([:first_name, :last_name])
   end
+
+  def add_communication(tenant, communication) do
+    tenant
+    |> change()
+    |> put_assoc(:communications, [communication | tenant.communications])
+  end
+
+  def remove_communication(tenant, communication) do
+    tenant
+    |> change()
+    |> put_assoc(
+      :communications,
+      Enum.reject(tenant.communications, &(&1.id == communication.id))
+    )
+  end
 end

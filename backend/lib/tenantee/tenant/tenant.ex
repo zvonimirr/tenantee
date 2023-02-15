@@ -4,6 +4,7 @@ defmodule Tenantee.Tenant do
   """
 
   alias Tenantee.Tenant.Schema
+  alias Tenantee.Tenant.Communication.Schema, as: CommunicationSchema
   alias Tenantee.Repo
   import Ecto.Query
 
@@ -54,6 +55,42 @@ defmodule Tenantee.Tenant do
            from(t in Schema, where: t.id == ^id)
            |> Repo.delete_all() do
       if affected_rows > 0, do: {:ok, :deleted}, else: {:error, :not_found}
+    end
+  end
+
+  @doc """
+  Creates a new communication for a tenant.
+  """
+  def add_communication(id, type, value) do
+    with {:ok, tenant} <- get_tenant_by_id(id),
+         {:ok, communication} <-
+           Repo.insert(
+             CommunicationSchema.changeset(%CommunicationSchema{}, %{
+               type: type,
+               value: value,
+               tenant: tenant |> Map.from_struct()
+             })
+           ) do
+      Schema.add_communication(tenant, communication)
+      |> Repo.update()
+    else
+      {:error, error} -> {:error, error}
+    end
+  end
+
+  @doc """
+  Deletes an existing communication for a tenant.
+  """
+  def remove_communication(tenant_id, communication_id) do
+    with {:ok, tenant} <- get_tenant_by_id(tenant_id),
+         communication when not is_nil(communication) <-
+           Repo.get(CommunicationSchema, communication_id),
+         {:ok, _} <- Repo.delete(communication) do
+      Schema.remove_communication(tenant, communication)
+      |> Repo.update()
+    else
+      {:error, error} -> {:error, error}
+      nil -> {:error, :not_found}
     end
   end
 end

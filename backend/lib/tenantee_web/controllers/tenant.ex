@@ -80,4 +80,27 @@ defmodule TenanteeWeb.TenantController do
       {:error, :not_found} -> respond(conn, :not_found, "Tenant not found")
     end
   end
+
+  def add_communication(conn, %{"id" => id, "type" => type, "value" => value}) do
+    with {:ok, tenant} <- Tenant.add_communication(id, type, value) do
+      conn
+      |> put_status(:created)
+      |> render("show.json", %{tenant: tenant})
+    else
+      {:error, :not_found} -> respond(conn, :not_found, "Tenant not found")
+    end
+  end
+
+  def add_communication(conn, _params) do
+    respond(conn, :unprocessable_entity, "Invalid communication")
+  end
+
+  def remove_communication(conn, %{"id" => id, "communication" => communication_id}) do
+    with {:ok, tenant} <- Tenant.remove_communication(id, communication_id) do
+      conn
+      |> render("show.json", %{tenant: tenant})
+    else
+      {:error, :not_found} -> respond(conn, :not_found, "Tenant not found")
+    end
+  end
 end

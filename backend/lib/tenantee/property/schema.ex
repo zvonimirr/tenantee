@@ -33,11 +33,12 @@ defmodule Tenantee.Property.Schema do
   end
 
   def remove_tenant(property, tenant) do
-    updated_tenants = Enum.reject(property.tenants, fn t -> t.id == tenant.id end)
-
     property
     |> change()
-    |> put_assoc(:tenants, updated_tenants)
+    |> put_assoc(
+      :tenants,
+      Enum.reject(property.tenants, &(&1.id == tenant.id))
+    )
   end
 
   def changeset(property, attrs) do
