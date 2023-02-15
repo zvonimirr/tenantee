@@ -6,6 +6,7 @@ defmodule Tenantee.Tenant.Schema do
   use Ecto.Schema
   import Ecto.Changeset
   alias Tenantee.Property.Schema, as: Property
+  alias Tenantee.Tenant.Communication.Schema, as: Communication
 
   schema "tenants" do
     field :first_name, :string
@@ -16,6 +17,8 @@ defmodule Tenantee.Tenant.Schema do
     many_to_many :properties, Property,
       join_through: "property_tenants",
       join_keys: [property_id: :id, tenant_id: :id]
+
+    has_many :communications, Communication, foreign_key: :tenant_id, on_delete: :delete_all
 
     timestamps()
   end
