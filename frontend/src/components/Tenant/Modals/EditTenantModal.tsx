@@ -10,7 +10,7 @@ import {
     ModalOverlay,
     Stack,
 } from '@chakra-ui/react';
-import { IconPencil, IconPhone } from '@tabler/icons-react';
+import { IconPencil } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Tenant, TenantUpdateDto } from '../../../types/tenant';
@@ -26,8 +26,6 @@ interface EditTenantModalProps {
 const defaultValues = {
     first_name: '',
     last_name: '',
-    email: '',
-    phone: '',
 };
 
 function EditTenantModal({
@@ -46,8 +44,6 @@ function EditTenantModal({
             reset({
                 first_name: tenant.name.split(' ')[0],
                 last_name: tenant.name.split(' ')[1],
-                email: tenant.email,
-                phone: tenant.phone,
             });
         }
     }, [tenant, reset]);
@@ -80,19 +76,6 @@ function EditTenantModal({
                                     required: 'Last name is required',
                                 }}
                                 leftAdornment={<IconPencil />}
-                            />
-                            <GenericInput
-                                name="email"
-                                label="Email"
-                                placeholder="Email of the tenant (optional)"
-                                control={control}
-                            />
-                            <GenericInput
-                                name="phone"
-                                label="Phone"
-                                placeholder="Phone of the tenant (optional)"
-                                control={control}
-                                leftAdornment={<IconPhone />}
                             />
                             <Box w="100%">
                                 <Button

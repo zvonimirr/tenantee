@@ -24,6 +24,7 @@ interface TenantCommunicationListProps {
 
 // TODO: Figure out a better way to do this
 const TYPE_TO_ICON = {
+    mail: <IconMail />,
     email: <IconMail />,
     phone: <IconPhone />,
     fb: <IconBrandFacebook />,

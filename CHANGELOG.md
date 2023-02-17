@@ -16,6 +16,7 @@
 - Generalized and simplified using Service API's ([@jvince](https://github.com/jvince))
 - Refactored pages to use new Service API model ([@jvince](https://github.com/jvince))
 - Tax is editable from the UI on a per property basis ([@zvonimirr](https://github.com/zvonimirr))
+- Added communication channels for tenants ([@zvonimirr](https://github.com/zvonimirr))
 
 ## 0.2.0
 ### API

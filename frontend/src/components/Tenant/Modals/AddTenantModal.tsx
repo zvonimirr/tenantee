@@ -23,8 +23,6 @@ interface AddTenantModalProps {
 const defaultValues = {
     first_name: '',
     last_name: '',
-    email: '',
-    phone: '',
 };
 
 function AddTenantModal({ isOpen, onClose, onSubmit }: AddTenantModalProps) {
@@ -56,22 +54,6 @@ function AddTenantModal({ isOpen, onClose, onSubmit }: AddTenantModalProps) {
                                 control={control}
                                 rules={{ required: 'Last name is required' }}
                             />
-                            <GenericInput
-                                name="email"
-                                label="Email"
-                                placeholder="Email"
-                                control={control}
-                                rules={{ pattern: /^\S+@\S+$/i }}
-                                type="email"
-                            />
-                            <GenericInput
-                                name="phone"
-                                label="Phone"
-                                placeholder="Phone"
-                                control={control}
-                                rules={{ pattern: /^\d{9,}$/ }}
-                                type="tel"
-                            />
                             <Box w="100%">
                                 <Button
                                     w="100%"
@@ -80,9 +62,7 @@ function AddTenantModal({ isOpen, onClose, onSubmit }: AddTenantModalProps) {
                                         !formState.isValid ||
                                         formState.isSubmitting
                                     }
-                                    onClick={handleSubmit((values) => {
-                                        onSubmit(values);
-                                    })}>
+                                    onClick={handleSubmit(onSubmit)}>
                                     Add Tenant
                                 </Button>
                             </Box>
