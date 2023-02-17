@@ -82,14 +82,15 @@ function TenantCard({
                             />
                         )}
                     </Flex>
-                    {tenant.communications.length > 0 && (
-                        <abbr title="Communications">
-                            <IconDots
-                                cursor="pointer"
-                                onClick={onCommunicationsOpen}
-                            />
-                        </abbr>
-                    )}
+                    {tenant.communications &&
+                        tenant.communications.length > 0 && (
+                            <abbr title="Communications">
+                                <IconDots
+                                    cursor="pointer"
+                                    onClick={onCommunicationsOpen}
+                                />
+                            </abbr>
+                        )}
                 </Flex>
                 <Center cursor="pointer" onClick={() => onClick(tenant)}>
                     <Flex direction="column" alignItems="center">

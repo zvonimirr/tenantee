@@ -76,6 +76,11 @@ function TenantPage() {
 
     const properties = useMemo(() => tenant?.properties, [tenant]);
 
+    const onPropertyCardClick = useCallback(
+        (property: Property) => navigate(`/properties/${property.id}`),
+        [navigate],
+    );
+
     const [selectedProperty, setSelectedProperty] = useState<Property | null>(
         null,
     );
@@ -353,6 +358,7 @@ function TenantPage() {
                                         <GridItem key={property.id}>
                                             <PropertyCard
                                                 property={property}
+                                                onClick={onPropertyCardClick}
                                                 onDeleteClick={() => {
                                                     setSelectedProperty(
                                                         property,
