@@ -62,16 +62,11 @@ defmodule Tenantee.Tenant do
   Creates a new communication for a tenant.
   """
   def add_communication(id, type, value) do
-    with {:ok, tenant} <- get_tenant_by_id(id),
-         {:ok, communication} <-
-           %CommunicationSchema{}
-           |> CommunicationSchema.changeset(%{
-             type: type,
-             value: value,
-             tenant: tenant |> Map.from_struct()
-           })
-           |> Repo.insert() do
-      Schema.add_communication(tenant, communication)
+    with {:ok, tenant} <- get_tenant_by_id(id) do
+      Schema.add_communication(tenant, %{
+        type: type,
+        value: value
+      })
       |> Repo.update()
     else
       {:error, error} -> {:error, error}
