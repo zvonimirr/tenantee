@@ -277,8 +277,8 @@ function TenantPage() {
             />
             <ConfirmModal
                 isOpen={isConfirmRemoveCommunicationModalOpen}
-                title={`Remove communication?`}
-                message={`Are you sure you want to remove this communication?`}
+                title={'Remove communication?'}
+                message={'Are you sure you want to remove this communication?'}
                 onConfirm={onCommunicationRemoveSubmit}
                 onCancel={closeConfirmRemoveCommunicationModal}
             />
