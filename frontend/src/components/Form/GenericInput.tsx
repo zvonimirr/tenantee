@@ -13,6 +13,7 @@ interface GenericInputProps<T extends FieldValues, K> {
     name: Path<T>;
     placeholder: string;
     label: string;
+    disabled?: boolean;
     control: Control<T, K>;
     type?: 'text' | 'number' | 'email' | 'password' | 'tel';
     rules?: Record<string, unknown>;
@@ -28,6 +29,7 @@ const GenericInput = <T extends FieldValues, K>({
     type,
     leftAdornment,
     rightAdornment,
+    disabled = false,
     rules = {},
 }: GenericInputProps<T, K>) => {
     return (
@@ -53,6 +55,8 @@ const GenericInput = <T extends FieldValues, K>({
                         )}
                         <Input
                             {...field}
+                            disabled={disabled}
+                            readOnly={disabled}
                             placeholder={
                                 fieldState.error?.message ?? placeholder
                             }

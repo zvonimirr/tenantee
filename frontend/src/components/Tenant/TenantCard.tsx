@@ -1,11 +1,5 @@
 import { Card, CardBody, Center, Flex, Stack, Text } from '@chakra-ui/react';
-import {
-    IconMail,
-    IconPencil,
-    IconPhone,
-    IconTrash,
-    IconUser,
-} from '@tabler/icons-react';
+import { IconPencil, IconTrash, IconUser } from '@tabler/icons-react';
 import { useMemo } from 'react';
 import { Tenant } from '../../types/tenant';
 
@@ -61,20 +55,6 @@ function TenantCard({
                                 cursor="pointer"
                                 onClick={() => onEditClick(tenant)}
                             />
-                        )}
-                    </Flex>
-                    <Flex gap={2}>
-                        {tenant.email && (
-                            <a href={`mailto:${tenant.email}`}>
-                                {' '}
-                                <IconMail cursor="pointer" />
-                            </a>
-                        )}
-                        {tenant.phone && (
-                            <a href={`tel:${tenant.phone}`}>
-                                {' '}
-                                <IconPhone cursor="pointer" />
-                            </a>
                         )}
                     </Flex>
                 </Flex>

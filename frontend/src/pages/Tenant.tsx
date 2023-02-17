@@ -19,6 +19,7 @@ import ConfirmModal from '../components/Modals/ConfirmModal';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
 import PropertyCard from '../components/Property/PropertyCard';
+import TenantCommunicationList from '../components/Tenant/TenantCommunicationList';
 import { useFetch } from '../hooks/useFetch';
 import { useNotification } from '../hooks/useNotification';
 import { propertyApiService } from '../services/api/PropertyApiService';
@@ -26,6 +27,7 @@ import { rentApiService } from '../services/api/RentApiService';
 import { tenantApiService } from '../services/api/TenantApiService';
 import { Property } from '../types/property';
 import { Rent } from '../types/rent';
+import { Communication } from '../types/tenant';
 
 function TenantPage() {
     const { id } = useParams();
@@ -62,6 +64,15 @@ function TenantPage() {
         onOpen: openConfirmRemoveModal,
         onClose: closeConfirmRemoveModal,
     } = useDisclosure();
+
+    const {
+        isOpen: isConfirmRemoveCommunicationModalOpen,
+        onOpen: openConfirmRemoveCommunicationModal,
+        onClose: closeConfirmRemoveCommunicationModal,
+    } = useDisclosure();
+
+    const [selectedCommunication, setSelectedCommunication] =
+        useState<Communication | null>(null);
 
     const properties = useMemo(() => tenant?.properties, [tenant]);
 
@@ -176,6 +187,78 @@ function TenantPage() {
         closeConfirmAddModal();
     }, [closeConfirmAddModal]);
 
+    const onCommunicationAdd = useCallback(
+        async (communication: Omit<Communication, 'id'>) => {
+            if (tenant) {
+                try {
+                    await tenantApiService.addCommunication(
+                        tenant.id,
+                        communication,
+                    );
+
+                    showSuccess(
+                        'Communication added',
+                        `${communication.type} was added to ${tenant.name}.`,
+                    );
+
+                    mutateTenant();
+                } catch (e) {
+                    showError(
+                        'Error',
+                        'An error occured while trying to add the communication to the tenant.',
+                    );
+                }
+            }
+        },
+        [tenant, showSuccess, showError, mutateTenant],
+    );
+
+    const onCommunicationDelete = useCallback(
+        (communicationId: string) => {
+            const communication = tenant?.communications.find(
+                (c) => c.id === communicationId,
+            );
+
+            if (communication) {
+                setSelectedCommunication(communication);
+                openConfirmRemoveCommunicationModal();
+            }
+        },
+        [tenant, openConfirmRemoveCommunicationModal],
+    );
+
+    const onCommunicationRemoveSubmit = useCallback(async () => {
+        if (selectedCommunication && tenant) {
+            try {
+                await tenantApiService.removeCommunication(
+                    tenant.id,
+                    selectedCommunication.id,
+                );
+
+                showSuccess(
+                    'Communication removed',
+                    `${selectedCommunication.type} was removed from ${tenant.name}`,
+                );
+            } catch (e) {
+                showError(
+                    'Error',
+                    `An error occurred while trying to remove ${selectedCommunication.type} from ${tenant.name}`,
+                );
+            } finally {
+                setSelectedCommunication(null);
+                closeConfirmRemoveCommunicationModal();
+                mutateTenant();
+            }
+        }
+    }, [
+        selectedCommunication,
+        tenant,
+        showSuccess,
+        showError,
+        closeConfirmRemoveCommunicationModal,
+        mutateTenant,
+    ]);
+
     return (
         <Box>
             <ConfirmModal
@@ -191,6 +274,13 @@ function TenantPage() {
                 message={`Are you sure you want to remove ${tenant?.name} from ${selectedProperty?.name}?`}
                 onConfirm={onTenantRemoveSubmit}
                 onCancel={closeConfirmRemoveModal}
+            />
+            <ConfirmModal
+                isOpen={isConfirmRemoveCommunicationModalOpen}
+                title={'Remove communication?'}
+                message={'Are you sure you want to remove this communication?'}
+                onConfirm={onCommunicationRemoveSubmit}
+                onCancel={closeConfirmRemoveCommunicationModal}
             />
             <Breadcrumbs items={breadcrumbs} />
             <PageContainer>
@@ -211,6 +301,11 @@ function TenantPage() {
                                 {tenant.name}
                             </Text>
                         </Flex>
+                        <TenantCommunicationList
+                            tenant={tenant}
+                            onCommunicationAdd={onCommunicationAdd}
+                            onCommunicationDelete={onCommunicationDelete}
+                        />
                         {isRentsLoading && (
                             <Center>
                                 <Spinner size="lg" />
