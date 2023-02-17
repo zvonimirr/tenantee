@@ -7,7 +7,7 @@ describe('ConfirmModal.cy.tsx', () => {
                 title="Cypress"
                 message="Cypress is awesome"
                 isOpen={true}
-                onCancel={() => {}}
+                onClose={() => {}}
                 onConfirm={() => {}}
             />,
         );
@@ -20,22 +20,22 @@ describe('ConfirmModal.cy.tsx', () => {
         cy.get('button').last().should('contain', 'Cancel');
     });
 
-    it('should call onCancel when cancel button is clicked', () => {
-        const onCancel = cy.stub();
+    it('should call onClose when cancel button is clicked', () => {
+        const onClose = cy.stub();
 
         cy.mount(
             <ConfirmModal
                 title="Cypress"
                 message="Cypress is awesome"
                 isOpen={true}
-                onCancel={onCancel}
+                onClose={onClose}
                 onConfirm={() => {}}
             />,
         );
 
         cy.get('button').last().click();
 
-        cy.wrap(onCancel).should('have.been.calledOnce');
+        cy.wrap(onClose).should('have.been.calledOnce');
     });
 
     it('should call onConfirm when confirm button is clicked', () => {
@@ -46,7 +46,7 @@ describe('ConfirmModal.cy.tsx', () => {
                 title="Cypress"
                 message="Cypress is awesome"
                 isOpen={true}
-                onCancel={() => {}}
+                onClose={() => {}}
                 onConfirm={onConfirm}
             />,
         );

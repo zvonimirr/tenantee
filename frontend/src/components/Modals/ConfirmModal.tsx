@@ -5,14 +5,13 @@ import BaseModal, { BaseModalProps } from './BaseModal';
 interface ConfirmModalProps extends BaseModalProps {
     message: string;
     onConfirm: () => void;
-    onCancel: () => void;
 }
 
 function ConfirmModal({
     title,
     message,
     onConfirm,
-    onCancel,
+    onClose,
     isOpen,
 }: ConfirmModalProps) {
     const buttonRef = useRef<HTMLButtonElement>(null);
@@ -21,7 +20,7 @@ function ConfirmModal({
         <BaseModal
             title={title}
             isOpen={isOpen}
-            onClose={onCancel}
+            onClose={onClose}
             initialFocusRef={buttonRef}>
             <Stack spacing={4}>
                 <Text>{message}</Text>
@@ -29,7 +28,7 @@ function ConfirmModal({
                     <Button ref={buttonRef} onClick={onConfirm}>
                         Confirm
                     </Button>
-                    <Button onClick={onCancel}>Cancel</Button>
+                    <Button onClick={onClose}>Cancel</Button>
                 </ButtonGroup>
             </Stack>
         </BaseModal>

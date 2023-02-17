@@ -158,14 +158,14 @@ function PropertyPage() {
                 title={`Add ${selectedTenant?.name} to ${property?.name}?`}
                 message={`Are you sure you want to add ${selectedTenant?.name} to ${property?.name}?`}
                 onConfirm={onTenantAddSubmit}
-                onCancel={onTenantAddCancel}
+                onClose={onTenantAddCancel}
             />
             <ConfirmModal
                 isOpen={isConfirmRemoveModalOpen}
                 title={`Remove ${selectedTenant?.name} from ${property?.name}?`}
                 message={`Are you sure you want to remove ${selectedTenant?.name} from the property?`}
                 onConfirm={onTenantRemoveSubmit}
-                onCancel={closeConfirmRemoveModal}
+                onClose={closeConfirmRemoveModal}
             />
             <Breadcrumbs items={breadcrumbs} />
             <PageContainer>

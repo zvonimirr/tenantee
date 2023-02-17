@@ -155,7 +155,7 @@ function Tenants() {
                 title="Delete Tenant"
                 message={`Are you sure you want to delete ${selectedTenant?.name}?`}
                 onConfirm={onTenantDeleteClick}
-                onCancel={closeConfirmModal}
+                onClose={closeConfirmModal}
             />
             <AddTenantModal
                 isOpen={isAddNewTenantModalOpen}
