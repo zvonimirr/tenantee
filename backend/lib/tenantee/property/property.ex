@@ -17,7 +17,7 @@ defmodule Tenantee.Property do
            %Schema{}
            |> Schema.changeset(attrs)
            |> Repo.insert() do
-      {:ok, Repo.preload(property, [:tenants, :expenses])}
+      {:ok, Repo.preload(property, [:tenants, :expenses, tenants: :communications])}
     end
   end
 
@@ -27,7 +27,7 @@ defmodule Tenantee.Property do
   def get_property(id) do
     with property <- Repo.get(Schema, id) do
       if property,
-        do: {:ok, Repo.preload(property, [:tenants, :expenses])},
+        do: {:ok, Repo.preload(property, [:tenants, :expenses, tenants: :communications])},
         else: {:error, :not_found}
     end
   end
@@ -37,7 +37,7 @@ defmodule Tenantee.Property do
   """
   def get_all_properties do
     Repo.all(Schema)
-    |> Repo.preload([:tenants, :expenses])
+    |> Repo.preload([:tenants, :expenses, tenants: :communications])
   end
 
   @doc """
@@ -49,7 +49,7 @@ defmodule Tenantee.Property do
          changeset <-
            Schema.changeset(property, attrs),
          {:ok, updated_property} <- Repo.update(changeset) do
-      {:ok, Repo.preload(updated_property, [:tenants, :expenses])}
+      {:ok, Repo.preload(updated_property, [:tenants, :expenses, tenants: :communications])}
     end
   end
 
