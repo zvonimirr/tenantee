@@ -1,6 +1,12 @@
 import { Property } from './property';
 import { Rent } from './rent';
 
+export interface Communication {
+    id: string;
+    type: string;
+    value: string;
+}
+
 export interface Tenant {
     id: number;
     name: string;
@@ -8,6 +14,7 @@ export interface Tenant {
     phone?: string;
     unpaid_rents: Rent[];
     properties: Property[];
+    communications: Communication[];
 }
 
 export interface TenantList {
