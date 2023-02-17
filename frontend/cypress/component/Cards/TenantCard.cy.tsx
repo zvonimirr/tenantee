@@ -15,6 +15,7 @@ describe('TenantCard', () => {
                     name: 'Test Tenant',
                     unpaid_rents: [],
                     properties: [],
+                    communications: [],
                 }}
             />,
         );
@@ -52,6 +53,7 @@ describe('TenantCard', () => {
                         },
                     ],
                     properties: [],
+                    communications: [],
                 }}
             />,
         );
@@ -81,6 +83,7 @@ describe('TenantCard', () => {
                         },
                     ],
                     properties: [],
+                    communications: [],
                 }}
             />,
         );

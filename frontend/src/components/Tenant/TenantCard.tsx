@@ -1,7 +1,18 @@
-import { Card, CardBody, Center, Flex, Stack, Text } from '@chakra-ui/react';
-import { IconPencil, IconTrash, IconUser } from '@tabler/icons-react';
+import {
+    Box,
+    Card,
+    CardBody,
+    Center,
+    Flex,
+    Stack,
+    Text,
+    useDisclosure,
+} from '@chakra-ui/react';
+import { IconDots, IconPencil, IconTrash, IconUser } from '@tabler/icons-react';
 import { useMemo } from 'react';
 import { Tenant } from '../../types/tenant';
+import BaseModal from '../Modals/BaseModal';
+import TenantCommunicationList from './TenantCommunicationList';
 
 interface TenantCardProps {
     tenant: Tenant;
@@ -16,6 +27,12 @@ function TenantCard({
     onDeleteClick,
     onEditClick,
 }: TenantCardProps) {
+    const {
+        isOpen: isCommunicationsOpen,
+        onOpen: onCommunicationsOpen,
+        onClose: onCommunicationsClose,
+    } = useDisclosure();
+
     const iconColor = useMemo(() => {
         if (tenant.unpaid_rents.length < 1) {
             return 'black';
@@ -42,6 +59,14 @@ function TenantCard({
 
     return (
         <Card>
+            <BaseModal
+                isOpen={isCommunicationsOpen}
+                onClose={onCommunicationsClose}
+                title="Communications">
+                <Box mb={4}>
+                    <TenantCommunicationList tenant={tenant} withoutTitle />
+                </Box>
+            </BaseModal>
             <CardBody>
                 <Flex gap={2} justifyContent="space-between">
                     <Flex gap={2}>
@@ -57,6 +82,14 @@ function TenantCard({
                             />
                         )}
                     </Flex>
+                    {tenant.communications.length > 0 && (
+                        <abbr title="Communications">
+                            <IconDots
+                                cursor="pointer"
+                                onClick={onCommunicationsOpen}
+                            />
+                        </abbr>
+                    )}
                 </Flex>
                 <Center cursor="pointer" onClick={() => onClick(tenant)}>
                     <Flex direction="column" alignItems="center">

@@ -144,7 +144,7 @@ function Properties() {
                 title="Delete Property"
                 message={`Are you sure you want to delete ${selectedProperty?.name}?`}
                 onConfirm={onPropertyDeleteClick}
-                onCancel={closeConfirmModal}
+                onClose={closeConfirmModal}
             />
             <AddPropertyModal
                 isOpen={isAddNewPropertyModalOpen}

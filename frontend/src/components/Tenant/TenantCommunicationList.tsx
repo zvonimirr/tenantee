@@ -16,10 +16,11 @@ import GenericInput from '../Form/GenericInput';
 
 interface TenantCommunicationListProps {
     tenant: Tenant;
-    onCommunicationAdd: (
+    withoutTitle?: boolean;
+    onCommunicationAdd?: (
         communication: Omit<Communication, 'id'>,
     ) => Promise<void>;
-    onCommunicationDelete: (id: string) => void;
+    onCommunicationDelete?: (id: string) => void;
 }
 
 // TODO: Figure out a better way to do this
@@ -40,6 +41,7 @@ const TYPE_TO_ICON = {
 
 function TenantCommunicationList({
     tenant,
+    withoutTitle = false,
     onCommunicationAdd,
     onCommunicationDelete,
 }: TenantCommunicationListProps) {
@@ -56,7 +58,7 @@ function TenantCommunicationList({
 
     return (
         <Flex gap={2} direction="column">
-            <Text fontSize="xl">Communication:</Text>
+            {!withoutTitle && <Text fontSize="xl">Communication:</Text>}
             {isEmpty(communications) && <Text>No communications found.</Text>}
             {communications?.map((communication) => {
                 const type = TYPE_TO_ICON[communication.type.toLowerCase()] ?? (
@@ -71,45 +73,50 @@ function TenantCommunicationList({
                                 <Text>{communication.value}</Text>
                             </Flex>
                         </Text>
-                        <IconTrash
-                            color="red"
-                            cursor="pointer"
-                            onClick={() =>
-                                onCommunicationDelete(communication.id)
-                            }
-                        />
+                        {onCommunicationDelete && (
+                            <IconTrash
+                                color="red"
+                                cursor="pointer"
+                                onClick={() =>
+                                    onCommunicationDelete(communication.id)
+                                }
+                            />
+                        )}
                     </Flex>
                 );
             })}
-
-            <Stack>
-                <GenericInput
-                    name="type"
-                    label="Type"
-                    control={control}
-                    disabled={formState.isSubmitting}
-                    rules={{ required: 'Type is required' }}
-                    placeholder="Communication type..."
-                />
-                <GenericInput
-                    name="value"
-                    label="Value"
-                    control={control}
-                    disabled={formState.isSubmitting}
-                    rules={{ required: 'Value is required' }}
-                    placeholder="Communication value..."
-                />
-                <Button
-                    colorScheme="teal"
-                    isLoading={formState.isSubmitting}
-                    isDisabled={formState.isSubmitting || !formState.isValid}
-                    onClick={handleSubmit(async (data) => {
-                        await onCommunicationAdd(data);
-                        reset();
-                    })}>
-                    Add Communication
-                </Button>
-            </Stack>
+            {onCommunicationAdd && (
+                <Stack>
+                    <GenericInput
+                        name="type"
+                        label="Type"
+                        control={control}
+                        disabled={formState.isSubmitting}
+                        rules={{ required: 'Type is required' }}
+                        placeholder="Communication type..."
+                    />
+                    <GenericInput
+                        name="value"
+                        label="Value"
+                        control={control}
+                        disabled={formState.isSubmitting}
+                        rules={{ required: 'Value is required' }}
+                        placeholder="Communication value..."
+                    />
+                    <Button
+                        colorScheme="teal"
+                        isLoading={formState.isSubmitting}
+                        isDisabled={
+                            formState.isSubmitting || !formState.isValid
+                        }
+                        onClick={handleSubmit(async (data) => {
+                            await onCommunicationAdd(data);
+                            reset();
+                        })}>
+                        Add Communication
+                    </Button>
+                </Stack>
+            )}
         </Flex>
     );
 }
