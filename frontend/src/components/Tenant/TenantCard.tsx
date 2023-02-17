@@ -82,7 +82,8 @@ function TenantCard({
                             />
                         )}
                     </Flex>
-                    {tenant.communications.length > 0 && (
+                    {tenant.communications &&
+                        tenant.communications.length > 0 && (
                         <abbr title="Communications">
                             <IconDots
                                 cursor="pointer"

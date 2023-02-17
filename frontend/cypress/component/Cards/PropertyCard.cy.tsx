@@ -25,6 +25,7 @@ describe('PropertyCard', () => {
                         amount: 100,
                         currency: 'USD',
                     },
+                    tax_percentage: 0,
                     due_date_modifier: 0,
                 }}
             />,
