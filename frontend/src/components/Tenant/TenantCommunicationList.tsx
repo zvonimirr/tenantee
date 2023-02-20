@@ -1,4 +1,4 @@
-import { Button, Flex, Stack, Text } from '@chakra-ui/react';
+import { Button, Flex, Link, Stack, Text } from '@chakra-ui/react';
 import {
     IconBrandFacebook,
     IconBrandInstagram,
@@ -23,21 +23,58 @@ interface TenantCommunicationListProps {
     onCommunicationDelete?: (id: string) => void;
 }
 
+enum CommunicationType {
+    PHONE = 'phone',
+    MAIL = 'mail',
+    WHATSAPP = 'whatsapp',
+    TELEGRAM = 'telegram',
+    INSTAGRAM = 'instagram',
+    FACEBOOK = 'facebook',
+}
+
+const STRING_TYPE_TO_ENUM: Record<string, CommunicationType> = {
+    mail: CommunicationType.MAIL,
+    email: CommunicationType.MAIL,
+    phone: CommunicationType.PHONE,
+    fb: CommunicationType.FACEBOOK,
+    messenger: CommunicationType.FACEBOOK,
+    facebook: CommunicationType.FACEBOOK,
+    ig: CommunicationType.INSTAGRAM,
+    insta: CommunicationType.INSTAGRAM,
+    instagram: CommunicationType.INSTAGRAM,
+    telegram: CommunicationType.TELEGRAM,
+    wa: CommunicationType.WHATSAPP,
+    whatsapp: CommunicationType.WHATSAPP,
+};
+
 // TODO: Figure out a better way to do this
-const TYPE_TO_ICON = {
-    mail: <IconMail />,
-    email: <IconMail />,
-    phone: <IconPhone />,
-    fb: <IconBrandFacebook />,
-    messenger: <IconBrandFacebook />,
-    facebook: <IconBrandFacebook />,
-    ig: <IconBrandInstagram />,
-    insta: <IconBrandInstagram />,
-    instagram: <IconBrandInstagram />,
-    telegram: <IconBrandTelegram />,
-    wa: <IconBrandWhatsapp />,
-    whatsapp: <IconBrandWhatsapp />,
-} as Record<string, JSX.Element>;
+const TYPE_TO_ICON: Record<CommunicationType, JSX.Element> = {
+    [CommunicationType.MAIL]: <IconMail />,
+    [CommunicationType.PHONE]: <IconPhone />,
+    [CommunicationType.FACEBOOK]: <IconBrandFacebook />,
+    [CommunicationType.INSTAGRAM]: <IconBrandInstagram />,
+    [CommunicationType.TELEGRAM]: <IconBrandTelegram />,
+    [CommunicationType.WHATSAPP]: <IconBrandWhatsapp />,
+};
+
+function getUrl(type: CommunicationType, value: string) {
+    switch (type) {
+    case CommunicationType.MAIL:
+        return `mailto:${value}`;
+    case CommunicationType.PHONE:
+        return `tel:${value}`;
+    case CommunicationType.FACEBOOK:
+        return `https://www.facebook.com/${value}`;
+    case CommunicationType.INSTAGRAM:
+        return `https://www.instagram.com/${value}`;
+    case CommunicationType.TELEGRAM:
+        return `https://t.me/${value}`;
+    case CommunicationType.WHATSAPP:
+        return `https://wa.me/${value}`;
+    default:
+        return null;
+    }
+}
 
 function TenantCommunicationList({
     tenant,
@@ -61,16 +98,30 @@ function TenantCommunicationList({
             {!withoutTitle && <Text fontSize="xl">Communication:</Text>}
             {isEmpty(communications) && <Text>No communications found.</Text>}
             {communications?.map((communication) => {
-                const type = TYPE_TO_ICON[communication.type.toLowerCase()] ?? (
+                const type =
+                    STRING_TYPE_TO_ENUM[communication.type.toLowerCase()] ??
+                    null;
+
+                const icon = type ? (
+                    TYPE_TO_ICON[type]
+                ) : (
                     <Text>{communication.type}</Text>
                 );
+
+                const url = getUrl(type, communication.value);
 
                 return (
                     <Flex key={communication.id} gap={2} alignItems="center">
                         <Text>
                             <Flex alignItems="center" gap={2}>
-                                {type}
-                                <Text>{communication.value}</Text>
+                                {icon}
+                                {url ? (
+                                    <Link href={url}>
+                                        {communication.value}
+                                    </Link>
+                                ) : (
+                                    <Text>{communication.value}</Text>
+                                )}
                             </Flex>
                         </Text>
                         {onCommunicationDelete && (
