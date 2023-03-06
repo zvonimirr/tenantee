@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^2.5.1",
-    "@emotion/react": "^11.10.5",
+    "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@tabler/icons-react": "^2.3.0",
     "country-to-currency": "^1.0.7",
