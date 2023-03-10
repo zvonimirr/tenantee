@@ -51,7 +51,7 @@ defmodule Tenantee.MixProject do
       {:cors_plug, "~> 3.0"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.11.1", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.15.0", only: [:test], runtime: false},
+      {:excoveralls, "~> 0.16.0", only: [:test], runtime: false},
       {:phoenix_swagger, "~> 0.8"},
       {:phoenix_view, "~> 2.0"},
       {:ex_json_schema, "~> 0.5"},
