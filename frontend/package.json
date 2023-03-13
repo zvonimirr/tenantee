@@ -23,7 +23,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.1",
     "react-router-dom": "^6.9.0",
-    "swr": "^2.0.3"
+    "swr": "^2.1.0"
   },
   "devDependencies": {
     "@types/ramda": "^0.28.22",
