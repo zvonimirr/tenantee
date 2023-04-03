@@ -14,7 +14,7 @@
     "@chakra-ui/react": "^2.5.3",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@tabler/icons-react": "^2.11.0",
+    "@tabler/icons-react": "^2.13.1",
     "country-to-currency": "^1.0.7",
     "currency-symbol-map": "^5.1.0",
     "framer-motion": "^10.0.0",
