@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/ramda": "^0.28.22",
-    "@types/react": "^18.0.28",
+    "@types/react": "^18.0.35",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.58.0",
