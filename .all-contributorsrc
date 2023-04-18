@@ -64,6 +64,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "akosszarvak",
+      "name": "Szarvák Ákos",
+      "avatar_url": "https://avatars.githubusercontent.com/u/43302360?v=4",
+      "profile": "https://akosszarvak.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
