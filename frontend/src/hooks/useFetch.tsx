@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import useSWR, { Fetcher } from 'swr';
+import useSWR, { Fetcher, Key } from 'swr';
 
 type FetcherUrl = string | [...unknown[]] | null;
 
@@ -7,7 +7,7 @@ interface UseFetchOptions {
     onError?: (error: Error) => void;
 }
 
-function resolveUrl(arg: FetcherUrl): [string?, ...unknown[]] {
+function resolveUrl(arg: FetcherUrl): Key {
     if (arg === null || (Array.isArray(arg) && !arg.length)) {
         return [];
     }
