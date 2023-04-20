@@ -7,23 +7,30 @@ import PageContainer from '../components/PageContainer';
 import { useFetch } from '../hooks/useFetch';
 import { preferenceApiService } from '../services/api/PreferenceApiService';
 import { propertyApiService } from '../services/api/PropertyApiService';
+import { pluralize } from '../utils/common';
 import { formatMoney } from '../utils/money';
+import { getPreferenceValueByName } from '../utils/preferences';
 
 function Home() {
     const {
-        data: { value: name } = { value: 'landlord' },
-        isLoading: isLoadingName,
-    } = useFetch(
-        [preferenceApiService.apiRoute, 'name'],
-        preferenceApiService.get,
-    );
+        data: { preferences } = { preferences: [] },
+        isLoading: isLoadingPreferences,
+    } = useFetch([preferenceApiService.apiRoute], preferenceApiService.list);
 
     const {
         data: { properties } = { properties: [] },
         isLoading: isLoadingProperties,
     } = useFetch([propertyApiService.apiRoute], propertyApiService.list);
 
-    const isLoading = isLoadingName || isLoadingProperties;
+    const isLoading = isLoadingPreferences || isLoadingProperties;
+
+    const name = useMemo(() => {
+        return getPreferenceValueByName(preferences, 'name', 'landlord');
+    }, [preferences]);
+
+    const currency = useMemo(() => {
+        return getPreferenceValueByName(preferences, 'default_currency', 'USD');
+    }, [preferences]);
 
     const monthlyRevenue = useMemo(() => {
         if (isEmpty(properties) || !properties) {
@@ -54,7 +61,7 @@ function Home() {
                             </span>
                             !
                         </Text>
-                        {!properties.length && (
+                        {properties.length < 1 ? (
                             <Text fontSize="xl">
                                 {'You don\'t have any properties yet. '}
                                 <span
@@ -65,28 +72,24 @@ function Home() {
                                     <Link to="/properties">Add one now</Link>.
                                 </span>
                             </Text>
-                        )}
-                        {properties.length && (
+                        ) : (
                             <Box>
                                 <Text fontSize="xl">
                                     You have{' '}
                                     <span style={{ fontWeight: 'bold' }}>
                                         {properties.length}
                                     </span>{' '}
-                                    {properties.length === 1
-                                        ? 'property'
-                                        : 'properties'}
+                                    {pluralize(
+                                        properties,
+                                        'property',
+                                        'properties',
+                                    )}
                                     .
                                 </Text>
                                 <Text fontSize="xl">
                                     Your monthly revenue is{' '}
                                     <span style={{ fontWeight: 'bold' }}>
-                                        ~
-                                        {formatMoney(
-                                            monthlyRevenue,
-                                            properties[0].monthly_revenue
-                                                .currency,
-                                        )}
+                                        ~{formatMoney(monthlyRevenue, currency)}
                                     </span>
                                 </Text>
                             </Box>
