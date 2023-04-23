@@ -26,7 +26,10 @@ export interface PropertyList {
 }
 
 export interface PropertyDto
-    extends Omit<Property, 'id' | 'price' | 'tenants' | 'monthly_revenue'> {
+    extends Omit<
+        Property,
+        'id' | 'price' | 'tenants' | 'monthly_revenue' | 'expenses'
+    > {
     price: number;
 }
 
