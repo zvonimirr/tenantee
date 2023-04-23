@@ -1,4 +1,9 @@
 import {
+    Accordion,
+    AccordionButton,
+    AccordionIcon,
+    AccordionItem,
+    AccordionPanel,
     Box,
     Center,
     Flex,
@@ -14,6 +19,7 @@ import { IconArrowBack, IconHome, IconMoneybag } from '@tabler/icons-react';
 import { isEmpty, prop } from 'ramda';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Bar, BarChart, CartesianGrid, Tooltip, XAxis, YAxis } from 'recharts';
 import ConfirmModal from '../components/Modals/ConfirmModal';
 import Breadcrumbs from '../components/Navigation/Breadcrumbs';
 import PageContainer from '../components/PageContainer';
@@ -69,6 +75,52 @@ function PropertyPage() {
 
         return tenants.filter((tenant) => !tenantIds.includes(tenant.id));
     }, [tenants, property]);
+
+    const revenue = useMemo(() => {
+        if (!property) {
+            return null;
+        }
+
+        return property.monthly_revenue;
+    }, [property]);
+
+    const expenses = useMemo(() => {
+        if (!property) {
+            return null;
+        }
+
+        // Get all expenses for the property
+        // that are in the current month
+        const expenses = property.expenses.filter((expense) => {
+            const expenseDate = new Date(expense.date);
+            const currentDate = new Date();
+
+            return (
+                expenseDate.getMonth() === currentDate.getMonth() &&
+                expenseDate.getFullYear() === currentDate.getFullYear()
+            );
+        });
+
+        // Sum up all expenses
+        return expenses.reduce((acc, expense) => {
+            return acc + Number(expense.amount.amount);
+        }, 0);
+    }, [property]);
+
+    const chartData = useMemo(() => {
+        return [
+            {
+                name: 'Revenue',
+                value: revenue?.amount ?? 0,
+                fill: '#00B87C',
+            },
+            {
+                name: 'Expenses',
+                value: expenses ?? 0,
+                fill: '#FF5C93',
+            },
+        ];
+    }, [revenue, expenses]);
 
     const breadcrumbs = useMemo(
         () => [
@@ -200,6 +252,50 @@ function PropertyPage() {
                                 )}
                             </Text>
                         </Flex>
+                        {revenue && (
+                            <Accordion allowToggle>
+                                <AccordionItem>
+                                    <AccordionButton>
+                                        <Text>Profit/Loss</Text>
+                                        <AccordionIcon />
+                                    </AccordionButton>
+                                    <AccordionPanel>
+                                        <BarChart
+                                            width={window.innerWidth - 100}
+                                            height={300}
+                                            data={chartData}>
+                                            <CartesianGrid
+                                                strokeDasharray="3 3"
+                                                color="white"
+                                            />
+                                            <Tooltip
+                                                separator=": "
+                                                formatter={(value: unknown) => {
+                                                    return formatMoney(
+                                                        value as number,
+                                                        revenue.currency,
+                                                    );
+                                                }}
+                                            />
+                                            <XAxis
+                                                dataKey="name"
+                                                tick={{ fill: 'white' }}
+                                            />
+                                            <YAxis
+                                                tick={{ fill: 'white' }}
+                                                tickFormatter={(tick) =>
+                                                    formatMoney(
+                                                        tick,
+                                                        revenue.currency,
+                                                    )
+                                                }
+                                            />
+                                            <Bar dataKey="value" />
+                                        </BarChart>
+                                    </AccordionPanel>
+                                </AccordionItem>
+                            </Accordion>
+                        )}
                         <Grid templateColumns="repeat(3, 1fr)" gap={6}>
                             {property.tenants.map((tenant) => (
                                 <GridItem key={tenant.id}>

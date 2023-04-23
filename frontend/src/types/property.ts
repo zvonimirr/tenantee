@@ -13,6 +13,10 @@ export interface Property {
     price: Price;
     tenants: Tenant[];
     monthly_revenue: Price;
+    expenses: {
+        amount: Price;
+        date: Date;
+    }[];
     due_date_modifier: number;
     tax_percentage: number;
 }
@@ -22,7 +26,10 @@ export interface PropertyList {
 }
 
 export interface PropertyDto
-    extends Omit<Property, 'id' | 'price' | 'tenants' | 'monthly_revenue'> {
+    extends Omit<
+        Property,
+        'id' | 'price' | 'tenants' | 'monthly_revenue' | 'expenses'
+    > {
     price: number;
 }
 
