@@ -16,6 +16,7 @@ describe('PropertyCard', () => {
                     name: 'Test Property',
                     description: 'Test Description',
                     location: 'Test Location',
+                    expenses: [],
                     price: {
                         amount: 100,
                         currency: 'USD',

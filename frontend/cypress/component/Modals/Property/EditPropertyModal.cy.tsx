@@ -10,6 +10,7 @@ const mockProperty = {
         currency: 'USD',
     },
     tenants: [],
+    expenses: [],
     monthly_revenue: {
         amount: 100,
         currency: 'USD',
