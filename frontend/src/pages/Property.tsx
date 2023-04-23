@@ -13,6 +13,7 @@ import {
     Spinner,
     Stack,
     Text,
+    useColorMode,
     useDisclosure,
 } from '@chakra-ui/react';
 import { IconArrowBack, IconHome, IconMoneybag } from '@tabler/icons-react';
@@ -32,6 +33,7 @@ import { Tenant } from '../types/tenant';
 import { formatMoney } from '../utils/money';
 
 function PropertyPage() {
+    const { colorMode } = useColorMode();
     const { id } = useParams();
     const navigate = useNavigate();
     const { showError, showSuccess } = useNotification();
@@ -106,6 +108,12 @@ function PropertyPage() {
             return acc + Number(expense.amount.amount);
         }, 0);
     }, [property]);
+
+    const chartOptions = useMemo(() => {
+        return {
+            color: colorMode === 'light' ? '#000' : '#fff',
+        };
+    }, [colorMode]);
 
     const chartData = useMemo(() => {
         return [
@@ -263,10 +271,11 @@ function PropertyPage() {
                                         <BarChart
                                             width={window.innerWidth - 100}
                                             height={300}
+                                            style={{ margin: 0 }}
                                             data={chartData}>
                                             <CartesianGrid
                                                 strokeDasharray="3 3"
-                                                color="white"
+                                                color={chartOptions.color}
                                             />
                                             <Tooltip
                                                 separator=": "
@@ -279,10 +288,14 @@ function PropertyPage() {
                                             />
                                             <XAxis
                                                 dataKey="name"
-                                                tick={{ fill: 'white' }}
+                                                tick={{
+                                                    fill: chartOptions.color,
+                                                }}
                                             />
                                             <YAxis
-                                                tick={{ fill: 'white' }}
+                                                tick={{
+                                                    fill: chartOptions.color,
+                                                }}
                                                 tickFormatter={(tick) =>
                                                     formatMoney(
                                                         tick,

@@ -5,3 +5,7 @@ html, body, #root {
 
     height: 100vh;
 }
+
+svg.recharts-surface {
+    padding: 5px;
+}
