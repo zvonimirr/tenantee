@@ -13,6 +13,10 @@ export interface Property {
     price: Price;
     tenants: Tenant[];
     monthly_revenue: Price;
+    expenses: {
+        amount: Price;
+        date: Date;
+    }[];
     due_date_modifier: number;
     tax_percentage: number;
 }
