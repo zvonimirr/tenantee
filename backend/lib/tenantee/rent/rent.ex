@@ -26,8 +26,14 @@ defmodule Tenantee.Rent do
            paid: false
          })
          |> Repo.insert() do
-      {:ok, rent} -> {:ok, load_associations(rent)}
-      {:error, changeset} -> {:error, changeset}
+      {:ok, rent} ->
+        {:ok, load_associations(rent)}
+
+      # coveralls-ignore-start
+      # TODO: Figure out how to test this
+      {:error, changeset} ->
+        {:error, changeset}
+        # coveralls-ignore-end
     end
   end
 

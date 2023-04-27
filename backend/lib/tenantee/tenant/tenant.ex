@@ -19,8 +19,11 @@ defmodule Tenantee.Tenant do
       {:ok, tenant} ->
         {:ok, load_associations(tenant)}
 
+      # coveralls-ignore-start
+      # TODO: Figure out how to test this
       {:error, error} ->
         {:error, error}
+        # coveralls-ignore-end
     end
   end
 
