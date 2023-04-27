@@ -8,7 +8,7 @@ defmodule TenanteeWeb.ExpenseView do
       amount: expense.amount,
       description: expense.description,
       date: expense.inserted_at,
-      property: render(PropertyView, "show_without_tenants.json", property: expense.property)
+      property: render(PropertyView, "show.json", property: expense.property)
     }
   end
 

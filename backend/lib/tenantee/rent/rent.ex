@@ -45,7 +45,7 @@ defmodule Tenantee.Rent do
       from r in Schema,
         where: r.property_id == ^property_id and r.paid == false
     )
-    |> Enum.map(&Repo.preload(&1, :tenant))
+    |> Enum.map(&Repo.preload(&1, [:tenant, :property]))
   end
 
   @doc """

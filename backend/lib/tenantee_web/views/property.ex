@@ -9,30 +9,32 @@ defmodule TenanteeWeb.PropertyView do
     }
   end
 
-  def render("show_without_tenants.json", %{property: property}) do
-    price = Tenantee.Utils.Currency.convert(property.price) |> Money.round(currency_digits: 2)
-    monthly_revenue = Tenantee.Stats.get_monthly_revenue(property)
+  def render("show.json", %{property: property})
+      when is_list(property.tenants) and is_list(property.expenses) do
+    render("show.json", %{property: Map.drop(property, [:tenants, :expenses])})
+    |> Map.put_new(
+      :tenants,
+      render(TenantView, "show.json", %{tenants: property.tenants}) |> Map.get(:tenants)
+    )
+    |> Map.put_new(
+      :expenses,
+      Enum.map(property.expenses, &render(ExpenseView, "show.json", %{expense: &1}))
+    )
+  end
 
+  def render("show.json", %{property: property}) do
     %{
       id: property.id,
       name: property.name,
       description: property.description,
       location: property.location,
-      price: price,
-      monthly_revenue: monthly_revenue,
+      price: property.price,
+      monthly_revenue: property.monthly_revenue,
       tax_percentage: property.tax_percentage,
       due_date_modifier: property.due_date_modifier,
       inserted_at: property.inserted_at,
       updated_at: property.updated_at
     }
-  end
-
-  def render("show.json", %{property: property}) do
-    %{
-      tenants: render(TenantView, "show.json", %{tenants: property.tenants}) |> Map.get(:tenants),
-      expenses: Enum.map(property.expenses, &render(ExpenseView, "show.json", %{expense: &1}))
-    }
-    |> Map.merge(render("show_without_tenants.json", %{property: property}))
   end
 
   def render("show_rent.json", %{rent: rent}) do

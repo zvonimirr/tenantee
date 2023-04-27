@@ -17,7 +17,7 @@ defmodule Tenantee.Property do
            %Schema{}
            |> Schema.changeset(attrs)
            |> Repo.insert() do
-      {:ok, Repo.preload(property, [:tenants, :expenses, tenants: :communications])}
+      {:ok, load_associations(property)}
     end
   end
 
@@ -27,7 +27,7 @@ defmodule Tenantee.Property do
   def get_property(id) do
     with property <- Repo.get(Schema, id) do
       if property,
-        do: {:ok, Repo.preload(property, [:tenants, :expenses, tenants: :communications])},
+        do: {:ok, load_associations(property)},
         else: {:error, :not_found}
     end
   end
@@ -37,7 +37,7 @@ defmodule Tenantee.Property do
   """
   def get_all_properties do
     Repo.all(Schema)
-    |> Repo.preload([:tenants, :expenses, tenants: :communications])
+    |> Enum.map(&load_associations/1)
   end
 
   @doc """
@@ -49,7 +49,7 @@ defmodule Tenantee.Property do
          changeset <-
            Schema.changeset(property, attrs),
          {:ok, updated_property} <- Repo.update(changeset) do
-      {:ok, Repo.preload(updated_property, [:tenants, :expenses, tenants: :communications])}
+      {:ok, load_associations(updated_property)}
     end
   end
 
@@ -69,9 +69,9 @@ defmodule Tenantee.Property do
   """
   def add_tenant(property_id, tenant_id) do
     with {:ok, %Schema{} = property} <- get_property(property_id),
-         {:ok, %TenantSchema{} = tenant} <- Tenant.get_tenant_by_id(tenant_id) do
-      Schema.add_tenant(property, tenant)
-      |> Repo.update()
+         {:ok, %TenantSchema{} = tenant} <- Tenant.get_tenant_by_id(tenant_id),
+         {:ok, updated_property} <- Repo.update(Schema.add_tenant(property, tenant)) do
+      {:ok, load_associations(updated_property)}
     else
       {:error, error} -> {:error, error}
     end
@@ -82,9 +82,9 @@ defmodule Tenantee.Property do
   """
   def remove_tenant(property_id, tenant_id) do
     with {:ok, %Schema{} = property} <- get_property(property_id),
-         {:ok, %TenantSchema{} = tenant} <- Tenant.get_tenant_by_id(tenant_id) do
-      Schema.remove_tenant(property, tenant)
-      |> Repo.update()
+         {:ok, %TenantSchema{} = tenant} <- Tenant.get_tenant_by_id(tenant_id),
+         {:ok, updated_property} <- Repo.update(Schema.remove_tenant(property, tenant)) do
+      {:ok, load_associations(updated_property)}
     else
       {:error, error} -> {:error, error}
     end
@@ -97,5 +97,19 @@ defmodule Tenantee.Property do
     get_all_properties()
     |> Enum.reject(&Enum.empty?(&1.tenants))
     |> Enum.filter(&Enum.any?(&1.tenants, fn tenant -> tenant.id == tenant_id end))
+  end
+
+  @doc """
+  Calculates the monthly revenue of a property,
+  as wel as rounding the price to 2 decimal places.
+  """
+  def load_revenue(property) do
+    Map.update(property, :price, Money.new(:USD, 0), &Money.round(&1, currency_digits: 2))
+    |> Map.put(:monthly_revenue, Tenantee.Stats.get_monthly_revenue(property))
+  end
+
+  defp load_associations(property) do
+    Repo.preload(property, [:tenants, :expenses, tenants: :communications])
+    |> load_revenue()
   end
 end

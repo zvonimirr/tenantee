@@ -4,6 +4,7 @@ defmodule Tenantee.Expense do
   """
 
   import Ecto.Query
+  alias Tenantee.Property
   alias Tenantee.Repo
   alias Tenantee.Expense.Schema
 
@@ -66,5 +67,6 @@ defmodule Tenantee.Expense do
 
   defp load_property(expense) do
     Repo.preload(expense, [:property, property: [:tenants]])
+    |> Map.update(:property, nil, &Property.load_revenue/1)
   end
 end

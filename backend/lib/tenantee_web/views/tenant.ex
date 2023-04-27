@@ -19,7 +19,8 @@ defmodule TenanteeWeb.TenantView do
 
     properties =
       Property.get_properties_of_tenant(tenant.id)
-      |> Enum.map(&render(PropertyView, "show_without_tenants.json", %{property: &1}))
+      |> Enum.map(&Map.drop(&1, [:tenants, :expenses]))
+      |> Enum.map(&render(PropertyView, "show.json", %{property: &1}))
 
     communications =
       if not Ecto.assoc_loaded?(tenant.communications),
