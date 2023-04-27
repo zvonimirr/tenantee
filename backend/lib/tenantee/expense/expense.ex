@@ -15,7 +15,7 @@ defmodule Tenantee.Expense do
            %Schema{}
            |> Schema.changeset(attrs)
            |> Repo.insert() do
-      {:ok, expense}
+      {:ok, load_property(expense)}
     end
   end
 
@@ -25,7 +25,7 @@ defmodule Tenantee.Expense do
   def get_expense(expense_id) do
     case Repo.get(Schema, expense_id) do
       nil -> {:error, :not_found}
-      expense -> {:ok, expense}
+      expense -> {:ok, load_property(expense)}
     end
   end
 
@@ -37,7 +37,7 @@ defmodule Tenantee.Expense do
       where: fragment("EXTRACT(MONTH FROM inserted_at) = EXTRACT(MONTH FROM NOW())")
     )
     |> Repo.all()
-    |> Enum.map(&Repo.preload(&1, :property))
+    |> Enum.map(&load_property/1)
   end
 
   @doc """
@@ -49,7 +49,7 @@ defmodule Tenantee.Expense do
            expense
            |> Schema.changeset(attrs)
            |> Repo.update() do
-      {:ok, expense}
+      {:ok, load_property(expense)}
     end
   end
 
@@ -62,5 +62,9 @@ defmodule Tenantee.Expense do
            |> Repo.delete_all() do
       if affected_rows > 0, do: {:ok, :deleted}, else: {:error, :not_found}
     end
+  end
+
+  defp load_property(expense) do
+    Repo.preload(expense, [:property, property: [:tenants]])
   end
 end
