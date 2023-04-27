@@ -19,16 +19,18 @@ defmodule TenanteeWeb.RentControllerTest do
     tenant_id: tenant_id
   } do
     conn = get(conn, "/api/rent")
+    json = json_response(conn, 200)
+    [rent] = json["rents"]
 
-    assert json_response(conn, 200)["rents"] == [
-             %{
-               "due_date" => "2022-11-23",
-               "id" => rent_id,
-               "paid" => false,
-               "property" => %{"id" => property_id, "name" => "Test Property"},
-               "tenant" => %{"id" => tenant_id, "name" => "Test Tenant"}
-             }
-           ]
+    assert rent["due_date"] == "2022-11-23"
+    assert rent["id"] == rent_id
+    assert rent["paid"] == false
+
+    assert rent["property"]["id"] == property_id
+    assert rent["property"]["name"] == "Test Property"
+
+    assert rent["tenant"]["id"] == tenant_id
+    assert rent["tenant"]["name"] == "Test Tenant"
   end
 
   test "GET /api/rent/paid", %{
@@ -46,16 +48,18 @@ defmodule TenanteeWeb.RentControllerTest do
     tenant_id: tenant_id
   } do
     conn = get(conn, "/api/rent/unpaid")
+    json = json_response(conn, 200)
+    [rent] = json["rents"]
 
-    assert json_response(conn, 200)["rents"] == [
-             %{
-               "due_date" => "2022-11-23",
-               "id" => rent_id,
-               "paid" => false,
-               "property" => %{"id" => property_id, "name" => "Test Property"},
-               "tenant" => %{"id" => tenant_id, "name" => "Test Tenant"}
-             }
-           ]
+    assert rent["due_date"] == "2022-11-23"
+    assert rent["id"] == rent_id
+    assert rent["paid"] == false
+
+    assert rent["property"]["id"] == property_id
+    assert rent["property"]["name"] == "Test Property"
+
+    assert rent["tenant"]["id"] == tenant_id
+    assert rent["tenant"]["name"] == "Test Tenant"
   end
 
   describe "POST /api/rent/:id/mark-as-paid" do
@@ -64,12 +68,11 @@ defmodule TenanteeWeb.RentControllerTest do
       rent_id: rent_id
     } do
       conn = post(conn, "/api/rent/#{rent_id}/mark-as-paid")
+      rent = json_response(conn, 200)
 
-      assert json_response(conn, 200) == %{
-               "due_date" => "2022-11-23",
-               "id" => rent_id,
-               "paid" => true
-             }
+      assert rent["due_date"] == "2022-11-23"
+      assert rent["id"] == rent_id
+      assert rent["paid"] == true
     end
 
     test "not found", %{
@@ -87,12 +90,11 @@ defmodule TenanteeWeb.RentControllerTest do
       rent_id: rent_id
     } do
       conn = post(conn, "/api/rent/#{rent_id}/mark-as-unpaid")
+      rent = json_response(conn, 200)
 
-      assert json_response(conn, 200) == %{
-               "due_date" => "2022-11-23",
-               "id" => rent_id,
-               "paid" => false
-             }
+      assert rent["due_date"] == "2022-11-23"
+      assert rent["id"] == rent_id
+      assert rent["paid"] == false
     end
 
     test "not found", %{

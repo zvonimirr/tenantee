@@ -1,5 +1,6 @@
 defmodule TenanteeWeb.PropertyView do
   use TenanteeWeb, :view
+  alias Tenantee.Tenant
   alias TenanteeWeb.TenantView
   alias TenanteeWeb.ExpenseView
 
@@ -14,7 +15,10 @@ defmodule TenanteeWeb.PropertyView do
     render("show.json", %{property: Map.drop(property, [:tenants, :expenses])})
     |> Map.put_new(
       :tenants,
-      render(TenantView, "show.json", %{tenants: property.tenants}) |> Map.get(:tenants)
+      render(TenantView, "show.json", %{
+        tenants: Enum.map(property.tenants, &Tenant.load_finances/1)
+      })
+      |> Map.get(:tenants)
     )
     |> Map.put_new(
       :expenses,
@@ -40,7 +44,7 @@ defmodule TenanteeWeb.PropertyView do
   def render("show_rent.json", %{rent: rent}) do
     %{
       rent: %{
-        tenant: render(TenantView, "show.json", %{tenant: rent.tenant}),
+        tenant: render(TenantView, "show.json", %{tenant: Tenant.load_finances(rent.tenant)}),
         paid: rent.paid,
         due_date: rent.due_date
       }

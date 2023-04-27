@@ -12,20 +12,23 @@ defmodule Tenantee.Rent do
   """
   def get_all_rents do
     Repo.all(Schema)
-    |> Enum.map(&Repo.preload(&1, [:tenant, :property]))
+    |> Enum.map(&load_associations/1)
   end
 
   @doc """
   Adds a new rent.
   """
   def add_rent(property, tenant, due_date) do
-    Schema.changeset(%Schema{}, %{
-      property_id: property.id,
-      tenant_id: tenant.id,
-      due_date: due_date,
-      paid: false
-    })
-    |> Repo.insert()
+    case Schema.changeset(%Schema{}, %{
+           property_id: property.id,
+           tenant_id: tenant.id,
+           due_date: due_date,
+           paid: false
+         })
+         |> Repo.insert() do
+      {:ok, rent} -> {:ok, load_associations(rent)}
+      {:error, changeset} -> {:error, changeset}
+    end
   end
 
   @doc """
@@ -34,7 +37,7 @@ defmodule Tenantee.Rent do
   """
   def get_rents_by_paid(paid \\ false) do
     Repo.all(from r in Schema, where: r.paid == ^paid)
-    |> Enum.map(&Repo.preload(&1, [:tenant, :property]))
+    |> Enum.map(&load_associations/1)
   end
 
   @doc """
@@ -45,7 +48,7 @@ defmodule Tenantee.Rent do
       from r in Schema,
         where: r.property_id == ^property_id and r.paid == false
     )
-    |> Enum.map(&Repo.preload(&1, [:tenant, :property]))
+    |> Enum.map(&load_associations/1)
   end
 
   @doc """
@@ -56,7 +59,7 @@ defmodule Tenantee.Rent do
       from r in Schema,
         where: r.tenant_id == ^tenant_id
     )
-    |> Enum.map(&Repo.preload(&1, :property))
+    |> Enum.map(&load_associations/1)
   end
 
   @doc """
@@ -67,7 +70,7 @@ defmodule Tenantee.Rent do
       from r in Schema,
         where: r.tenant_id == ^tenant_id and r.paid == false
     )
-    |> Enum.map(&Repo.preload(&1, :property))
+    |> Enum.map(&load_associations/1)
   end
 
   @doc """
@@ -75,12 +78,18 @@ defmodule Tenantee.Rent do
   """
   def mark_rent(rent_id, paid \\ false) do
     with rent <- Repo.get(Schema, rent_id),
-         false <- is_nil(rent) do
-      rent
-      |> Schema.changeset(%{paid: paid})
-      |> Repo.update()
+         false <- is_nil(rent),
+         {:ok, rent} <-
+           rent
+           |> Schema.changeset(%{paid: paid})
+           |> Repo.update() do
+      {:ok, load_associations(rent)}
     else
       _ -> {:error, :not_found}
     end
+  end
+
+  defp load_associations(rent) do
+    Repo.preload(rent, [:tenant, :property, property: :tenants])
   end
 end

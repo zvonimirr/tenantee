@@ -6,7 +6,9 @@ defmodule TenanteeWeb.TenantViewTest do
     id: 1,
     first_name: "John",
     last_name: "Doe",
-    communications: []
+    communications: [],
+    debt: Money.new(0, "USD"),
+    income: Money.new(0, "USD")
   }
 
   @api_tenant @tenant

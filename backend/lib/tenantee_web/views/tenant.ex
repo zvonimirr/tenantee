@@ -1,11 +1,8 @@
 defmodule TenanteeWeb.TenantView do
   use TenanteeWeb, :view
-  alias TenanteeWeb.PropertyView
   alias TenanteeWeb.RentView
   alias TenanteeWeb.CommunicationView
   alias Tenantee.Rent
-  alias Tenantee.Stats
-  alias Tenantee.Property
 
   def render("show.json", %{tenants: tenants}) do
     %{
@@ -13,36 +10,32 @@ defmodule TenanteeWeb.TenantView do
     }
   end
 
-  def render("show.json", %{tenant: tenant}) do
-    debt = Stats.get_debt(tenant) |> get_money()
-    income = Stats.get_income(tenant) |> get_money()
-
-    properties =
-      Property.get_properties_of_tenant(tenant.id)
-      |> Enum.map(&Map.drop(&1, [:tenants, :expenses]))
-      |> Enum.map(&render(PropertyView, "show.json", %{property: &1}))
-
-    communications =
-      if not Ecto.assoc_loaded?(tenant.communications),
-        do: nil,
-        else:
-          render(CommunicationView, "show.json", %{communications: tenant.communications})
-          |> Map.get(:communications)
-
-    unpaid_rents =
+  def render("show.json", %{tenant: tenant})
+      when is_list(tenant.properties) and is_list(tenant.communications) do
+    render("show.json", %{tenant: Map.drop(tenant, [:properties])})
+    |> Map.replace(:properties, Enum.map(tenant.properties, &Map.drop(&1, [:tenants, :expenses])))
+    |> Map.replace(
+      :communications,
+      render(CommunicationView, "show.json", %{communications: tenant.communications})
+      |> Map.get(:communications)
+    )
+    |> Map.replace(
+      :unpaid_rents,
       render(RentView, "show.json", %{rents: Rent.get_unpaid_rents_by_tenant_id(tenant.id)})
       |> Map.get(:rents)
+    )
+  end
 
+  def render("show.json", %{tenant: tenant}) do
     %{
       id: tenant.id,
       name: tenant.first_name <> " " <> tenant.last_name,
-      properties: properties,
-      communications: communications,
-      unpaid_rents: unpaid_rents
+      communications: [],
+      debt: tenant.debt,
+      income: tenant.income,
+      unpaid_rents: [],
+      properties: []
     }
-    |> Map.put(:debt, debt)
-    |> Map.put(:income, income)
-    |> Map.filter(fn {_k, v} -> not is_nil(v) end)
   end
 
   def render("show_rent.json", %{rent: rent}) do
@@ -77,8 +70,4 @@ defmodule TenanteeWeb.TenantView do
   def render("error.json", %{message: message}) do
     %{error: message}
   end
-
-  defp get_money(%Money{} = m) when is_map(m), do: m
-
-  defp get_money(_money), do: nil
 end

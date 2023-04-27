@@ -1,38 +1,38 @@
 defmodule TenanteeWeb.RentView do
+  alias Tenantee.Rent.Schema
+  alias Tenantee.Tenant
+  alias Tenantee.Property
+  alias TenanteeWeb.PropertyView
+  alias TenanteeWeb.TenantView
   use TenanteeWeb, :view
 
+  def render(
+        "show.json",
+        %{
+          rent:
+            %Schema{
+              tenant: %Tenant.Schema{},
+              property: %Property.Schema{}
+            } = rent
+        }
+      ) do
+    render("show.json", %{rent: Map.drop(rent, [:tenant, :property])})
+    |> Map.put(
+      :tenant,
+      render(TenantView, "show.json", %{tenant: Tenant.load_finances(rent.tenant)})
+    )
+    |> Map.put(
+      :property,
+      render(PropertyView, "show.json", %{property: Property.load_revenue(rent.property)})
+    )
+  end
+
   def render("show.json", %{rent: rent}) do
-    tenant =
-      if Map.has_key?(rent, :tenant) and Ecto.assoc_loaded?(rent.tenant) do
-        %{
-          tenant: %{
-            id: rent.tenant.id,
-            name: rent.tenant.first_name <> " " <> rent.tenant.last_name
-          }
-        }
-      else
-        %{}
-      end
-
-    property =
-      if Map.has_key?(rent, :property) and Ecto.assoc_loaded?(rent.property) do
-        %{
-          property: %{
-            id: rent.property.id,
-            name: rent.property.name
-          }
-        }
-      else
-        %{}
-      end
-
     %{
       id: rent.id,
       due_date: rent.due_date,
       paid: rent.paid
     }
-    |> Map.merge(tenant)
-    |> Map.merge(property)
   end
 
   def render("show.json", %{rents: rents}) do

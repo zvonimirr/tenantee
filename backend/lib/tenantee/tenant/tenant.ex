@@ -3,6 +3,7 @@ defmodule Tenantee.Tenant do
   This module contains all the necessary functions to manage tenants.
   """
 
+  alias Tenantee.Stats
   alias Tenantee.Tenant.Schema
   alias Tenantee.Tenant.Communication.Schema, as: CommunicationSchema
   alias Tenantee.Repo
@@ -12,9 +13,15 @@ defmodule Tenantee.Tenant do
   Creates a new tenant.
   """
   def create_tenant(tenant) do
-    %Schema{}
-    |> Schema.changeset(tenant)
-    |> Repo.insert()
+    case %Schema{}
+         |> Schema.changeset(tenant)
+         |> Repo.insert() do
+      {:ok, tenant} ->
+        {:ok, load_associations(tenant)}
+
+      {:error, error} ->
+        {:error, error}
+    end
   end
 
   @doc """
@@ -22,7 +29,7 @@ defmodule Tenantee.Tenant do
   """
   def get_tenant_by_id(id) do
     with tenant <- Repo.get(Schema, id) do
-      if tenant, do: {:ok, tenant |> Repo.preload(:communications)}, else: {:error, :not_found}
+      if tenant, do: {:ok, load_associations(tenant)}, else: {:error, :not_found}
     end
   end
 
@@ -30,7 +37,7 @@ defmodule Tenantee.Tenant do
   Gets a list of all tenants.
   """
   def get_all_tenants do
-    Repo.all(Schema) |> Repo.preload(:communications)
+    Repo.all(Schema) |> Enum.map(&load_associations/1)
   end
 
   @doc """
@@ -40,7 +47,7 @@ defmodule Tenantee.Tenant do
     with {:ok, tenant} <- get_tenant_by_id(id),
          changeset <- Schema.changeset(tenant, attrs),
          {:ok, updated_tenant} <- Repo.update(changeset) do
-      {:ok, updated_tenant |> Repo.preload(:communications)}
+      {:ok, load_associations(updated_tenant)}
     else
       {:error, :not_found} ->
         {:error, :not_found}
@@ -62,12 +69,14 @@ defmodule Tenantee.Tenant do
   Creates a new communication for a tenant.
   """
   def add_communication(id, type, value) do
-    with {:ok, tenant} <- get_tenant_by_id(id) do
-      Schema.add_communication(tenant, %{
-        type: type,
-        value: value
-      })
-      |> Repo.update()
+    with {:ok, tenant} <- get_tenant_by_id(id),
+         {:ok, updated_tenant} <-
+           Schema.add_communication(tenant, %{
+             type: type,
+             value: value
+           })
+           |> Repo.update() do
+      {:ok, load_associations(updated_tenant)}
     else
       {:error, error} -> {:error, error}
     end
@@ -79,12 +88,26 @@ defmodule Tenantee.Tenant do
   def remove_communication(tenant_id, communication_id) do
     with {:ok, tenant} <- get_tenant_by_id(tenant_id),
          communication when not is_nil(communication) <-
-           Repo.get(CommunicationSchema, communication_id) do
-      Schema.remove_communication(tenant, communication)
-      |> Repo.update()
+           Repo.get(CommunicationSchema, communication_id),
+         {:ok, updated_tenant} <-
+           Schema.remove_communication(tenant, communication)
+           |> Repo.update() do
+      {:ok, load_associations(updated_tenant)}
     else
       {:error, error} -> {:error, error}
       nil -> {:error, :not_found}
     end
+  end
+
+  defp load_associations(tenant) do
+    tenant
+    |> Repo.preload([:communications, :properties])
+    |> load_finances()
+  end
+
+  def load_finances(tenant) do
+    tenant
+    |> Map.put(:debt, Stats.get_debt(tenant))
+    |> Map.put(:income, Stats.get_income(tenant))
   end
 end

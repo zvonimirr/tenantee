@@ -6,9 +6,7 @@ defmodule TenanteeWeb.RentViewTest do
   @rent %{
     id: 1,
     due_date: ~D[2019-01-01],
-    paid: false,
-    tenant_id: 1,
-    property_id: 1
+    paid: false
   }
 
   @rent_rendered %{
@@ -18,6 +16,6 @@ defmodule TenanteeWeb.RentViewTest do
   }
 
   test "renders show.json" do
-    assert render(TenanteeWeb.RentView, "show.json", rent: @rent) == @rent_rendered
+    assert render(TenanteeWeb.RentView, "show.json", %{rent: @rent}) == @rent_rendered
   end
 end
