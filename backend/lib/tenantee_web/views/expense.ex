@@ -1,14 +1,26 @@
 defmodule TenanteeWeb.ExpenseView do
   use TenanteeWeb, :view
   alias TenanteeWeb.PropertyView
+  alias Tenantee.Property
+
+  def render("show.json", %{
+        expense:
+          %{
+            property: %Property.Schema{}
+          } = expense
+      }) do
+    %{
+      property: render(PropertyView, "show.json", property: expense.property)
+    }
+    |> Map.merge(render("show.json", %{expense: Map.delete(expense, :property)}))
+  end
 
   def render("show.json", %{expense: expense}) do
     %{
       id: expense.id,
       amount: expense.amount,
       description: expense.description,
-      date: expense.inserted_at,
-      property: render(PropertyView, "show.json", property: expense.property)
+      date: expense.inserted_at
     }
   end
 
