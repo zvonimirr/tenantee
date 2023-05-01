@@ -24,7 +24,7 @@
         "react-hook-form": "^7.43.9",
         "react-router-dom": "^6.10.0",
         "recharts": "^2.5.0",
-        "swr": "^2.1.0"
+        "swr": "^2.1.5"
     },
     "devDependencies": {
         "@types/ramda": "^0.29.0",
