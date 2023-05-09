@@ -11,7 +11,7 @@
         "cypress": "cypress run --component"
     },
     "dependencies": {
-        "@chakra-ui/react": "^2.5.5",
+        "@chakra-ui/react": "^2.6.1",
         "@emotion/react": "^11.11.0",
         "@emotion/styled": "^11.10.8",
         "@tabler/icons-react": "^2.17.0",
