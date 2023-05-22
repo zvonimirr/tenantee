@@ -23,7 +23,7 @@
         "react-dom": "^18.2.0",
         "react-hook-form": "^7.43.9",
         "react-router-dom": "^6.11.1",
-        "recharts": "^2.5.0",
+        "recharts": "^2.6.2",
         "swr": "^2.1.5"
     },
     "devDependencies": {
