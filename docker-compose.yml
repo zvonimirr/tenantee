@@ -26,8 +26,8 @@ services:
     image: postgres:14.2-alpine
     container_name: "tenantee_postgres"
     environment:
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_PREFIX}
+      - POSTGRES_USER=tenantee
+      - POSTGRES_PASSWORD=tenantee
+      - POSTGRES_DB=tenantee_dev
     ports:
       - "5432:5432"

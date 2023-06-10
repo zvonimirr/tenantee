@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :tenantee, Tenantee.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "tenantee",
+  password: "tenantee",
   hostname: "localhost",
   database: "tenantee_dev",
   stacktrace: true,
