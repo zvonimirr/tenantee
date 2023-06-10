@@ -1,32 +1,26 @@
 version: "3.7"
 
 services:
-  backend:
-    build: 
-      context: ./backend
-      args:
-        - PHOENIX_VERSION=1.6.15
-    environment:
-      - DB_PREFIX=${DB_PREFIX}
-      - DB_HOST=${DB_HOST}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DATABASE_URL=ecto://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:5432/${DB_PREFIX}
-    command: 
-      - "./run.sh"
-    ports:
-      - "4000:4000"
-      - "443:443"
-    volumes:
-      - ./backend:/app
-    depends_on:
-      - db
-
-  frontend:
-    build:
-      context: ./frontend
-    ports:
-      - "80:80"
+  # backend:
+  #   build: 
+  #     context: ./backend
+  #     args:
+  #       - PHOENIX_VERSION=1.6.15
+  #   environment:
+  #     - DB_PREFIX=${DB_PREFIX}
+  #     - DB_HOST=${DB_HOST}
+  #     - DB_USERNAME=${DB_USERNAME}
+  #     - DB_PASSWORD=${DB_PASSWORD}
+  #     - DATABASE_URL=ecto://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:5432/${DB_PREFIX}
+  #   command: 
+  #     - "./run.sh"
+  #   ports:
+  #     - "4000:4000"
+  #     - "443:443"
+  #   volumes:
+  #     - ./backend:/app
+  #   depends_on:
+  #     - db
 
   db:
     image: postgres:14.2-alpine
