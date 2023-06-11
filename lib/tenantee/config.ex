@@ -21,6 +21,23 @@ defmodule Tenantee.Config do
   end
 
   @doc """
+  Returns the configuration for the application as a result tuple.
+  """
+  def get_result(key) when is_atom(key) do
+    case get(Atom.to_string(key)) do
+      nil -> {:error, "key not found"}
+      value -> {:ok, value}
+    end
+  end
+
+  def get_result(key) when is_bitstring(key) do
+    case get(key) do
+      nil -> {:error, "key not found"}
+      value -> {:ok, value}
+    end
+  end
+
+  @doc """
   Sets the configuration for the application.
   """
   def set(key, value) when is_atom(key) do

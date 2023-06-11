@@ -10,13 +10,14 @@ defmodule Tenantee.Schema.Property do
     field :name, :string
     field :description, :string, default: ""
     field :address, :string
+    field :price, Money.Ecto.Composite.Type
 
     timestamps()
   end
 
   def changeset(property, params \\ %{}) do
     property
-    |> cast(params, [:name, :description, :address])
-    |> validate_required([:name, :address])
+    |> cast(params, [:name, :description, :address, :price])
+    |> validate_required([:name, :address, :price])
   end
 end

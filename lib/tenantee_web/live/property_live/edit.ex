@@ -1,9 +1,11 @@
 defmodule TenanteeWeb.PropertyLive.Edit do
+  alias TenanteeWeb.PropertyLive.Helper
+  alias Tenantee.Config
   alias Tenantee.Entity.Property
   use TenanteeWeb, :live_view
 
   def mount(params, _session, socket) do
-    {:ok, assign_defaults(socket, params)}
+    {:ok, Helper.default(socket, params)}
   end
 
   def handle_event("change", %{"_target" => [target]} = params, socket) do
@@ -13,24 +15,29 @@ defmodule TenanteeWeb.PropertyLive.Edit do
 
   def handle_event(
         "update",
-        %{"name" => name, "description" => description, "address" => address},
+        %{"name" => name, "description" => description, "address" => address, "price" => price},
         socket
       ) do
-    with :ok <-
+    with {:ok, currency} <- Config.get_result(:currency),
+         :ok <-
            Property.update(socket.assigns.id, %{
              name: name,
              description: description,
-             address: address
+             address: address,
+             price: Money.new(price, currency)
            }) do
       {:noreply, put_flash(socket, :info, "#{name} was updated successfully.")}
     else
+      {:error, "key not found"} ->
+        {:noreply, put_flash(socket, :error, "Please set your default currency in the settings.")}
+
       {:error, _reason} ->
         {:noreply, put_flash(socket, :error, "Error updating the property.")}
     end
   end
 
   def render(assigns) do
-    assigns = assign(assigns, :disabled, is_disabled(assigns))
+    assigns = assign(assigns, :disabled, Helper.is_submit_disabled?(assigns))
 
     ~H"""
     <a class="text-gray-500" href={~p"/properties"}>
@@ -58,6 +65,17 @@ defmodule TenanteeWeb.PropertyLive.Edit do
       />
       <.input
         phx-change="change"
+        type="number"
+        name="price"
+        min="0"
+        step="0.1"
+        value={@price}
+        label="Price"
+        placeholder="Price of the property"
+        required
+      />
+      <.input
+        phx-change="change"
         type="textarea"
         name="description"
         value={@description}
@@ -70,22 +88,5 @@ defmodule TenanteeWeb.PropertyLive.Edit do
       </.button>
     </form>
     """
-  end
-
-  defp assign_defaults(socket, %{"id" => id}) do
-    with {:ok, property} <- Property.get(id) do
-      assign(socket, :name, property.name)
-      |> assign(:address, property.address)
-      |> assign(:description, property.description)
-      |> assign(:id, id)
-    end
-  end
-
-  defp is_disabled(assigns) do
-    [
-      assigns.name,
-      assigns.address
-    ]
-    |> Enum.any?(&(String.length(&1) == 0))
   end
 end

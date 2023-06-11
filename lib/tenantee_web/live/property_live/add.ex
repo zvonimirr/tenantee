@@ -1,9 +1,11 @@
 defmodule TenanteeWeb.PropertyLive.Add do
+  alias Tenantee.Config
   alias Tenantee.Entity.Property
+  alias TenanteeWeb.PropertyLive.Helper
   use TenanteeWeb, :live_view
 
   def mount(_params, _session, socket) do
-    {:ok, assign_defaults(socket)}
+    {:ok, Helper.default(socket)}
   end
 
   def handle_event("change", %{"_target" => [target]} = params, socket) do
@@ -13,21 +15,30 @@ defmodule TenanteeWeb.PropertyLive.Add do
 
   def handle_event(
         "create",
-        %{"name" => name, "description" => description, "address" => address},
+        %{"name" => name, "description" => description, "address" => address, "price" => price},
         socket
       ) do
-    with {:ok, _property} <-
-           Property.create(%{name: name, description: description, address: address}) do
+    with {:ok, currency} <- Config.get_result(:currency),
+         {:ok, _property} <-
+           Property.create(%{
+             name: name,
+             description: description,
+             address: address,
+             price: Money.new(price, currency)
+           }) do
       {:noreply,
        assign(socket, :created, true) |> put_flash(:info, "#{name} was created successfully.")}
     else
+      {:error, "key not found"} ->
+        {:noreply, put_flash(socket, :error, "Please set your default currency in the settings.")}
+
       {:error, _reason} ->
         {:noreply, put_flash(socket, :error, "Error creating the property.")}
     end
   end
 
   def render(assigns) do
-    assigns = assign(assigns, :disabled, is_disabled(assigns))
+    assigns = assign(assigns, :disabled, Helper.is_submit_disabled?(assigns))
 
     ~H"""
     <a class="text-gray-500" href={~p"/properties"}>
@@ -55,6 +66,17 @@ defmodule TenanteeWeb.PropertyLive.Add do
       />
       <.input
         phx-change="change"
+        type="number"
+        name="price"
+        min="0"
+        step="0.1"
+        value={@price}
+        label="Price"
+        placeholder="Price of the property"
+        required
+      />
+      <.input
+        phx-change="change"
         type="textarea"
         name="description"
         value={@description}
@@ -67,21 +89,5 @@ defmodule TenanteeWeb.PropertyLive.Add do
       </.button>
     </form>
     """
-  end
-
-  defp assign_defaults(socket) do
-    socket
-    |> assign(:name, "")
-    |> assign(:address, "")
-    |> assign(:description, "")
-    |> assign(:created, false)
-  end
-
-  defp is_disabled(assigns) do
-    [
-      assigns.name,
-      assigns.address
-    ]
-    |> Enum.any?(&(String.length(&1) == 0))
   end
 end

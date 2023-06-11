@@ -2,6 +2,7 @@ defmodule TenanteeWeb.Components.Property do
   @moduledoc """
   Provides UI components for the Property context.
   """
+  alias Tenantee.Cldr
   use Phoenix.Component
   import TenanteeWeb.CoreComponents
 
@@ -32,6 +33,10 @@ defmodule TenanteeWeb.Components.Property do
         <%= @property.address %>
       </p>
       <p class="text-gray-600">
+        <span class="font-bold">Price:</span>
+        <%= format_price(@property.price) %>
+      </p>
+      <p class="text-gray-600">
         <span class="font-bold">Description:</span>
         <%= if @property.description == "" do %>
           No description provided.
@@ -46,5 +51,11 @@ defmodule TenanteeWeb.Components.Property do
       </a>
     </div>
     """
+  end
+
+  defp format_price(price) do
+    with {:ok, formatted_price} <- Cldr.Money.to_string(price, symbol: true) do
+      formatted_price
+    end
   end
 end

@@ -50,7 +50,9 @@ defmodule Tenantee.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:redix, "~> 1.2"}
+      {:redix, "~> 1.2"},
+      {:ex_money, "~> 5.13"},
+      {:ex_money_sql, "~> 1.9"}
     ]
   end
 
