@@ -17,7 +17,7 @@ defmodule TenanteeWeb.Router do
   scope "/", TenanteeWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/settings", ConfigLive
   end
 
   # Other scopes may use custom stacks.

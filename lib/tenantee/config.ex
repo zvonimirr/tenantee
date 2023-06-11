@@ -1,10 +1,8 @@
 defmodule Tenantee.Config do
   @moduledoc """
-  A struct defining the configuration for the application.
+  A helper module for managing the configuration of the application.
   """
   alias Tenantee.Redis
-
-  defstruct [:name]
 
   @doc """
   Returns the configuration for the application.
@@ -17,7 +15,7 @@ defmodule Tenantee.Config do
 
   def get(key, default) when is_bitstring(key) do
     case Redis.command(["GET", key]) do
-      {:ok, value} -> value
+      {:ok, value} -> if is_nil(value), do: default, else: value
       {:error, _} -> default
     end
   end
