@@ -7,6 +7,6 @@ defmodule Tenantee.Redis do
   Sends commands to Redis, utilizing the already configured Redix app.
   """
   def command(command, args \\ []) do
-    Redix.command(Tenantee.Redis, command, args)
+    Redix.command(:redix, command, args)
   end
 end

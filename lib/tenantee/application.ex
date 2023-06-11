@@ -13,7 +13,7 @@ defmodule Tenantee.Application do
       # Start the Ecto repository
       Tenantee.Repo,
       # Start the Redix cache
-      {Redix, {Application.get_env(:tenantee, :redis_connection_url), name: Tenantee.Redix}},
+      {Redix, {Application.get_env(:tenantee, :redis_connection_url), [name: :redix]}},
       # Start the PubSub system
       {Phoenix.PubSub, name: Tenantee.PubSub},
       # Start Finch
