@@ -50,4 +50,11 @@ defmodule Tenantee.Entity.Property do
       :ok
     end
   end
+
+  @doc """
+  Gets a total number of properties.
+  """
+  def count() do
+    Repo.aggregate(Schema, :count, :id)
+  end
 end

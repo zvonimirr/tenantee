@@ -29,6 +29,10 @@ defmodule TenanteeWeb.PropertyLive.List do
     end
   end
 
+  def handle_event("cancel_delete", _, socket) do
+    {:noreply, assign(socket, property: nil)}
+  end
+
   def render(assigns) do
     ~H"""
     <%= if @property do %>
@@ -47,7 +51,7 @@ defmodule TenanteeWeb.PropertyLive.List do
           >
             Delete
           </.button>
-          <.button>Cancel</.button>
+          <.button phx-click="cancel_delete">Cancel</.button>
         </div>
       </.modal>
     <% end %>
