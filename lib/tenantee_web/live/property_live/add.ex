@@ -19,21 +19,17 @@ defmodule TenanteeWeb.PropertyLive.Add do
         socket
       ) do
     with {:ok, currency} <- Config.get(:currency),
-         {:ok, _property} <-
+         {:ok, property} <-
            Property.create(%{
              name: name,
              description: description,
              address: address,
              price: Money.new(price, currency)
            }) do
-      {:noreply,
-       assign(socket, :created, true) |> put_flash(:info, "#{name} was created successfully.")}
+      {:noreply, handle_success(socket, property.id, name)}
     else
-      {:error, "key not found"} ->
-        {:noreply, put_flash(socket, :error, "Please set your default currency in the settings.")}
-
-      {:error, _reason} ->
-        {:noreply, put_flash(socket, :error, "Error creating the property.")}
+      {:error, reason} ->
+        {:noreply, Helper.handle_errors(socket, reason)}
     end
   end
 
@@ -89,5 +85,11 @@ defmodule TenanteeWeb.PropertyLive.Add do
       </.button>
     </form>
     """
+  end
+
+  def handle_success(socket, id, name) do
+    put_flash(socket, :info, "#{name} was created successfully.")
+    |> assign(:created, true)
+    |> push_navigate(to: ~p"/properties/#{id}")
   end
 end

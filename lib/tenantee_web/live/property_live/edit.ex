@@ -26,13 +26,10 @@ defmodule TenanteeWeb.PropertyLive.Edit do
              address: address,
              price: Money.new(price, currency)
            }) do
-      {:noreply, put_flash(socket, :info, "#{name} was updated successfully.")}
+      {:noreply, handle_success(socket, name)}
     else
-      {:error, "key not found"} ->
-        {:noreply, put_flash(socket, :error, "Please set your default currency in the settings.")}
-
-      {:error, _reason} ->
-        {:noreply, put_flash(socket, :error, "Error updating the property.")}
+      {:error, reason} ->
+        {:noreply, Helper.handle_errors(socket, reason)}
     end
   end
 
@@ -88,5 +85,9 @@ defmodule TenanteeWeb.PropertyLive.Edit do
       </.button>
     </form>
     """
+  end
+
+  def handle_success(socket, name) do
+    put_flash(socket, :info, "#{name} was updated successfully.")
   end
 end
