@@ -31,15 +31,19 @@ defmodule TenanteeWeb.Components.Property do
         <span class="font-bold">Address:</span>
         <%= @property.address %>
       </p>
-      <%= if String.length(@property.description) > 0 do %>
-        <p class="text-gray-600">
-          <span class="font-bold">Description:</span>
+      <p class="text-gray-600">
+        <span class="font-bold">Description:</span>
+        <%= if @property.description == "" do %>
+          No description provided.
+        <% else %>
           <%= @property.description %>
-        </p>
-      <% end %>
-      <.button>
-        <.icon name="hero-pencil" class="w-4 h-4" /> Edit
-      </.button>
+        <% end %>
+      </p>
+      <a href={"/properties/#{@property.id}"}>
+        <.button>
+          <.icon name="hero-pencil" class="w-4 h-4" /> Edit
+        </.button>
+      </a>
     </div>
     """
   end

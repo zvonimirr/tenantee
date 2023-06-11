@@ -31,4 +31,23 @@ defmodule Tenantee.Entity.Property do
       :ok
     end
   end
+
+  @doc """
+  Creates a property.
+  """
+  def create(attrs) do
+    Schema.changeset(%Schema{}, attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a property by id.
+  """
+  def update(id, attrs) do
+    with {:ok, property} <- get(id),
+         changeset <- Schema.changeset(property, attrs),
+         {:ok, _} <- Repo.update(changeset) do
+      :ok
+    end
+  end
 end

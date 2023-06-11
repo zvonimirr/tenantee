@@ -18,7 +18,13 @@ defmodule TenanteeWeb.Router do
     pipe_through :browser
 
     live "/", HomeLive
-    live "/properties", PropertyLive
+
+    scope "/properties" do
+      live "/", PropertyLive.List
+      live "/new", PropertyLive.Add
+      live "/:id", PropertyLive.Edit
+    end
+
     live "/settings", ConfigLive
   end
 

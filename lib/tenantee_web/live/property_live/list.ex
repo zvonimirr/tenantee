@@ -1,4 +1,4 @@
-defmodule TenanteeWeb.PropertyLive do
+defmodule TenanteeWeb.PropertyLive.List do
   alias Tenantee.Entity.Property
   use TenanteeWeb, :live_view
   import TenanteeWeb.Components.Property, only: [card: 1]
@@ -54,13 +54,20 @@ defmodule TenanteeWeb.PropertyLive do
     <h1 class="text-3xl font-bold mb-4">Manage your properties</h1>
     <%= if @properties == [] do %>
       <p class="text-gray-500 mb-4">You don't have any properties yet.</p>
-      <.button>Why not add one?</.button>
+      <a href={~p"/properties/new"}>
+        <.button>Why not add one?</.button>
+      </a>
     <% else %>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <%= for property <- @properties do %>
           <.card property={property} />
         <% end %>
       </div>
+      <a href={~p"/properties/new"}>
+        <.button class="mt-4">
+          <.icon name="hero-home" /> Add another property
+        </.button>
+      </a>
     <% end %>
     """
   end
