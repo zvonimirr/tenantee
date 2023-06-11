@@ -4,7 +4,7 @@ defmodule TenanteeWeb.HomeLive do
   use TenanteeWeb, :live_view
 
   def mount(_params, _session, socket) do
-    with value <- Config.get(:name) do
+    with value <- Config.get(:name, nil) do
       {:ok, assign(socket, :name, value) |> assign(:property_count, Property.count())}
     end
   end

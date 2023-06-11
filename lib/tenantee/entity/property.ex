@@ -8,6 +8,7 @@ defmodule Tenantee.Entity.Property do
   @doc """
   Returns all properties.
   """
+  @spec all() :: [Schema.t()]
   def all do
     Repo.all(Schema)
   end
@@ -15,6 +16,7 @@ defmodule Tenantee.Entity.Property do
   @doc """
   Gets a property by id.
   """
+  @spec get(String.t()) :: {:ok, Schema.t()} | {:error, String.t()}
   def get(id) do
     case Repo.get(Schema, id) do
       nil -> {:error, "Property not found"}
@@ -25,6 +27,7 @@ defmodule Tenantee.Entity.Property do
   @doc """
   Deletes a property by id.
   """
+  @spec delete(String.t()) :: :ok | {:error, String.t()}
   def delete(id) do
     with {:ok, property} <- get(id),
          {:ok, _} <- Repo.delete(property) do
@@ -35,6 +38,7 @@ defmodule Tenantee.Entity.Property do
   @doc """
   Creates a property.
   """
+  @spec create(map()) :: {:ok, Schema.t()} | {:error, String.t()}
   def create(attrs) do
     Schema.changeset(%Schema{}, attrs)
     |> Repo.insert()
@@ -43,6 +47,7 @@ defmodule Tenantee.Entity.Property do
   @doc """
   Updates a property by id.
   """
+  @spec update(String.t(), map()) :: :ok | {:error, String.t()}
   def update(id, attrs) do
     with {:ok, property} <- get(id),
          changeset <- Schema.changeset(property, attrs),
@@ -54,6 +59,7 @@ defmodule Tenantee.Entity.Property do
   @doc """
   Gets a total number of properties.
   """
+  @spec count() :: integer()
   def count() do
     Repo.aggregate(Schema, :count, :id)
   end

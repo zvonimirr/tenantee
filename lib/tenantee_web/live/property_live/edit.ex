@@ -18,7 +18,7 @@ defmodule TenanteeWeb.PropertyLive.Edit do
         %{"name" => name, "description" => description, "address" => address, "price" => price},
         socket
       ) do
-    with {:ok, currency} <- Config.get_result(:currency),
+    with {:ok, currency} <- Config.get(:currency),
          :ok <-
            Property.update(socket.assigns.id, %{
              name: name,

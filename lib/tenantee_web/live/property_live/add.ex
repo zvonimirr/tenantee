@@ -18,7 +18,7 @@ defmodule TenanteeWeb.PropertyLive.Add do
         %{"name" => name, "description" => description, "address" => address, "price" => price},
         socket
       ) do
-    with {:ok, currency} <- Config.get_result(:currency),
+    with {:ok, currency} <- Config.get(:currency),
          {:ok, _property} <-
            Property.create(%{
              name: name,

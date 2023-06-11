@@ -7,8 +7,7 @@ defmodule Tenantee.Config do
   @doc """
   Returns the configuration for the application.
   """
-  def get(key, default \\ nil)
-
+  @spec get(String.t() | atom(), any) :: any
   def get(key, default) when is_atom(key) do
     get(Atom.to_string(key), default)
   end
@@ -20,18 +19,16 @@ defmodule Tenantee.Config do
     end
   end
 
-  @doc """
-  Returns the configuration for the application as a result tuple.
-  """
-  def get_result(key) when is_atom(key) do
-    case get(Atom.to_string(key)) do
+  @spec get(String.t() | atom()) :: {:ok, any} | {:error, String.t()}
+  def get(key) when is_atom(key) do
+    case get(Atom.to_string(key), nil) do
       nil -> {:error, "key not found"}
       value -> {:ok, value}
     end
   end
 
-  def get_result(key) when is_bitstring(key) do
-    case get(key) do
+  def get(key) when is_bitstring(key) do
+    case get(key, nil) do
       nil -> {:error, "key not found"}
       value -> {:ok, value}
     end
@@ -40,6 +37,7 @@ defmodule Tenantee.Config do
   @doc """
   Sets the configuration for the application.
   """
+  @spec set(String.t() | atom(), any) :: :ok | :error
   def set(key, value) when is_atom(key) do
     set(Atom.to_string(key), value)
   end
@@ -54,6 +52,7 @@ defmodule Tenantee.Config do
   @doc """
   Deletes the configuration for the application.
   """
+  @spec delete(String.t() | atom()) :: :ok | :error
   def delete(key) when is_atom(key) do
     delete(Atom.to_string(key))
   end

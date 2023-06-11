@@ -9,6 +9,7 @@ defmodule TenanteeWeb.PropertyLive.Helper do
   @doc """
   Check if the submit button should be disabled
   """
+  @spec is_submit_disabled?(map()) :: boolean
   def is_submit_disabled?(assigns) do
     with {price, ""} <- Float.parse(assigns.price) do
       [
@@ -22,6 +23,10 @@ defmodule TenanteeWeb.PropertyLive.Helper do
     end
   end
 
+  @doc """
+  Assigns the default properties to the socket
+  """
+  @spec default(term) :: term
   def default(socket) do
     socket
     |> assign(:name, "")
@@ -31,6 +36,10 @@ defmodule TenanteeWeb.PropertyLive.Helper do
     |> assign(:created, false)
   end
 
+  @doc """
+  Assigns the properties to the socket from the property
+  """
+  @spec default(term, map()) :: term
   def default(socket, %{"id" => id}) do
     with {:ok, property} <- Property.get(id) do
       socket
