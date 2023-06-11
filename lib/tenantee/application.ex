@@ -12,14 +12,14 @@ defmodule Tenantee.Application do
       TenanteeWeb.Telemetry,
       # Start the Ecto repository
       Tenantee.Repo,
+      # Start the Redix cache
+      {Redix, {Application.get_env(:tenantee, :redis_connection_url), name: Tenantee.Redix}},
       # Start the PubSub system
       {Phoenix.PubSub, name: Tenantee.PubSub},
       # Start Finch
       {Finch, name: Tenantee.Finch},
       # Start the Endpoint (http/https)
       TenanteeWeb.Endpoint
-      # Start a worker by calling: Tenantee.Worker.start_link(arg)
-      # {Tenantee.Worker, arg}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
