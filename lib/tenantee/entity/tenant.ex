@@ -1,42 +1,45 @@
-defmodule Tenantee.Entity.Property do
+defmodule Tenantee.Entity.Tenant do
   @moduledoc """
-  Helper functions for properties.
+  Helper functions for tenants.
   """
-  alias Tenantee.Schema.Property, as: Schema
+  alias Tenantee.Schema.Tenant, as: Schema
   alias Tenantee.Repo
 
   @doc """
-  Returns all properties.
+  Returns all tenants.
   """
   @spec all() :: [Schema.t()]
-  def all do
+  def all() do
     Repo.all(Schema)
   end
 
   @doc """
-  Gets a property by id.
+  Gets a tenant by id.
   """
   @spec get(integer()) :: {:ok, Schema.t()} | {:error, String.t()}
   def get(id) do
     case Repo.get(Schema, id) do
-      nil -> {:error, "Property not found"}
-      property -> {:ok, property}
+      nil ->
+        {:error, "Tenant not found."}
+
+      tenant ->
+        {:ok, tenant}
     end
   end
 
   @doc """
-  Deletes a property by id.
+  Deletes a tenant by id.
   """
   @spec delete(integer()) :: :ok | {:error, String.t()}
   def delete(id) do
-    with {:ok, property} <- get(id),
-         {:ok, _} <- Repo.delete(property) do
+    with {:ok, tenant} <- get(id),
+         {:ok, _} <- Repo.delete(tenant) do
       :ok
     end
   end
 
   @doc """
-  Creates a property.
+  Creates a tenant.
   """
   @spec create(map()) :: {:ok, Schema.t()} | {:error, String.t()}
   def create(attrs) do
@@ -45,22 +48,14 @@ defmodule Tenantee.Entity.Property do
   end
 
   @doc """
-  Updates a property by id.
+  Updates a tenant by id.
   """
   @spec update(integer(), map()) :: :ok | {:error, String.t()}
   def update(id, attrs) do
-    with {:ok, property} <- get(id),
-         changeset <- Schema.changeset(property, attrs),
+    with {:ok, tenant} <- get(id),
+         changeset <- Schema.changeset(tenant, attrs),
          {:ok, _} <- Repo.update(changeset) do
       :ok
     end
-  end
-
-  @doc """
-  Gets a total number of properties.
-  """
-  @spec count() :: integer()
-  def count() do
-    Repo.aggregate(Schema, :count, :id)
   end
 end
