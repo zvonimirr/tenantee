@@ -21,8 +21,7 @@ defmodule TenanteeWeb.Components.Property do
         </h1>
         <.button
           class="bg-red-500 text-white hover:bg-red-600"
-          phx-click="delete"
-          phx-value-id={@property.id}
+          phx-click={open_confirm_modal(@property.id)}
         >
           <.icon name="hero-trash" class="w-4 h-4" /> Delete
         </.button>

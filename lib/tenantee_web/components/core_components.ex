@@ -641,4 +641,11 @@ defmodule TenanteeWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  @doc """
+  Opens up a confirmation modal.
+  """
+  def open_confirm_modal(id) do
+    show_modal(JS.push("delete", value: %{"id" => id}), "confirm-modal")
+  end
 end
