@@ -8,6 +8,7 @@ Dockerfile
 docker-compose.yml
 _build
 priv/cert/
+.credo.exs
 .git
 .github
 .gitignore
