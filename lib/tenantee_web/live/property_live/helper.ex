@@ -2,6 +2,7 @@ defmodule TenanteeWeb.PropertyLive.Helper do
   @moduledoc """
   Helper functions for properties
   """
+  alias Tenantee.Config
   alias Tenantee.Entity.Property
   import Phoenix.Component, only: [assign: 3]
   import Phoenix.LiveView, only: [put_flash: 3]
@@ -28,11 +29,14 @@ defmodule TenanteeWeb.PropertyLive.Helper do
   """
   @spec default(term) :: term
   def default(socket) do
-    socket
-    |> assign(:name, "")
-    |> assign(:address, "")
-    |> assign(:description, "")
-    |> assign(:price, "")
+    with currency <- Config.get(:currency, "") do
+      socket
+      |> assign(:name, "")
+      |> assign(:address, "")
+      |> assign(:description, "")
+      |> assign(:price, "")
+      |> assign(:currency, currency)
+    end
   end
 
   @doc """
@@ -40,13 +44,15 @@ defmodule TenanteeWeb.PropertyLive.Helper do
   """
   @spec default(term, map()) :: term
   def default(socket, %{"id" => id}) do
-    with {:ok, property} <- Property.get(id) do
+    with {:ok, property} <- Property.get(id),
+         currency <- Config.get(:currency, "") do
       socket
       |> assign(:name, property.name)
       |> assign(:address, property.address)
       |> assign(:description, property.description)
       |> assign(:price, property.price.amount |> to_string())
       |> assign(:id, id)
+      |> assign(:currency, currency)
     end
   end
 

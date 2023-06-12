@@ -67,7 +67,7 @@ defmodule TenanteeWeb.PropertyLive.Add do
         min="0"
         step="0.1"
         value={@price}
-        label="Price"
+        label={"Price (" <> @currency <> ")"}
         placeholder="Price of the property"
         required
       />
