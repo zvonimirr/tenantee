@@ -2,6 +2,7 @@ defmodule Tenantee.Entity.Property do
   @moduledoc """
   Helper functions for properties.
   """
+  alias Tenantee.Entity.Tenant
   alias Tenantee.Schema.Property, as: Schema
   alias Tenantee.Repo
 
@@ -62,5 +63,22 @@ defmodule Tenantee.Entity.Property do
   @spec count() :: integer()
   def count() do
     Repo.aggregate(Schema, :count, :id)
+  end
+
+  @doc """
+  Toggles the lease.
+  """
+  @spec toggle_lease(term(), term()) :: :ok | {:error, String.t()}
+  def toggle_lease(property, tenant) do
+    if tenant.id in get_tenant_ids(property) do
+      Tenant.remove_from_property(tenant.id, property.id)
+    else
+      Tenant.add_to_property(tenant.id, property.id)
+    end
+  end
+
+  defp get_tenant_ids(property) do
+    property.tenants
+    |> Enum.map(& &1.id)
   end
 end

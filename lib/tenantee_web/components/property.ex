@@ -2,6 +2,7 @@ defmodule TenanteeWeb.Components.Property do
   @moduledoc """
   Provides UI components for the Property context.
   """
+  alias Phoenix.LiveView.JS
   alias Tenantee.Cldr
   use Phoenix.Component
   import TenanteeWeb.CoreComponents
@@ -43,13 +44,22 @@ defmodule TenanteeWeb.Components.Property do
           <%= @property.description %>
         <% end %>
       </p>
-      <a href={"/properties/#{@property.id}"}>
-        <.button>
-          <.icon name="hero-pencil" class="w-4 h-4" /> Edit
+      <div class="flex gap-4">
+        <.button phx-click={open_manage_tenants_modal(@property.id)}>
+          <.icon name="hero-user" class="w-4 h-4" /> Manage tenants
         </.button>
-      </a>
+        <a href={"/properties/#{@property.id}"}>
+          <.button>
+            <.icon name="hero-pencil" class="w-4 h-4" /> Edit
+          </.button>
+        </a>
+      </div>
     </div>
     """
+  end
+
+  defp open_manage_tenants_modal(property_id) do
+    show_modal(JS.push("manage_tenants", value: %{"id" => property_id}), "manage-tenants-modal")
   end
 
   defp format_price(price) do

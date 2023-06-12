@@ -33,4 +33,37 @@ defmodule TenanteeWeb.Components.Tenant do
     </div>
     """
   end
+
+  @doc """
+  Renders a tenant list item.
+  """
+  attr :tenant, :map, required: true
+  attr :property, :map, required: true
+
+  def list_item(assigns) do
+    ~H"""
+    <div class={[
+      "flex items-center gap-2 shadow-lg border border-gray-200 rounded-lg p-4 text-black font-semibold",
+      is_tenant_in_property?(@tenant, @property) && "bg-green-300"
+    ]}>
+      <.input
+        type="checkbox"
+        name={"lease_#{@property.id}_#{@tenant.id}"}
+        value={is_tenant_in_property?(@tenant, @property)}
+        phx-click="toggle_lease"
+        phx-value-property={@property.id}
+        phx-value-tenant={@tenant.id}
+      />
+      <p>
+        <%= @tenant.first_name %> <%= @tenant.last_name %>
+      </p>
+    </div>
+    """
+  end
+
+  defp is_tenant_in_property?(tenant, property) do
+    property.tenants
+    |> Enum.map(& &1.id)
+    |> Enum.member?(tenant.id)
+  end
 end

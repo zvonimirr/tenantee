@@ -1,16 +1,28 @@
 defmodule TenanteeWeb.PropertyLive.List do
   alias Tenantee.Entity.Property
+  alias Tenantee.Entity.Tenant
   use TenanteeWeb, :live_view
   import TenanteeWeb.Components.Property, only: [card: 1]
+  import TenanteeWeb.Components.Tenant, only: [list_item: 1]
 
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, properties: Property.all(), property: nil)}
+    {:ok, default(socket)}
   end
 
   def handle_event("delete", %{"id" => id}, socket) do
     case Property.get(id) do
       {:ok, property} ->
-        {:noreply, assign(socket, property: property)}
+        {:noreply, assign(socket, property: property, action: "delete")}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, "Property not found")}
+    end
+  end
+
+  def handle_event("manage_tenants", %{"id" => id}, socket) do
+    case Property.get(id) do
+      {:ok, property} ->
+        {:noreply, assign(socket, property: property, action: "manage_tenants")}
 
       {:error, _} ->
         {:noreply, put_flash(socket, :error, "Property not found")}
@@ -30,12 +42,23 @@ defmodule TenanteeWeb.PropertyLive.List do
   end
 
   def handle_event("cancel_delete", _, socket) do
-    {:noreply, assign(socket, property: nil)}
+    {:noreply, assign(socket, action: nil, property: nil)}
+  end
+
+  def handle_event("toggle_lease", %{"property" => property_id, "tenant" => tenant_id}, socket) do
+    with {:ok, property} <- Property.get(property_id),
+         {:ok, tenant} <- Tenant.get(tenant_id),
+         :ok <- Property.toggle_lease(property, tenant),
+         {:ok, property} <- Property.get(property_id) do
+      {:noreply,
+       assign(socket, properties: Property.all(), property: property)
+       |> put_flash(:info, "Lease updated successfully.")}
+    end
   end
 
   def render(assigns) do
     ~H"""
-    <%= if @property do %>
+    <%= if @action == "delete" and not is_nil(@property) do %>
       <.modal id="confirm-modal" show>
         <p class="text-2xl mb-4 font-bold">Are you sure?</p>
         <p class="text-gray-500">This action cannot be undone.</p>
@@ -55,6 +78,26 @@ defmodule TenanteeWeb.PropertyLive.List do
         </div>
       </.modal>
     <% end %>
+    <%= if @action == "manage_tenants" and not is_nil(@property) do %>
+      <.modal id="manage-tenants-modal" show>
+        <p class="text-2xl mb-4 font-bold">Manage tenants</p>
+        <p class="text-gray-500">
+          Toggling the checkbox will add or remove the tenant from the property.
+        </p>
+        <p class="text-gray-500 mb-4">
+          Tenants with a lease will be shown in green.
+        </p>
+        <div class="flex flex-col gap-4 mb-4 items-start">
+          <%= for tenant <- Tenant.all() do %>
+            <.list_item tenant={tenant} property={@property} />
+          <% end %>
+        </div>
+
+        <.button phx-click="cancel_delete" class="ml-2 bg-red-500 hover:bg-red-600">
+          Cancel
+        </.button>
+      </.modal>
+    <% end %>
     <h1 class="text-3xl font-bold mb-4">Manage your properties</h1>
     <%= if @properties == [] do %>
       <p class="text-gray-500 mb-4">You don't have any properties yet.</p>
@@ -62,7 +105,7 @@ defmodule TenanteeWeb.PropertyLive.List do
         <.button>Why not add one?</.button>
       </a>
     <% else %>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <%= for property <- @properties do %>
           <.card property={property} />
         <% end %>
@@ -74,5 +117,12 @@ defmodule TenanteeWeb.PropertyLive.List do
       </a>
     <% end %>
     """
+  end
+
+  defp default(socket) do
+    socket
+    |> assign(:properties, Property.all())
+    |> assign(:property, nil)
+    |> assign(:action, nil)
   end
 end

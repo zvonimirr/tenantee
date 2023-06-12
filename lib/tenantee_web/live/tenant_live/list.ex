@@ -4,7 +4,7 @@ defmodule TenanteeWeb.TenantLive.List do
   import TenanteeWeb.Components.Tenant, only: [card: 1]
 
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, tenants: Tenant.all(), tenant: nil)}
+    {:ok, default(socket)}
   end
 
   def handle_event("delete", %{"id" => id}, socket) do
@@ -64,7 +64,7 @@ defmodule TenanteeWeb.TenantLive.List do
         <.button>Why not add one?</.button>
       </a>
     <% else %>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <%= for tenant <- @tenants do %>
           <.card tenant={tenant} />
         <% end %>
@@ -76,5 +76,11 @@ defmodule TenanteeWeb.TenantLive.List do
       </a>
     <% end %>
     """
+  end
+
+  defp default(socket) do
+    socket
+    |> assign(:tenants, Tenant.all())
+    |> assign(:tenant, nil)
   end
 end
