@@ -1,6 +1,29 @@
 version: "3.7"
 
 services:
+  app:
+    container_name: "tenantee_app"
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - PHOENIX_VERSION=1.7.2
+    environment:
+      - DB_PREFIX=tenantee_dev
+      - DB_HOST=db
+      - DB_USERNAME=tenantee
+      - DB_PASSWORD=tenantee
+      - DATABASE_URL=ecto://tenantee:tenantee@db/tenantee_dev
+    command: 
+      - "./run.sh"
+    ports:
+      - "4000:4000"
+      - "443:443"
+    volumes:
+      - ./:/app
+    depends_on:
+      - db
+
   redis:
     image: redis:7.0.11
     container_name: "tenantee_redis"

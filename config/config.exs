@@ -59,6 +59,10 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Configure Redis
+config :tenantee,
+  redis_connection_url: "redis://:tenantee_redis@localhost:6379"
+
 # Configure Cldr
 config :ex_cldr, default_backend: Tenantee.Cldr
 

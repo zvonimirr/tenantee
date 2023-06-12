@@ -35,3 +35,5 @@ tenantee-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Ignore certificate files.
+*.pem

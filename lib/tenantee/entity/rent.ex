@@ -89,4 +89,12 @@ defmodule Tenantee.Entity.Rent do
     |> Repo.all()
     |> Enum.count()
   end
+
+  @doc """
+  Gets a number of rents.
+  """
+  @spec total() :: integer()
+  def total() do
+    Repo.aggregate(Schema, :count, :id)
+  end
 end

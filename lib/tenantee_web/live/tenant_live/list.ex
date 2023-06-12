@@ -12,7 +12,7 @@ defmodule TenanteeWeb.TenantLive.List do
   def handle_event("delete", %{"id" => id}, socket) do
     case Tenant.get(id) do
       {:ok, tenant} ->
-        {:noreply, assign(socket, tenant: tenant)}
+        {:noreply, assign(socket, tenant: tenant, action: "delete")}
 
       {:error, _} ->
         {:noreply, put_flash(socket, :error, "Tenant not found")}
