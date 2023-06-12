@@ -65,8 +65,7 @@ config :ex_cldr, default_backend: Tenantee.Cldr
 # Configure Quantum
 config :tenantee, Tenantee.Scheduler,
   jobs: [
-    # {"0 0 1 * *", {Tenantee.Jobs.Rent, :generate_rents, []}}
-    {"* * * * *", {Tenantee.Jobs.Rent, :generate_rents, []}}
+    {"0 0 1 * *", {Tenantee.Jobs.Rent, :generate_rents, []}}
   ]
 
 # Import environment specific config. This must remain at the bottom
