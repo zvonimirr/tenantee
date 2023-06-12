@@ -38,4 +38,5 @@ jobs:
         with:
           otp-version: ${{matrix.otp}}
           elixir-version: ${{matrix.elixir}}
+      - run: MIX_ENV=dev mix deps.get
       - run: MIX_ENV=dev mix credo
