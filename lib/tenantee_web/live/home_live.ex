@@ -1,12 +1,11 @@
 defmodule TenanteeWeb.HomeLive do
   alias Tenantee.Entity.Property
+  alias Tenantee.Entity.Tenant
   alias Tenantee.Config
   use TenanteeWeb, :live_view
 
   def mount(_params, _session, socket) do
-    with value <- Config.get(:name, nil) do
-      {:ok, assign(socket, :name, value) |> assign(:property_count, Property.count())}
-    end
+    {:ok, default(socket)}
   end
 
   def render(assigns) do
@@ -49,7 +48,9 @@ defmodule TenanteeWeb.HomeLive do
         <p class="text-gray-600">
           Looks, like you own <%= @property_count %> <%= if @property_count == 1,
             do: "property",
-            else: "properties" %>.
+            else: "properties" %> and, <%= @tenant_count %> <%= if @tenant_count == 1,
+            do: "tenant",
+            else: "tenants" %>.
         </p>
         <p class="text-gray-600">
           You can manage <%= if @property_count == 1,
@@ -64,5 +65,15 @@ defmodule TenanteeWeb.HomeLive do
       <% end %>
     <% end %>
     """
+  end
+
+  defp default(socket) do
+    case Config.get(:name, nil) do
+      nil ->
+        assign(socket, name: nil, property_count: 0, tenant_count: 0)
+
+      name ->
+        assign(socket, name: name, property_count: Property.count(), tenant_count: Tenant.count())
+    end
   end
 end

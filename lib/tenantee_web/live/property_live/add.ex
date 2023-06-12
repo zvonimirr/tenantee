@@ -89,7 +89,6 @@ defmodule TenanteeWeb.PropertyLive.Add do
 
   def handle_success(socket, id, name) do
     put_flash(socket, :info, "#{name} was created successfully.")
-    |> assign(:created, true)
     |> push_navigate(to: ~p"/properties/#{id}")
   end
 end

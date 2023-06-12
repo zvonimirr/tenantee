@@ -22,9 +22,14 @@ defmodule TenanteeWeb.Components.Tenant do
           class="bg-red-500 text-white hover:bg-red-600"
           phx-click={open_confirm_modal(@tenant.id)}
         >
-          <.icon name="hero-trash" class="w-8 h-8" /> Delete
+          <.icon name="hero-trash" class="w-4 h-4" /> Delete
         </.button>
       </div>
+      <a href={"/tenants/#{@tenant.id}"}>
+        <.button>
+          <.icon name="hero-pencil" class="w-4 h-4" /> Edit
+        </.button>
+      </a>
     </div>
     """
   end

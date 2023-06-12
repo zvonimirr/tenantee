@@ -58,4 +58,12 @@ defmodule Tenantee.Entity.Tenant do
       :ok
     end
   end
+
+  @doc """
+  Get a total number of tenants.
+  """
+  @spec count() :: integer()
+  def count() do
+    Repo.aggregate(Schema, :count, :id)
+  end
 end

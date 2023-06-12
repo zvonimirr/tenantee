@@ -1,11 +1,10 @@
 defmodule TenanteeWeb.PropertyLive.Helper do
-  import Phoenix.Component, only: [assign: 3]
-  import Phoenix.LiveView, only: [put_flash: 3]
-
   @moduledoc """
   Helper functions for properties
   """
   alias Tenantee.Entity.Property
+  import Phoenix.Component, only: [assign: 3]
+  import Phoenix.LiveView, only: [put_flash: 3]
 
   @doc """
   Check if the submit button should be disabled
@@ -34,7 +33,6 @@ defmodule TenanteeWeb.PropertyLive.Helper do
     |> assign(:address, "")
     |> assign(:description, "")
     |> assign(:price, "")
-    |> assign(:created, false)
   end
 
   @doc """
