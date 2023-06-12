@@ -2,6 +2,7 @@ defmodule Tenantee.Schema.Property do
   @moduledoc """
   Property Ecto Schema.
   """
+  alias Tenantee.Schema.Tenant
 
   use Ecto.Schema
   import Ecto.Changeset
@@ -11,6 +12,8 @@ defmodule Tenantee.Schema.Property do
     field :description, :string, default: ""
     field :address, :string
     field :price, Money.Ecto.Composite.Type
+
+    many_to_many(:tenants, Tenant, join_through: "leases", on_replace: :delete)
 
     timestamps()
   end

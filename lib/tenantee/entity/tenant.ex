@@ -2,6 +2,7 @@ defmodule Tenantee.Entity.Tenant do
   @moduledoc """
   Helper functions for tenants.
   """
+  alias Tenantee.Entity.Property
   alias Tenantee.Schema.Tenant, as: Schema
   alias Tenantee.Repo
 
@@ -23,7 +24,7 @@ defmodule Tenantee.Entity.Tenant do
         {:error, "Tenant not found."}
 
       tenant ->
-        {:ok, tenant}
+        {:ok, Repo.preload(tenant, :properties)}
     end
   end
 
@@ -65,5 +66,41 @@ defmodule Tenantee.Entity.Tenant do
   @spec count() :: integer()
   def count() do
     Repo.aggregate(Schema, :count, :id)
+  end
+
+  @doc """
+  Add a tenant to a property.
+  """
+  @spec add_to_property(integer(), integer()) :: :ok | {:error, String.t()}
+  def add_to_property(id, property_id) do
+    with {:ok, tenant} <- get(id),
+         {:ok, property} <- Property.get(property_id),
+         changeset <- Schema.set_properties(tenant, tenant.properties ++ [property]),
+         {:ok, _} <- Repo.update(changeset) do
+      :ok
+    end
+  end
+
+  @doc """
+  Remove a tenant from a property.
+  """
+  @spec remove_from_property(integer(), integer()) :: :ok | {:error, String.t()}
+  def remove_from_property(id, property_id) do
+    with {:ok, tenant} <- get(id),
+         {:ok, property} <- Property.get(property_id),
+         changeset <-
+           Schema.set_properties(
+             tenant,
+             remove_property_from_list(tenant.properties, property.id)
+           ),
+         {:ok, _} <- Repo.update(changeset) do
+      :ok
+    end
+  end
+
+  defp remove_property_from_list(properties, property_id) do
+    Enum.filter(properties, fn property ->
+      property.id != property_id
+    end)
   end
 end

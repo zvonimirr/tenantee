@@ -37,7 +37,7 @@ defmodule TenanteeWeb.TenantLive.Edit do
       <.icon name="hero-arrow-left" /> Back to tenants
     </a>
     <h1 class="text-3xl font-bold my-4">Edit <%= @first_name %> <%= @last_name %></h1>
-    <form phx-submit="create" class="flex flex-col gap-4 max-w-xs">
+    <form phx-submit="update" class="flex flex-col gap-4 max-w-xs">
       <.input
         phx-change="change"
         type="text"
