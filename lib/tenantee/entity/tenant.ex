@@ -12,7 +12,7 @@ defmodule Tenantee.Entity.Tenant do
   @spec all() :: [Schema.t()]
   def all() do
     Repo.all(Schema)
-    |> Repo.preload(:properties)
+    |> Repo.preload([:properties, :rents])
   end
 
   @doc """
@@ -25,7 +25,7 @@ defmodule Tenantee.Entity.Tenant do
         {:error, "Tenant not found."}
 
       tenant ->
-        {:ok, Repo.preload(tenant, :properties)}
+        {:ok, Repo.preload(tenant, [:properties, :rents])}
     end
   end
 

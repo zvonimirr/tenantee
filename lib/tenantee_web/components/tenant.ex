@@ -12,6 +12,7 @@ defmodule TenanteeWeb.Components.Tenant do
 
   def card(assigns) do
     assigns = assign(assigns, :count, length(assigns.tenant.properties))
+    assigns = assign(assigns, :unpaid_rents, get_unpaid_rents(assigns.tenant))
 
     ~H"""
     <div class="flex flex-col gap-4 shadow-lg border border-gray-200 rounded-lg p-4">
@@ -32,6 +33,21 @@ defmodule TenanteeWeb.Components.Tenant do
           Currently occupying <%= @count %> <%= if @count == 1, do: "property", else: "properties" %>.
         </abbr>
       </p>
+      <%= if @count > 0 do %>
+        <p class={[
+          @unpaid_rents > 0 && "text-red-500",
+          @unpaid_rents == 0 && "text-green-500"
+        ]}>
+          Has <%= @unpaid_rents %> unpaid <%= if @unpaid_rents == 1, do: "rent", else: "rents" %>.
+        </p>
+      <% else %>
+        <div>
+          <p class="text-gray-600">
+            Since this tenant is not occupying
+            any property, it has no unpaid rents.
+          </p>
+        </div>
+      <% end %>
       <a href={"/tenants/#{@tenant.id}"}>
         <.button>
           <.icon name="hero-pencil" class="w-4 h-4" /> Edit
@@ -80,5 +96,10 @@ defmodule TenanteeWeb.Components.Tenant do
       "" -> "No properties"
       names -> names
     end
+  end
+
+  defp get_unpaid_rents(tenant) do
+    Enum.filter(tenant.rents, &(&1.paid == false))
+    |> Enum.count()
   end
 end
