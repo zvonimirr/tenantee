@@ -1,13 +1,7 @@
 version: 2
 updates:
-  # Maintain dependencies for npm
-  - package-ecosystem: "npm"
-    directory: "/frontend"
-    schedule:
-      interval: "weekly"
-      
   # Maintain dependencies for hex
   - package-ecosystem: "mix"
-    directory: "/backend"
+    directory: "/"
     schedule:
       interval: "weekly"

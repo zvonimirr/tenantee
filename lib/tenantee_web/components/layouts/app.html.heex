@@ -1,0 +1,41 @@
+<header>
+  <div class="flex items-center justify-between border-b border-zinc-100 px-6 py-3 text-sm">
+    <div class="flex items-center gap-4">
+      <a class="text-2xl hover:text-green-500 transition-colors" href="/">
+        Tenantee
+      </a>
+      <p class="bg-green-500 text-white rounded-full px-2 font-medium leading-6">
+        v<%= Tenantee.MixProject.project()[:version] %>
+      </p>
+    </div>
+    <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
+      <a href={~p"/"}>
+        <abbr title="Go to homepage">
+          <.icon name="hero-home" class="hover:text-green-500 transition-colors" />
+        </abbr>
+      </a>
+      <a href={~p"/properties"}>
+        <abbr title="Properties">
+          <.icon name="hero-home-modern" class="hover:text-green-500 transition-colors" />
+        </abbr>
+      </a>
+      <a href={~p"/tenants"}>
+        <abbr title="Tenants">
+          <.icon name="hero-user-circle" class="hover:text-green-500 transition-colors" />
+        </abbr>
+      </a>
+      <a href={~p"/settings"}>
+        <abbr title="Settings">
+          <.icon name="hero-cog-6-tooth" class="hover:text-green-500 transition-colors" />
+        </abbr>
+      </a>
+      <a href="https://github.com/zvonimirr/tenantee" class="hover:text-green-500 transition-colors" target="_blank">
+        GitHub
+      </a>
+    </div>
+  </div>
+</header>
+<main class="p-6">
+  <.flash_group flash={@flash} />
+  <%= @inner_content %>
+</main>

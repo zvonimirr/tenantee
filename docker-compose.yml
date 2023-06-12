@@ -1,39 +1,42 @@
 version: "3.7"
 
 services:
-  backend:
+  app:
+    container_name: "tenantee_app"
     build: 
-      context: ./backend
+      context: ./
+      dockerfile: Dockerfile
       args:
-        - PHOENIX_VERSION=1.6.15
+        - PHOENIX_VERSION=1.7.2
     environment:
-      - DB_PREFIX=${DB_PREFIX}
-      - DB_HOST=${DB_HOST}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DATABASE_URL=ecto://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:5432/${DB_PREFIX}
+      - DB_PREFIX=tenantee_dev
+      - DB_HOST=db
+      - DB_USERNAME=tenantee
+      - DB_PASSWORD=tenantee
+      - DATABASE_URL=ecto://tenantee:tenantee@db/tenantee_dev
     command: 
       - "./run.sh"
     ports:
       - "4000:4000"
       - "443:443"
     volumes:
-      - ./backend:/app
+      - ./:/app
     depends_on:
       - db
 
-  frontend:
-    build:
-      context: ./frontend
+  redis:
+    image: redis:7.0.11
+    container_name: "tenantee_redis"
+    command: /bin/sh -c "redis-server --requirepass tenantee_redis"
     ports:
-      - "80:80"
+      - "6379:6379"
 
   db:
     image: postgres:14.2-alpine
     container_name: "tenantee_postgres"
     environment:
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_PREFIX}
+      - POSTGRES_USER=tenantee
+      - POSTGRES_PASSWORD=tenantee
+      - POSTGRES_DB=tenantee_dev
     ports:
       - "5432:5432"

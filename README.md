@@ -1,5 +1,4 @@
 # Tenantee
-[![Coverage Status](https://coveralls.io/repos/github/zvonimirr/tenantee/badge.svg?branch=dev)](https://coveralls.io/github/zvonimirr/tenantee?branch=dev)
 ![GitHub issues](https://img.shields.io/github/issues-raw/zvonimirr/tenantee)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/zvonimirr/tenantee)
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/zvonimirr/tenantee/dev)
@@ -8,43 +7,29 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-![Example](./example.gif)
-
 Tenantee (pronounced "tenant-e") is a free and open-source management software aimed at landlords.
 
 ## Requirements
-- Node (LTS)
 - Elixir
+- PostgreSQL
+- Redis
 
 ## Running the application
-### Backend
-1. Go to [the backend directory](./backend)
-2. Run `mix deps.get`
-3. Run `mix phx.swagger.generate` (Optional, but Swagger won't work without it)
-4. Configure the database in [config/dev.exs](./backend/config/dev.exs) (or prod.exs if running in prod mode)
-5. Run `mix ecto.create`
-6. Run `mix ecto.migrate`
-7. Run `mix phx.server` (You can run in production mode by appending `MIX_ENV=prod` before the command)
+1. Run `mix deps.get`
+2. Configure the database in [config/dev.exs](./backend/config/dev.exs) (or prod.exs if running in prod mode)
+3. Run `mix ecto.create`
+4. Run `mix ecto.migrate`
+5. Run `mix phx.server` (You can run in production mode by appending `MIX_ENV=prod` before the command)
 
-Your backend should be running on [http://localhost:4000](http://localhost:4000)
-
-You should have Swagger UI on [http://localhost:4000/api](http://localhost:4000/api)
+Your app should be running on [http://localhost:4000](http://localhost:4000)
 
 Deploying to production? Please make sure to set all the necessary environment variables and see [https://hexdocs.pm/phoenix/deployment.html](https://hexdocs.pm/phoenix/deployment.html)
 
-### Frontend
-1. Go to [the frontend directory](./frontend)
-2. Run `npm install`
-3. Run `npm run build`
-
-Your static build should be in the `dist` directory. 
-
-You can either run `npm run  preview` or host it via Apache, Nginx or something similar.
 ### Docker
 Running the application via Docker is simple and easy.
 1. Run `docker-compose up -d`
 
-Your backend should be running on [http://localhost:4000](http://localhost:4000) and the frontend should be available on [http://localhost](http://localhost)
+Your app should be running on [http://localhost:4000](http://localhost:4000)
 
 ## Contributing
 If you wish to contribute to the project, please refer to the [contributing guide](./CONTRIBUTING.md) first.
