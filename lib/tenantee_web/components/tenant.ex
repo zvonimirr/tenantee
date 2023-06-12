@@ -14,6 +14,7 @@ defmodule TenanteeWeb.Components.Tenant do
   def card(assigns) do
     assigns = assign(assigns, :count, length(assigns.tenant.properties))
     assigns = assign(assigns, :unpaid_rents, Rent.total_unpaid(assigns.tenant.id))
+    assigns = assign(assigns, :overdue_rents, Rent.total_overdue(assigns.tenant.id))
 
     ~H"""
     <div class="flex flex-col gap-4 shadow-lg border border-gray-200 rounded-lg p-4">
@@ -35,12 +36,23 @@ defmodule TenanteeWeb.Components.Tenant do
         </abbr>
       </p>
       <%= if @count > 0 do %>
-        <p class={[
-          @unpaid_rents > 0 && "text-red-500",
-          @unpaid_rents == 0 && "text-green-500"
-        ]}>
-          Has <%= @unpaid_rents %> unpaid <%= if @unpaid_rents == 1, do: "rent", else: "rents" %>.
-        </p>
+        <div>
+          <p class={[
+            @unpaid_rents > 0 && "text-yellow-500",
+            @unpaid_rents == 0 && "text-green-500"
+          ]}>
+            Has <%= @unpaid_rents %> unpaid <%= if @unpaid_rents == 1, do: "rent", else: "rents" %>.
+          </p>
+          <%= if @overdue_rents > 0 do %>
+            <p class="text-red-500">
+              <%= @overdue_rents %> of them <%= if @overdue_rents == 1, do: "is", else: "are" %> overdue.
+            </p>
+          <% else %>
+            <p class="text-yellow-500">
+              But, none of them are overdue.
+            </p>
+          <% end %>
+        </div>
       <% else %>
         <div>
           <p class="text-gray-600">
