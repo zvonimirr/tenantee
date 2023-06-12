@@ -53,7 +53,8 @@ defmodule Tenantee.MixProject do
       {:redix, "~> 1.2"},
       {:ex_money, "~> 5.13"},
       {:ex_money_sql, "~> 1.9"},
-      {:ex_cldr_dates_times, "~> 2.13"}
+      {:ex_cldr_dates_times, "~> 2.13"},
+      {:quantum, "~> 3.5"}
     ]
   end
 

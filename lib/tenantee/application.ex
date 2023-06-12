@@ -14,6 +14,8 @@ defmodule Tenantee.Application do
       Tenantee.Repo,
       # Start the Redix cache
       {Redix, {Application.get_env(:tenantee, :redis_connection_url), [name: :redix]}},
+      # Start the Quantum cron scheduler
+      Tenantee.Scheduler,
       # Start the PubSub system
       {Phoenix.PubSub, name: Tenantee.PubSub},
       # Start Finch

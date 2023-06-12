@@ -59,8 +59,15 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Configure Money and Cldr
+# Configure Cldr
 config :ex_cldr, default_backend: Tenantee.Cldr
+
+# Configure Quantum
+config :tenantee, Tenantee.Scheduler,
+  jobs: [
+    # {"0 0 1 * *", {Tenantee.Jobs.Rent, :generate_rents, []}}
+    {"* * * * *", {Tenantee.Jobs.Rent, :generate_rents, []}}
+  ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
