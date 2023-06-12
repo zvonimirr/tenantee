@@ -11,6 +11,8 @@ defmodule TenanteeWeb.Components.Tenant do
   attr :tenant, :map, required: true
 
   def card(assigns) do
+    assigns = assign(assigns, :count, length(assigns.tenant.properties))
+
     ~H"""
     <div class="flex flex-col gap-4 shadow-lg border border-gray-200 rounded-lg p-4">
       <div class="flex flex-row justify-between">
@@ -25,6 +27,11 @@ defmodule TenanteeWeb.Components.Tenant do
           <.icon name="hero-trash" class="w-4 h-4" /> Delete
         </.button>
       </div>
+      <p class="text-gray-600">
+        <abbr title={get_properties_names(@tenant)}>
+          Currently occupying <%= @count %> <%= if @count == 1, do: "property", else: "properties" %>.
+        </abbr>
+      </p>
       <a href={"/tenants/#{@tenant.id}"}>
         <.button>
           <.icon name="hero-pencil" class="w-4 h-4" /> Edit
@@ -65,5 +72,13 @@ defmodule TenanteeWeb.Components.Tenant do
     property.tenants
     |> Enum.map(& &1.id)
     |> Enum.member?(tenant.id)
+  end
+
+  defp get_properties_names(tenant) do
+    case Enum.map(tenant.properties, &(&1.name <> " at " <> &1.address))
+         |> Enum.join(", ") do
+      "" -> "No properties"
+      names -> names
+    end
   end
 end

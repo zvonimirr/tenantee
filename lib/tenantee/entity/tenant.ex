@@ -12,6 +12,7 @@ defmodule Tenantee.Entity.Tenant do
   @spec all() :: [Schema.t()]
   def all() do
     Repo.all(Schema)
+    |> Repo.preload(:properties)
   end
 
   @doc """
