@@ -1,12 +1,14 @@
 defmodule TenanteeWeb.ConfigLive do
+  alias Tenantee.Entity.Property
   alias Tenantee.Cldr
   alias Tenantee.Config
   use TenanteeWeb, :live_view
 
   def mount(_params, _session, socket) do
     with name <- Config.get(:name, ""),
-         currency <- Config.get(:currency, "") do
-      {:ok, assign(socket, name: name) |> assign(:currency, currency)}
+         currency <- Config.get(:currency, ""),
+         count <- Property.count() do
+      {:ok, assign(socket, name: name, currency: currency, count: count)}
     end
   end
 
@@ -38,9 +40,21 @@ defmodule TenanteeWeb.ConfigLive do
         name="currency"
         value={@currency}
         options={get_options()}
+        disabled={@count > 0}
         label="Currency"
         prompt="Your currency..."
       />
+      <%= if @count > 0 do %>
+        <div>
+          <p class="text-sm text-gray-500">
+            You can't change the currency because you already have properties.
+          </p>
+          <p class="text-sm text-gray-500">
+            If you want to change the currency, you need to delete all your properties first.
+          </p>
+          <.input type="hidden" name="currency" value={@currency} />
+        </div>
+      <% end %>
       <.button type="submit" disabled={@disabled} phx-disable-with="Saving...">
         Save
       </.button>
