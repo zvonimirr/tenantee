@@ -1,4 +1,7 @@
 defmodule TenanteeWeb.Telemetry do
+  @moduledoc """
+  Telemetry configuration for TenanteeWeb.
+  """
   use Supervisor
   import Telemetry.Metrics
 

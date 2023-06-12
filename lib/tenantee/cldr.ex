@@ -1,4 +1,7 @@
 defmodule Tenantee.Cldr do
+  @moduledoc """
+  This module is used to configure the Cldr library.
+  """
   use Cldr,
     locales: ["en"],
     default_locale: "en",

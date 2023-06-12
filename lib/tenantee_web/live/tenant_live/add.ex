@@ -17,13 +17,13 @@ defmodule TenanteeWeb.TenantLive.Add do
         %{"first_name" => first_name, "last_name" => last_name},
         socket
       ) do
-    with {:ok, tenant} <-
-           Tenant.create(%{
-             first_name: first_name,
-             last_name: last_name
-           }) do
-      {:noreply, handle_success(socket, tenant.id, first_name <> " " <> last_name)}
-    else
+    case Tenant.create(%{
+           first_name: first_name,
+           last_name: last_name
+         }) do
+      {:ok, tenant} ->
+        {:noreply, handle_success(socket, tenant.id, first_name <> " " <> last_name)}
+
       {:error, _reason} ->
         {:noreply, put_flash(socket, :error, "Something went wrong. Please try again.")}
     end
