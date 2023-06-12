@@ -69,4 +69,24 @@ defmodule Tenantee.Entity.Rent do
     |> Repo.all()
     |> Enum.count()
   end
+
+  @doc """
+  Gets a number of unpaid rents without tenant id.
+  """
+  @spec total_unpaid() :: integer()
+  def total_unpaid() do
+    from(r in Schema, where: r.paid == false)
+    |> Repo.all()
+    |> Enum.count()
+  end
+
+  @doc """
+  Gets a number of overdue rents without tenant id.
+  """
+  @spec total_overdue() :: integer()
+  def total_overdue() do
+    from(r in Schema, where: r.paid == false and r.due_date < ^Date.utc_today())
+    |> Repo.all()
+    |> Enum.count()
+  end
 end

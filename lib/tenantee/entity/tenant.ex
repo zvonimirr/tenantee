@@ -4,7 +4,9 @@ defmodule Tenantee.Entity.Tenant do
   """
   alias Tenantee.Entity.Property
   alias Tenantee.Schema.Tenant, as: Schema
+  alias Tenantee.Schema.Rent
   alias Tenantee.Repo
+  import Ecto.Query
 
   @doc """
   Returns all tenants.
@@ -12,7 +14,8 @@ defmodule Tenantee.Entity.Tenant do
   @spec all() :: [Schema.t()]
   def all() do
     Repo.all(Schema)
-    |> Repo.preload([:properties, :rents])
+    |> Repo.preload([:properties])
+    |> Enum.map(&preload_rents/1)
   end
 
   @doc """
@@ -25,7 +28,7 @@ defmodule Tenantee.Entity.Tenant do
         {:error, "Tenant not found."}
 
       tenant ->
-        {:ok, Repo.preload(tenant, [:properties, :rents])}
+        {:ok, preload_rents(Repo.preload(tenant, [:properties]))}
     end
   end
 
@@ -104,5 +107,11 @@ defmodule Tenantee.Entity.Tenant do
     Enum.filter(properties, fn property ->
       property.id != property_id
     end)
+  end
+
+  defp preload_rents(tenant) do
+    Repo.preload(tenant,
+      rents: from(r in Rent, where: r.tenant_id == ^tenant.id, order_by: [desc: r.due_date])
+    )
   end
 end

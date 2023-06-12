@@ -1,6 +1,5 @@
 defmodule TenanteeWeb.HomeLive do
-  alias Tenantee.Entity.Property
-  alias Tenantee.Entity.Tenant
+  alias Tenantee.Entity.{Rent, Property, Tenant}
   alias Tenantee.Config
   use TenanteeWeb, :live_view
 
@@ -48,20 +47,31 @@ defmodule TenanteeWeb.HomeLive do
         <p class="text-gray-600">
           Looks, like you own <%= @property_count %> <%= if @property_count == 1,
             do: "property",
-            else: "properties" %> and, <%= @tenant_count %> <%= if @tenant_count == 1,
+            else: "properties" %> and <%= @tenant_count %> <%= if @tenant_count == 1,
             do: "tenant",
             else: "tenants" %>.
         </p>
         <p class="text-gray-600">
-          You can manage <%= if @property_count == 1,
-            do: "it",
-            else: "them" %> from the <a
-            class="text-green-500 hover:text-green-700 transition-colors"
-            href={~p"/properties"}
-          >
-          properties page
+          You can manage them from the
+          <a class="text-green-500 hover:text-green-700 transition-colors" href={~p"/properties"}>
+            properties page
+          </a>
+          or the <a class="text-green-500 hover:text-green-700 transition-colors" href={~p"/tenants"}>
+          tenants page
         </a>.
         </p>
+      <% end %>
+
+      <%= if @unpaid > 0 or @overdue > 0 do %>
+        <p class="mt-3 text-gray-600">
+          You have <%= @unpaid %> unpaid and <%= @overdue %> overdue <%= if @overdue == 1,
+            do: "rent",
+            else: "rents" %>.
+        </p>
+
+        <a class="text-green-500 hover:text-green-700 transition-colors" href={~p"/tenants"}>
+          View your rents here
+        </a>
       <% end %>
     <% end %>
     """
@@ -70,10 +80,16 @@ defmodule TenanteeWeb.HomeLive do
   defp default(socket) do
     case Config.get(:name, nil) do
       nil ->
-        assign(socket, name: nil, property_count: 0, tenant_count: 0)
+        assign(socket, name: nil, property_count: 0, tenant_count: 0, unpaid: 0, overdue: 0)
 
       name ->
-        assign(socket, name: name, property_count: Property.count(), tenant_count: Tenant.count())
+        assign(socket,
+          name: name,
+          property_count: Property.count(),
+          tenant_count: Tenant.count(),
+          unpaid: Rent.total_unpaid(),
+          overdue: Rent.total_overdue()
+        )
     end
   end
 end
