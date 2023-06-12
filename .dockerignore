@@ -9,6 +9,7 @@ docker-compose.yml
 _build
 priv/cert/
 .credo.exs
+.sobelow.conf
 .git
 .github
 .gitignore

@@ -55,7 +55,8 @@ defmodule Tenantee.MixProject do
       {:ex_money_sql, "~> 1.9"},
       {:ex_cldr_dates_times, "~> 2.13"},
       {:quantum, "~> 3.5"},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:sobelow, "~> 0.12", only: [:dev, :test], runtime: false}
     ]
   end
 
@@ -73,7 +74,8 @@ defmodule Tenantee.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["tailwind default", "esbuild default"],
-      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"]
+      "assets.deploy": ["tailwind default --minify", "esbuild default --minify", "phx.digest"],
+      sobelow: ["sobelow --config"]
     ]
   end
 end

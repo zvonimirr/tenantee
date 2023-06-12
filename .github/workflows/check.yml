@@ -8,7 +8,7 @@ on:
       - master
 
 jobs:
-  credo:
+  check:
     runs-on: ubuntu-latest
     name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
     strategy:
@@ -40,3 +40,4 @@ jobs:
           elixir-version: ${{matrix.elixir}}
       - run: MIX_ENV=dev mix deps.get
       - run: MIX_ENV=dev mix credo
+      - run: MIX_ENV=dev mix sobelow
