@@ -8,12 +8,12 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-![Example](./example.gif)
-
 Tenantee (pronounced "tenant-e") is a free and open-source management software aimed at landlords.
 
 ## Requirements
 - Elixir
+- PostgreSQL
+- Redis
 
 ## Running the application
 1. Run `mix deps.get`

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.0
+`0.4.0` is a complete rewrite that ditches React and focuses solely on Elixir. 
+Reasons for that are explained in #391, and some features were cut for the time being, but will likely
+be added again shortly.
+
 ## 0.3.0
 ### API
 - Properties now have a tax percentage field ([@zvonimirr](https://github.com/zvonimirr))
