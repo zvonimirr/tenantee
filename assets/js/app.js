@@ -5,8 +5,7 @@ import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
 // Include Tippy.js for tooltips
-import tippy from "tippy.js";
-import "tippy.js/dist/tippy.css";
+import tippy, { animateFill, roundArrow } from "tippy.js";
 
 const csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -21,15 +20,17 @@ window.addEventListener("phx:page-loading-start", (_info) => topbar.show(300));
 window.addEventListener("phx:page-loading-stop", (_info) => topbar.hide());
 
 // Initialize tooltips
-const tooltips = Array.from(document.querySelectorAll("[data-tooltip]")).map(
-  (el) => el.dataset.tooltip
-);
+window.addEventListener("phx:page-loading-stop", () => {
+  const tooltips = document.querySelectorAll("[data-tooltip]");
 
-tooltips.forEach((tooltip) => {
-  tippy(`[data-tooltip='${tooltip}']`, {
-    allowHTML: true,
-    duration: 0,
-    content: `<div class="bg-gray-800 text-white text-sm rounded-lg p-2">${tooltip}</div>`,
+  tooltips.forEach((tooltip) => {
+    tippy(tooltip, {
+      duration: 500,
+      content: tooltip.dataset.tooltip,
+      arrow: roundArrow,
+      plugins: [animateFill],
+      placement: "bottom",
+    });
   });
 });
 

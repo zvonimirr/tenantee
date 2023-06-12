@@ -31,10 +31,11 @@ defmodule TenanteeWeb.Components.Tenant do
           <.icon name="hero-trash" class="w-4 h-4" /> Delete
         </.button>
       </div>
-      <p class="text-gray-600">
-        <abbr title={get_properties_names(@tenant)}>
-          Currently occupying <%= @count %> <%= if @count == 1, do: "property", else: "properties" %>.
-        </abbr>
+      <p
+        class="text-gray-600 underline decoration-dotted hover:cursor-default"
+        data-tooltip={get_properties_names(@tenant)}
+      >
+        Currently occupying <%= @count %> <%= if @count == 1, do: "property", else: "properties" %>.
       </p>
       <%= if @count > 0 do %>
         <div>

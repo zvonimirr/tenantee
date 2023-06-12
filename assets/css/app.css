@@ -2,4 +2,12 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* This file is for your main application CSS */
+/* Import Tippy.js CSS */
+@import "tippy.js/dist/tippy.css";
+@import "tippy.js/dist/backdrop.css";
+@import "tippy.js/animations/shift-away.css";
+@import "tippy.js/dist/svg-arrow.css";
+
+.tippy-content {
+  @apply font-semibold;
+}
