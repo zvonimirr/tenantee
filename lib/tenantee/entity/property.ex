@@ -20,7 +20,7 @@ defmodule Tenantee.Entity.Property do
   def get(id) do
     case Repo.get(Schema, id) do
       nil -> {:error, "Property not found"}
-      property -> {:ok, property}
+      property -> {:ok, Repo.preload(property, :tenants)}
     end
   end
 
