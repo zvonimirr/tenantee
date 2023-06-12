@@ -3,6 +3,7 @@ defmodule Tenantee.Schema.Tenant do
   Tenant Ecto Schema.
   """
   alias Tenantee.Schema.Property
+  alias Tenantee.Schema.Rent
 
   use Ecto.Schema
   import Ecto.Changeset
@@ -11,6 +12,7 @@ defmodule Tenantee.Schema.Tenant do
     field :first_name, :string
     field :last_name, :string
 
+    has_many(:rents, Rent)
     many_to_many(:properties, Property, join_through: "leases", on_replace: :delete)
 
     timestamps()
