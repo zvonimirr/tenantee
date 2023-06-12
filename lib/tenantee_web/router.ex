@@ -1,5 +1,6 @@
 defmodule TenanteeWeb.Router do
   use TenanteeWeb, :router
+  alias TenanteeWeb.Csp
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -8,7 +9,9 @@ defmodule TenanteeWeb.Router do
     plug :put_root_layout, {TenanteeWeb.Layouts, :root}
     plug :protect_from_forgery
 
-    plug :put_secure_browser_headers, %{"content-security-policy" => "default-src https: 'self'"}
+    plug :put_secure_browser_headers, %{
+      "content-security-policy" => Csp.generate_csp()
+    }
   end
 
   pipeline :api do
