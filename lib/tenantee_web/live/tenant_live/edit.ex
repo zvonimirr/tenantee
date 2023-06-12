@@ -17,13 +17,13 @@ defmodule TenanteeWeb.TenantLive.Edit do
         %{"first_name" => first_name, "last_name" => last_name},
         socket
       ) do
-    with :ok <-
-           Tenant.update(socket.assigns.id, %{
-             first_name: first_name,
-             last_name: last_name
-           }) do
-      {:noreply, handle_success(socket, first_name <> " " <> last_name)}
-    else
+    case Tenant.update(socket.assigns.id, %{
+           first_name: first_name,
+           last_name: last_name
+         }) do
+      :ok ->
+        {:noreply, handle_success(socket, first_name <> " " <> last_name)}
+
       {:error, _reason} ->
         {:noreply, put_flash(socket, :error, "Something went wrong. Please try again.")}
     end

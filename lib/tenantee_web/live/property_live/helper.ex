@@ -12,15 +12,17 @@ defmodule TenanteeWeb.PropertyLive.Helper do
   """
   @spec is_submit_disabled?(map()) :: boolean
   def is_submit_disabled?(assigns) do
-    with {price, ""} <- Float.parse(assigns.price) do
-      [
-        assigns.name,
-        assigns.address,
-        assigns.price
-      ]
-      |> Enum.any?(&(String.length(&1) == 0)) or price <= 0
-    else
-      _ -> true
+    case Float.parse(assigns.price) do
+      {price, ""} when price > 0 ->
+        [
+          assigns.name,
+          assigns.address,
+          assigns.price
+        ]
+        |> Enum.any?(&(String.length(&1) == 0)) or price <= 0
+
+      _ ->
+        true
     end
   end
 

@@ -76,9 +76,8 @@ defmodule TenanteeWeb.ConfigLive do
   end
 
   defp currency_to_name(currency) do
-    with {:ok, "1 " <> name} <- Cldr.Number.to_string(1, format: :long, currency: currency) do
-      name |> String.capitalize()
-    else
+    case Cldr.Number.to_string(1, format: :long, currency: currency) do
+      {:ok, "1 " <> name} -> String.capitalize(name)
       _ -> currency
     end
   end

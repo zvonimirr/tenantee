@@ -4,7 +4,7 @@ defmodule Tenantee.MixProject do
   def project do
     [
       app: :tenantee,
-      version: "0.3.0",
+      version: "0.4.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -54,7 +54,8 @@ defmodule Tenantee.MixProject do
       {:ex_money, "~> 5.13"},
       {:ex_money_sql, "~> 1.9"},
       {:ex_cldr_dates_times, "~> 2.13"},
-      {:quantum, "~> 3.5"}
+      {:quantum, "~> 3.5"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
     ]
   end
 

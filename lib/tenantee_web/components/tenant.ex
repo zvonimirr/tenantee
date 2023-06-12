@@ -116,8 +116,7 @@ defmodule TenanteeWeb.Components.Tenant do
   end
 
   defp get_properties_names(tenant) do
-    case Enum.map(tenant.properties, &(&1.name <> " at " <> &1.address))
-         |> Enum.join(", ") do
+    case Enum.map_join(tenant.properties, ", ", &(&1.name <> " at " <> &1.address)) do
       "" -> "No properties"
       names -> names
     end
