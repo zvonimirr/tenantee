@@ -43,7 +43,7 @@ defmodule Tenantee.Entity.Tenant do
   @doc """
   Creates a tenant.
   """
-  @spec create(map()) :: {:ok, Schema.t()} | {:error, String.t()}
+  @spec create(map()) :: {:ok, Schema.t()} | {:error, Ecto.Changeset.t()}
   def create(attrs) do
     Schema.changeset(%Schema{}, attrs)
     |> Repo.insert()
@@ -52,7 +52,7 @@ defmodule Tenantee.Entity.Tenant do
   @doc """
   Updates a tenant by id.
   """
-  @spec update(integer(), map()) :: :ok | {:error, String.t()}
+  @spec update(integer(), map()) :: :ok | {:error, Ecto.Changeset.t() | String.t()}
   def update(id, attrs) do
     with {:ok, tenant} <- get(id),
          changeset <- Schema.changeset(tenant, attrs),
@@ -72,7 +72,7 @@ defmodule Tenantee.Entity.Tenant do
   @doc """
   Add a tenant to a property.
   """
-  @spec add_to_property(integer(), integer()) :: :ok | {:error, String.t()}
+  @spec add_to_property(integer(), integer()) :: :ok | {:error, Ecto.Changeset.t() | String.t()}
   def add_to_property(id, property_id) do
     with {:ok, tenant} <- get(id),
          {:ok, property} <- Property.get(property_id),
@@ -85,7 +85,8 @@ defmodule Tenantee.Entity.Tenant do
   @doc """
   Remove a tenant from a property.
   """
-  @spec remove_from_property(integer(), integer()) :: :ok | {:error, String.t()}
+  @spec remove_from_property(integer(), integer()) ::
+          :ok | {:error, Ecto.Changeset.t() | String.t()}
   def remove_from_property(id, property_id) do
     with {:ok, tenant} <- get(id),
          {:ok, property} <- Property.get(property_id),

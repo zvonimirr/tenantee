@@ -39,7 +39,7 @@ defmodule Tenantee.Entity.Property do
   @doc """
   Creates a property.
   """
-  @spec create(map()) :: {:ok, Schema.t()} | {:error, String.t()}
+  @spec create(map()) :: {:ok, Schema.t()} | {:error, Ecto.Changeset.t()}
   def create(attrs) do
     Schema.changeset(%Schema{}, attrs)
     |> Repo.insert()
@@ -48,7 +48,7 @@ defmodule Tenantee.Entity.Property do
   @doc """
   Updates a property by id.
   """
-  @spec update(integer(), map()) :: :ok | {:error, String.t()}
+  @spec update(integer(), map()) :: :ok | {:error, Ecto.Changeset.t() | String.t()}
   def update(id, attrs) do
     with {:ok, property} <- get(id),
          changeset <- Schema.changeset(property, attrs),
@@ -68,7 +68,7 @@ defmodule Tenantee.Entity.Property do
   @doc """
   Toggles the lease.
   """
-  @spec toggle_lease(term(), term()) :: :ok | {:error, String.t()}
+  @spec toggle_lease(term(), term()) :: :ok | {:error, Ecto.Changeset.t() | String.t()}
   def toggle_lease(property, tenant) do
     if tenant.id in get_tenant_ids(property) do
       Tenant.remove_from_property(tenant.id, property.id)
