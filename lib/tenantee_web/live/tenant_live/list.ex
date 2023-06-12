@@ -1,7 +1,9 @@
 defmodule TenanteeWeb.TenantLive.List do
+  alias Tenantee.Entity.Rent
   alias Tenantee.Entity.Tenant
   use TenanteeWeb, :live_view
   import TenanteeWeb.Components.Tenant, only: [card: 1]
+  import TenanteeWeb.Components.Rent, only: [list_item: 1]
 
   def mount(_params, _session, socket) do
     {:ok, default(socket)}
@@ -11,6 +13,16 @@ defmodule TenanteeWeb.TenantLive.List do
     case Tenant.get(id) do
       {:ok, tenant} ->
         {:noreply, assign(socket, tenant: tenant)}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, "Tenant not found")}
+    end
+  end
+
+  def handle_event("manage_rents", %{"id" => id}, socket) do
+    case Tenant.get(id) do
+      {:ok, tenant} ->
+        {:noreply, assign(socket, tenant: tenant, action: "manage_rents")}
 
       {:error, _} ->
         {:noreply, put_flash(socket, :error, "Tenant not found")}
@@ -33,9 +45,21 @@ defmodule TenanteeWeb.TenantLive.List do
     {:noreply, assign(socket, tenant: nil)}
   end
 
+  def handle_event("pay_rent", %{"rent" => rent_id}, socket) do
+    with {:ok, _rent} <- Rent.pay(rent_id),
+         {:ok, tenant} <- Tenant.get(socket.assigns.tenant.id) do
+      {:noreply,
+       assign(socket, tenant: tenant, tenants: Tenant.all())
+       |> put_flash(:info, "Rent paid successfully")}
+    else
+      _error ->
+        {:noreply, put_flash(socket, :error, "Something went wrong.")}
+    end
+  end
+
   def render(assigns) do
     ~H"""
-    <%= if @tenant do %>
+    <%= if @action == "delete" and not is_nil(@tenant) do %>
       <.modal id="confirm-modal" show>
         <p class="text-2xl mb-4 font-bold">Are you sure?</p>
         <p class="text-gray-500">This action cannot be undone.</p>
@@ -55,6 +79,20 @@ defmodule TenanteeWeb.TenantLive.List do
           </.button>
           <.button phx-click="cancel_delete">Cancel</.button>
         </div>
+      </.modal>
+    <% end %>
+    <%= if @action == "manage_rents" and not is_nil(@tenant) do %>
+      <.modal id="manage-rents-modal" show>
+        <p class="text-2xl mb-4 font-bold">Manage rents</p>
+        <div class="flex flex-col gap-4 mb-4 items-start">
+          <%= for rent <- @tenant.rents do %>
+            <.list_item rent={rent} />
+          <% end %>
+        </div>
+
+        <.button phx-click="cancel_delete" class="ml-2 bg-red-500 hover:bg-red-600">
+          Cancel
+        </.button>
       </.modal>
     <% end %>
     <h1 class="text-3xl font-bold mb-4">Manage your tenants</h1>
@@ -82,5 +120,6 @@ defmodule TenanteeWeb.TenantLive.List do
     socket
     |> assign(:tenants, Tenant.all())
     |> assign(:tenant, nil)
+    |> assign(:action, nil)
   end
 end

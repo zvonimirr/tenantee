@@ -52,7 +52,8 @@ defmodule Tenantee.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:redix, "~> 1.2"},
       {:ex_money, "~> 5.13"},
-      {:ex_money_sql, "~> 1.9"}
+      {:ex_money_sql, "~> 1.9"},
+      {:ex_cldr_dates_times, "~> 2.13"}
     ]
   end
 

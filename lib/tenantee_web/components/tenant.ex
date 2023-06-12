@@ -2,6 +2,7 @@ defmodule TenanteeWeb.Components.Tenant do
   @moduledoc """
   Provides UI components for the Tenant context.
   """
+  alias Phoenix.LiveView.JS
   alias Tenantee.Entity.Rent
   use Phoenix.Component
   import TenanteeWeb.CoreComponents
@@ -43,14 +44,16 @@ defmodule TenanteeWeb.Components.Tenant do
           ]}>
             Has <%= @unpaid_rents %> unpaid <%= if @unpaid_rents == 1, do: "rent", else: "rents" %>.
           </p>
-          <%= if @overdue_rents > 0 do %>
-            <p class="text-red-500">
-              <%= @overdue_rents %> of them <%= if @overdue_rents == 1, do: "is", else: "are" %> overdue.
-            </p>
-          <% else %>
-            <p class="text-yellow-500">
-              But, none of them are overdue.
-            </p>
+          <%= if @unpaid_rents > 0 do %>
+            <%= if @overdue_rents > 0 do %>
+              <p class="text-red-500">
+                <%= @overdue_rents %> of them <%= if @overdue_rents == 1, do: "is", else: "are" %> overdue.
+              </p>
+            <% else %>
+              <p class="text-yellow-500">
+                But, none of them are overdue.
+              </p>
+            <% end %>
           <% end %>
         </div>
       <% else %>
@@ -61,11 +64,16 @@ defmodule TenanteeWeb.Components.Tenant do
           </p>
         </div>
       <% end %>
-      <a href={"/tenants/#{@tenant.id}"}>
-        <.button>
-          <.icon name="hero-pencil" class="w-4 h-4" /> Edit
+      <div class="flex gap-4">
+        <.button phx-click={open_manage_rents_modal(@tenant.id)}>
+          <.icon name="hero-banknotes" class="w-4 h-4" /> Manage Rents
         </.button>
-      </a>
+        <a href={"/tenants/#{@tenant.id}"}>
+          <.button>
+            <.icon name="hero-pencil" class="w-4 h-4" /> Edit
+          </.button>
+        </a>
+      </div>
     </div>
     """
   end
@@ -95,6 +103,10 @@ defmodule TenanteeWeb.Components.Tenant do
       </p>
     </div>
     """
+  end
+
+  defp open_manage_rents_modal(tenant_id) do
+    show_modal(JS.push("manage_rents", value: %{"id" => tenant_id}), "manage-rents-modal")
   end
 
   defp is_tenant_in_property?(tenant, property) do

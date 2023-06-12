@@ -53,6 +53,9 @@ defmodule TenanteeWeb.PropertyLive.List do
       {:noreply,
        assign(socket, properties: Property.all(), property: property)
        |> put_flash(:info, "Lease updated successfully.")}
+    else
+      _error ->
+        {:noreply, put_flash(socket, :error, "Something went wrong.")}
     end
   end
 
