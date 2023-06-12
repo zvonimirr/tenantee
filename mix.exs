@@ -55,7 +55,8 @@ defmodule Tenantee.MixProject do
       {:ex_money_sql, "~> 1.9"},
       {:ex_cldr_dates_times, "~> 2.13"},
       {:quantum, "~> 3.5"},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:sobelow, "~> 0.12", only: [:dev, :test], runtime: false}
     ]
   end
 
