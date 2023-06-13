@@ -16,10 +16,8 @@ defmodule TenanteeWeb.Csp do
 
     csp
     |> Keyword.keys()
-    |> Enum.map(fn key ->
+    |> Enum.map_join("; ", fn key ->
       Atom.to_string(key) <> " " <> Enum.join(Keyword.get(csp, key), " ")
     end)
-    |> Enum.join("; ")
-    |> IO.inspect()
   end
 end

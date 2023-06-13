@@ -9,25 +9,17 @@
       </p>
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-      <a href={~p"/"}>
-        <abbr title="Go to homepage">
+      <a href={~p"/"} data-tooltip="Go to homepage">
           <.icon name="hero-home" class="hover:text-green-500 transition-colors" />
-        </abbr>
       </a>
-      <a href={~p"/properties"}>
-        <abbr title="Properties">
+      <a href={~p"/properties"} data-tooltip="Manage properties">
           <.icon name="hero-home-modern" class="hover:text-green-500 transition-colors" />
-        </abbr>
       </a>
-      <a href={~p"/tenants"}>
-        <abbr title="Tenants">
+      <a href={~p"/tenants"} data-tooltip="Manage tenants">
           <.icon name="hero-user-circle" class="hover:text-green-500 transition-colors" />
-        </abbr>
       </a>
-      <a href={~p"/settings"}>
-        <abbr title="Settings">
+      <a href={~p"/settings"} data-tooltip="Settings">
           <.icon name="hero-cog-6-tooth" class="hover:text-green-500 transition-colors" />
-        </abbr>
       </a>
       <a href="https://github.com/zvonimirr/tenantee" class="hover:text-green-500 transition-colors" target="_blank">
         GitHub
