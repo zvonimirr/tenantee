@@ -8,11 +8,21 @@ defmodule TenanteeWeb.Csp do
   """
   @spec generate_csp() :: String.t()
   def generate_csp() do
-    csp = [
-      "default-src": ["https:", "'self'"],
-      "img-src": ["https:", "data:", "'self'"],
-      "style-src": ["https:", "'self'", "'unsafe-inline'"]
-    ]
+    # Base CSP configuration, plus additional LiveDashboard configuration if it's enabled
+    csp =
+      [
+        "default-src": ["https:", "'self'"],
+        "img-src": ["https:", "data:", "'self'"],
+        "style-src": ["https:", "'self'", "'unsafe-inline'"]
+      ] ++
+        if Application.get_env(:tenantee, :dev_routes) do
+          [
+            "font-src": ["'unsafe-inline'", "data:"],
+            "script-src": ["'unsafe-inline'"]
+          ]
+        else
+          []
+        end
 
     csp
     |> Keyword.keys()
