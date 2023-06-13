@@ -17,6 +17,7 @@ jobs:
         elixir: [1.14.5]
     env:
       MIX_ENV: dev 
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     services:
       postgres:
@@ -41,4 +42,4 @@ jobs:
       - run: MIX_ENV=dev mix deps.get
       - run: MIX_ENV=dev mix credo
       - run: MIX_ENV=dev mix sobelow
-      - run: MIX_ENV=dev mix coveralls 
+      - run: MIX_ENV=dev mix coveralls.github
