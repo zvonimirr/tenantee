@@ -41,3 +41,4 @@ jobs:
       - run: MIX_ENV=dev mix deps.get
       - run: MIX_ENV=dev mix credo
       - run: MIX_ENV=dev mix sobelow
+      - run: MIX_ENV=dev mix coveralls 
