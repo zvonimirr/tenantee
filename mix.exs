@@ -13,9 +13,9 @@ defmodule Tenantee.MixProject do
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         coveralls: :test,
-        "coveralls.detail": :test,
-        "coveralls.post": :test,
-        "coveralls.html": :test
+        "coveralls.html": :test,
+        "coveralls.json": :test,
+        "coveralls.github": :test
       ]
     ]
   end
@@ -63,9 +63,9 @@ defmodule Tenantee.MixProject do
       {:ex_cldr_dates_times, "~> 2.13"},
       {:quantum, "~> 3.5"},
       {:faker, "~> 0.17", only: :test},
+      {:excoveralls, "~> 0.16.1", only: :test},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:sobelow, "~> 0.12", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.16.1", only: :test, runtime: false}
+      {:sobelow, "~> 0.12", only: [:dev, :test], runtime: false}
     ]
   end
 
