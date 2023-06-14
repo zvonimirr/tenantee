@@ -20,10 +20,6 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     services:
-      redis:
-        image: redis
-        ports: ['6379:6379']
-
       postgres:
         image: postgres
         ports: ['5432:5432']
@@ -38,6 +34,10 @@ jobs:
           --health-retries 5
 
     steps:
+      - uses: getong/redis-action@v1
+        with:
+          redis version: '7.0.11'
+          redis password: 'tenantee_redis'
       - uses: actions/checkout@v1.0.0
       - uses: erlef/setup-beam@v1
         with:
