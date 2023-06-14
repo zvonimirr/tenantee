@@ -1,4 +1,4 @@
-defmodule TenanteeWeb.TenantLiveTest do
+defmodule TenanteeWeb.TenantListLiveTest do
   use TenanteeWeb.ConnCase
   import Phoenix.LiveViewTest
   import Tenantee.Test.Factory.Tenant
