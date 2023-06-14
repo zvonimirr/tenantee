@@ -18,7 +18,12 @@ defmodule TenanteeWeb.ConfigLiveTest do
 
     assert view
            |> form("form", %{name: "Test", currency: "EUR"})
-           |> render_submit() =~ "Configuration saved successfully!"
+           |> render_submit()
+           |> Floki.parse_fragment!()
+           |> Floki.find("#flash")
+           |> Floki.find("p")
+           |> List.last()
+           |> Floki.text() =~ "Configuration saved successfully"
   end
 
   test "disables the currency select when we have a tenant or property", %{conn: conn} do
