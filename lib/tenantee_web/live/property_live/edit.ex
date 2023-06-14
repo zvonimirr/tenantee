@@ -20,8 +20,9 @@ defmodule TenanteeWeb.PropertyLive.Edit do
              description: description,
              address: address,
              price: Money.new(price, currency)
-           }) do
-      {:noreply, handle_success(socket, name)}
+           }),
+         {:ok, property} <- Property.get(socket.assigns.id) do
+      {:noreply, handle_success(socket, name, property)}
     else
       {:error, reason} ->
         {:noreply, Helper.handle_errors(socket, reason)}
@@ -86,7 +87,12 @@ defmodule TenanteeWeb.PropertyLive.Edit do
     """
   end
 
-  def handle_success(socket, name) do
-    put_flash(socket, :info, "#{name} was updated successfully.")
+  def handle_success(socket, name, property) do
+    socket
+    |> assign(:name, property.name)
+    |> assign(:address, property.address)
+    |> assign(:price, property.price.amount |> to_string())
+    |> assign(:description, property.description)
+    |> put_flash(:info, "#{name} was updated successfully.")
   end
 end
