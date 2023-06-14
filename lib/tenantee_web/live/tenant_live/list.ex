@@ -1,6 +1,5 @@
 defmodule TenanteeWeb.TenantLive.List do
-  alias Tenantee.Entity.Rent
-  alias Tenantee.Entity.Tenant
+  alias Tenantee.Entity.{Rent, Tenant}
   use TenanteeWeb, :live_view
   import TenanteeWeb.Components.Tenant, only: [card: 1]
   import TenanteeWeb.Components.Rent, only: [list_item: 1]

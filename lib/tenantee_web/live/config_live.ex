@@ -1,5 +1,5 @@
 defmodule TenanteeWeb.ConfigLive do
-  alias Tenantee.Entity.Rent
+  alias Tenantee.Entity.{Property, Tenant}
   alias Tenantee.Cldr
   alias Tenantee.Config
   use TenanteeWeb, :live_view
@@ -7,8 +7,14 @@ defmodule TenanteeWeb.ConfigLive do
   def mount(_params, _session, socket) do
     with name <- Config.get(:name, ""),
          currency <- Config.get(:currency, ""),
-         count <- Rent.total() do
-      {:ok, assign(socket, name: name, currency: currency, count: count)}
+         property_count <- Property.count(),
+         tenant_count <- Tenant.count() do
+      {:ok,
+       assign(socket,
+         name: name,
+         currency: currency,
+         count: property_count + tenant_count
+       )}
     end
   end
 
@@ -47,7 +53,7 @@ defmodule TenanteeWeb.ConfigLive do
       <%= if @count > 0 do %>
         <div>
           <p class="text-sm text-gray-500">
-            You can't change the currency because you already have properties and/or rents.
+            You can't change the currency because you already have properties and/or tenants.
           </p>
           <p class="text-sm text-gray-500">
             If you want to change the currency, you need to delete all your properties and tenants first.
