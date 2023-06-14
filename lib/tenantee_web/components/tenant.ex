@@ -32,7 +32,7 @@ defmodule TenanteeWeb.Components.Tenant do
         </.button>
       </div>
       <p
-        class="text-gray-600 underline decoration-dotted hover:cursor-default"
+        class="text-gray-600 underline decoration-dotted hover:cursor-default w-fit"
         data-tooltip={get_properties_names(@tenant)}
       >
         Currently occupying <%= @count %> <%= if @count == 1, do: "property", else: "properties" %>.
