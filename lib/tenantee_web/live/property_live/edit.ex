@@ -8,11 +8,6 @@ defmodule TenanteeWeb.PropertyLive.Edit do
     {:ok, Helper.default(socket, params)}
   end
 
-  def handle_event("change", %{"_target" => [target]} = params, socket) do
-    value = params[target]
-    {:noreply, assign(socket, String.to_existing_atom(target), value)}
-  end
-
   def handle_event(
         "update",
         %{"name" => name, "description" => description, "address" => address, "price" => price},
@@ -36,14 +31,21 @@ defmodule TenanteeWeb.PropertyLive.Edit do
   def render(assigns) do
     assigns = assign(assigns, :disabled, Helper.is_submit_disabled?(assigns))
 
+    # TODO: Allow FormHook to handle min, max for number inputs
+
     ~H"""
     <a class="text-gray-500" href={~p"/properties"}>
       <.icon name="hero-arrow-left" /> Back to properties
     </a>
     <h1 class="text-3xl font-bold my-4">Edit <%= @name %></h1>
-    <form phx-submit="update" class="flex flex-col gap-4 max-w-xs">
+    <form
+      id="edit-property-form"
+      phx-hook="FormHook"
+      phx-submit="update"
+      class="flex flex-col gap-4 max-w-xs"
+      data-required="name,address,price"
+    >
       <.input
-        phx-change="change"
         type="text"
         name="name"
         value={@name}
@@ -52,7 +54,6 @@ defmodule TenanteeWeb.PropertyLive.Edit do
         required
       />
       <.input
-        phx-change="change"
         type="text"
         name="address"
         value={@address}
@@ -61,7 +62,6 @@ defmodule TenanteeWeb.PropertyLive.Edit do
         required
       />
       <.input
-        phx-change="change"
         type="number"
         name="price"
         min="0"
@@ -72,7 +72,6 @@ defmodule TenanteeWeb.PropertyLive.Edit do
         required
       />
       <.input
-        phx-change="change"
         type="textarea"
         name="description"
         value={@description}
