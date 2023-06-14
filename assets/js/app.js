@@ -6,12 +6,20 @@ import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
 // Include Tippy.js for tooltips
 import tippy, { animateFill, roundArrow } from "tippy.js";
+// Import hooks
+import { FormHook } from "./hooks/form";
+
+// Define hooks
+const Hooks = {
+  FormHook,
+};
 
 const csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 const liveSocket = new LiveSocket("/live", Socket, {
   params: { _csrf_token: csrfToken },
+  hooks: Hooks,
 });
 
 // Show progress bar on live navigation and form submits

@@ -7,11 +7,6 @@ defmodule TenanteeWeb.TenantLive.Edit do
     {:ok, Helper.default(socket, params)}
   end
 
-  def handle_event("change", %{"_target" => [target]} = params, socket) do
-    value = params[target]
-    {:noreply, assign(socket, String.to_existing_atom(target), value)}
-  end
-
   def handle_event(
         "update",
         %{"first_name" => first_name, "last_name" => last_name},
@@ -22,7 +17,7 @@ defmodule TenanteeWeb.TenantLive.Edit do
            last_name: last_name
          }) do
       :ok ->
-        {:noreply, handle_success(socket, first_name <> " " <> last_name)}
+        {:noreply, handle_success(socket, first_name, last_name)}
 
       {:error, _reason} ->
         {:noreply, put_flash(socket, :error, "Something went wrong. Please try again.")}
@@ -37,9 +32,14 @@ defmodule TenanteeWeb.TenantLive.Edit do
       <.icon name="hero-arrow-left" /> Back to tenants
     </a>
     <h1 class="text-3xl font-bold my-4">Edit <%= @first_name %> <%= @last_name %></h1>
-    <form phx-submit="update" class="flex flex-col gap-4 max-w-xs">
+    <form
+      id="tenant-edit-form"
+      phx-hook="FormHook"
+      phx-submit="update"
+      class="flex flex-col gap-4 max-w-xs"
+      data-required="first_name,last_name"
+    >
       <.input
-        phx-change="change"
         type="text"
         name="first_name"
         value={@first_name}
@@ -48,7 +48,6 @@ defmodule TenanteeWeb.TenantLive.Edit do
         required
       />
       <.input
-        phx-change="change"
         type="text"
         name="last_name"
         value={@last_name}
@@ -64,7 +63,12 @@ defmodule TenanteeWeb.TenantLive.Edit do
     """
   end
 
-  def handle_success(socket, name) do
-    put_flash(socket, :info, "#{name} was created successfully.")
+  def handle_success(socket, first_name, last_name) do
+    name = "#{first_name} #{last_name}"
+
+    socket
+    |> assign(:first_name, first_name)
+    |> assign(:last_name, last_name)
+    |> put_flash(:info, "#{name} was updated successfully.")
   end
 end

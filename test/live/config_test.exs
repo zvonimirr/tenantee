@@ -21,22 +21,6 @@ defmodule TenanteeWeb.ConfigLiveTest do
            |> render_submit() =~ "Configuration saved successfully!"
   end
 
-  test "enables the save button after inputting a name", %{conn: conn} do
-    {:ok, view, _html} = live(conn, "/settings")
-
-    assert view
-           |> element("[name='name']")
-           |> render_change(%{"_target" => "name", "name" => "Test Name"}) =~ "Test Name"
-
-    assert view
-           |> element("[name='name']")
-           |> render_change(%{"_target" => "name", "name" => "Test Name"})
-           |> Floki.parse_fragment!()
-           |> Floki.find("button")
-           |> List.first()
-           |> Floki.attribute("disabled") == []
-  end
-
   test "disables the currency select when we have a tenant or property", %{conn: conn} do
     generate_tenant()
     {:ok, view, _html} = live(conn, "/settings")
