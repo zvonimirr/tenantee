@@ -10,26 +10,22 @@ defmodule TenanteeWeb.ConfigLive do
          property_count <- Property.count(),
          tenant_count <- Tenant.count() do
       {:ok,
-       assign(socket,
-         name: name,
-         currency: currency,
-         count: property_count + tenant_count
-       )}
+       assign_values(socket, name, currency)
+       |> assign(:count, property_count + tenant_count)}
     end
-  end
-
-  def handle_event("change", %{"_target" => [target]} = params, socket) do
-    value = params[target]
-    {:noreply, assign(socket, String.to_existing_atom(target), value)}
   end
 
   def handle_event("save", %{"name" => name, "currency" => currency}, socket) do
     with :ok <- Config.set(:name, name),
          :ok <- Config.set(:currency, currency) do
-      {:noreply, put_flash(socket, :info, "Configuration saved successfully!")}
+      {:noreply,
+       assign_values(socket, name, currency)
+       |> put_flash(:info, "Configuration saved successfully!")}
     else
       :error ->
-        {:noreply, put_flash(socket, :error, "Failed to save the configuration!")}
+        {:noreply,
+         assign_values(socket, name, currency)
+         |> put_flash(:error, "Failed to save the configuration!")}
     end
   end
 
@@ -38,10 +34,15 @@ defmodule TenanteeWeb.ConfigLive do
 
     ~H"""
     <h1 class="text-3xl font-bold">Configuration</h1>
-    <form phx-submit="save" class="flex flex-col gap-4 max-w-xs">
-      <.input phx-change="change" name="name" value={@name} label="Name" placeholder="Your name..." />
+    <form
+      id="config-form"
+      phx-hook="FormHook"
+      phx-submit="save"
+      class="flex flex-col gap-4 max-w-xs"
+      data-required="name,currency"
+    >
+      <.input name="name" value={@name} label="Name" placeholder="Your name..." />
       <.input
-        phx-change="change"
         type="select"
         name="currency"
         value={@currency}
@@ -68,6 +69,11 @@ defmodule TenanteeWeb.ConfigLive do
     """
   end
 
+  defp assign_values(socket, name, currency) do
+    assign(socket, :name, name)
+    |> assign(:currency, currency)
+  end
+
   defp is_disabled(assigns) do
     [
       assigns.name,
@@ -82,9 +88,8 @@ defmodule TenanteeWeb.ConfigLive do
   end
 
   defp currency_to_name(currency) do
-    case Cldr.Number.to_string(1, format: :long, currency: currency) do
-      {:ok, "1 " <> name} -> String.capitalize(name)
-      _ -> currency
+    with {:ok, "1 " <> name} <- Cldr.Number.to_string(1, format: :long, currency: currency) do
+      name
     end
   end
 end

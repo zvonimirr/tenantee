@@ -24,7 +24,7 @@ defmodule TenanteeWeb.PropertyLive.Add do
              name: name,
              description: description,
              address: address,
-             price: Money.new(price, currency)
+             price: Helper.handle_price(price, currency)
            }) do
       {:noreply, handle_success(socket, property.id, name)}
     else
@@ -36,14 +36,21 @@ defmodule TenanteeWeb.PropertyLive.Add do
   def render(assigns) do
     assigns = assign(assigns, :disabled, Helper.is_submit_disabled?(assigns))
 
+    # TODO: Allow FormHook to handle min, max for number inputs
+
     ~H"""
     <a class="text-gray-500" href={~p"/properties"}>
       <.icon name="hero-arrow-left" /> Back to properties
     </a>
     <h1 class="text-3xl font-bold my-4">Create new property</h1>
-    <form phx-submit="create" class="flex flex-col gap-4 max-w-xs">
+    <form
+      id="property-add-form"
+      phx-hook="FormHook"
+      phx-submit="create"
+      class="flex flex-col gap-4 max-w-xs"
+      data-required="name,address,price"
+    >
       <.input
-        phx-change="change"
         type="text"
         name="name"
         value={@name}
@@ -52,7 +59,6 @@ defmodule TenanteeWeb.PropertyLive.Add do
         required
       />
       <.input
-        phx-change="change"
         type="text"
         name="address"
         value={@address}
@@ -61,7 +67,6 @@ defmodule TenanteeWeb.PropertyLive.Add do
         required
       />
       <.input
-        phx-change="change"
         type="number"
         name="price"
         min="0"
@@ -72,7 +77,6 @@ defmodule TenanteeWeb.PropertyLive.Add do
         required
       />
       <.input
-        phx-change="change"
         type="textarea"
         name="description"
         value={@description}
