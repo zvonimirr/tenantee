@@ -649,4 +649,12 @@ defmodule TenanteeWeb.CoreComponents do
   def open_confirm_modal(id) do
     show_modal(JS.push("delete", value: %{"id" => id}), "confirm-modal")
   end
+
+  @doc """
+  Fires the delete event while disabling the button.
+  """
+  def do_delete(id, entity_id) do
+    JS.set_attribute({"disabled", true}, to: "##{id}")
+    |> JS.push("do_delete", value: %{"id" => entity_id})
+  end
 end
