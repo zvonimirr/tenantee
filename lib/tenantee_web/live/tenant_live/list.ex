@@ -36,7 +36,7 @@ defmodule TenanteeWeb.TenantLive.List do
          |> put_flash(:info, "Tenant deleted successfully")}
 
       _error ->
-        {:noreply, put_flash(socket, :error, "Tenant not found")}
+        {:noreply, put_flash(socket, :error, "Tenant not found") |> assign(tenant: nil)}
     end
   end
 
@@ -49,10 +49,13 @@ defmodule TenanteeWeb.TenantLive.List do
          {:ok, tenant} <- Tenant.get(socket.assigns.tenant.id) do
       {:noreply,
        assign(socket, tenant: tenant, tenants: Tenant.all())
-       |> put_flash(:info, "Rent paid successfully")}
+       |> put_flash(:info, "Rent paid successfully")
+       |> push_event("phx:enable", %{id: "rent_#{rent_id}"})}
     else
       _error ->
-        {:noreply, put_flash(socket, :error, "Something went wrong.")}
+        {:noreply,
+         put_flash(socket, :error, "Something went wrong.")
+         |> push_event("phx:enable", %{id: "rent_#{rent_id}"})}
     end
   end
 
@@ -70,9 +73,10 @@ defmodule TenanteeWeb.TenantLive.List do
         </p>
         <div class="flex justify-end gap-4">
           <.button
-            phx-click="do_delete"
+            id="delete-tenant"
+            phx-click={do_delete("delete-tenant", @tenant.id)}
             phx-value-id={@tenant.id}
-            class="ml-2 bg-red-500 hover:bg-red-600"
+            class="ml-2 bg-red-500 hover:bg-red-600 disabled:hover:bg-red-600"
           >
             Delete
           </.button>
@@ -82,16 +86,18 @@ defmodule TenanteeWeb.TenantLive.List do
     <% end %>
     <%= if @action == "manage_rents" and not is_nil(@tenant) do %>
       <.modal id="manage-rents-modal" show>
-        <p class="text-2xl mb-4 font-bold">Manage rents</p>
-        <div class="flex flex-col gap-4 mb-4 items-start">
-          <%= for rent <- @tenant.rents do %>
-            <.list_item rent={rent} />
-          <% end %>
-        </div>
+        <div phx-hook="ModalHook" id="manage-rents-modal-hook-container">
+          <p class="text-2xl mb-4 font-bold">Manage rents</p>
+          <div class="flex flex-col gap-4 mb-4 items-start">
+            <%= for rent <- @tenant.rents do %>
+              <.list_item rent={rent} />
+            <% end %>
+          </div>
 
-        <.button phx-click="cancel_delete" class="ml-2 bg-red-500 hover:bg-red-600">
-          Cancel
-        </.button>
+          <.button phx-click="cancel_delete" class="ml-2 bg-red-500 hover:bg-red-600">
+            Cancel
+          </.button>
+        </div>
       </.modal>
     <% end %>
     <h1 class="text-3xl font-bold mb-4">Manage your tenants</h1>

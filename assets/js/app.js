@@ -8,10 +8,12 @@ import topbar from "../vendor/topbar";
 import tippy, { animateFill, roundArrow } from "tippy.js";
 // Import hooks
 import { FormHook } from "./hooks/form";
+import { ModalHook } from "./hooks/modal";
 
 // Define hooks
 const Hooks = {
   FormHook,
+  ModalHook,
 };
 
 const csrfToken = document

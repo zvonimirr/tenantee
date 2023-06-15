@@ -36,7 +36,7 @@ defmodule TenanteeWeb.PropertyLive.List do
          |> put_flash(:info, "Property deleted successfully")}
 
       _error ->
-        {:noreply, put_flash(socket, :error, "Property not found")}
+        {:noreply, put_flash(socket, :error, "Property not found") |> assign(property: nil)}
     end
   end
 
@@ -51,10 +51,13 @@ defmodule TenanteeWeb.PropertyLive.List do
          {:ok, property} <- Property.get(property_id) do
       {:noreply,
        assign(socket, properties: Property.all(), property: property)
-       |> put_flash(:info, "Lease updated successfully.")}
+       |> put_flash(:info, "Lease updated successfully.")
+       |> push_event("phx:enable", %{id: "lease_#{property_id}_#{tenant_id}"})}
     else
       _error ->
-        {:noreply, put_flash(socket, :error, "Something went wrong.")}
+        {:noreply,
+         put_flash(socket, :error, "Something went wrong.")
+         |> push_event("phx:enable", %{id: "lease_#{property_id}_#{tenant_id}"})}
     end
   end
 
@@ -70,9 +73,10 @@ defmodule TenanteeWeb.PropertyLive.List do
         </p>
         <div class="flex justify-end gap-4">
           <.button
-            phx-click="do_delete"
+            id="delete-property"
+            phx-click={do_delete("delete-property", @property.id)}
             phx-value-id={@property.id}
-            class="ml-2 bg-red-500 hover:bg-red-600"
+            class="ml-2 bg-red-500 hover:bg-red-600 disabled:hover:bg-red-500"
           >
             Delete
           </.button>
@@ -82,22 +86,24 @@ defmodule TenanteeWeb.PropertyLive.List do
     <% end %>
     <%= if @action == "manage_tenants" and not is_nil(@property) do %>
       <.modal id="manage-tenants-modal" show>
-        <p class="text-2xl mb-4 font-bold">Manage tenants</p>
-        <p class="text-gray-500">
-          Toggling the checkbox will add or remove the tenant from the property.
-        </p>
-        <p class="text-gray-500 mb-4">
-          Tenants with a lease will be shown in green.
-        </p>
-        <div class="flex flex-col gap-4 mb-4 items-start">
-          <%= for tenant <- Tenant.all() do %>
-            <.list_item tenant={tenant} property={@property} />
-          <% end %>
-        </div>
+        <div phx-hook="ModalHook" id="manage-tenants-modal-hook-container">
+          <p class="text-2xl mb-4 font-bold">Manage tenants</p>
+          <p class="text-gray-500">
+            Toggling the checkbox will add or remove the tenant from the property.
+          </p>
+          <p class="text-gray-500 mb-4">
+            Tenants with a lease will be shown in green.
+          </p>
+          <div class="flex flex-col gap-4 mb-4 items-start">
+            <%= for tenant <- Tenant.all() do %>
+              <.list_item tenant={tenant} property={@property} />
+            <% end %>
+          </div>
 
-        <.button phx-click="cancel_delete" class="ml-2 bg-red-500 hover:bg-red-600">
-          Cancel
-        </.button>
+          <.button phx-click="cancel_delete" class="ml-2 bg-red-500 hover:bg-red-600">
+            Cancel
+          </.button>
+        </div>
       </.modal>
     <% end %>
     <h1 class="text-3xl font-bold mb-4">Manage your properties</h1>

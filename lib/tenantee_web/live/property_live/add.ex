@@ -8,11 +8,6 @@ defmodule TenanteeWeb.PropertyLive.Add do
     {:ok, Helper.default(socket)}
   end
 
-  def handle_event("change", %{"_target" => [target]} = params, socket) do
-    value = params[target]
-    {:noreply, assign(socket, String.to_existing_atom(target), value) |> assign(:created, false)}
-  end
-
   def handle_event(
         "create",
         %{"name" => name, "description" => description, "address" => address, "price" => price},

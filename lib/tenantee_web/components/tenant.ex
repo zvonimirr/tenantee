@@ -86,6 +86,8 @@ defmodule TenanteeWeb.Components.Tenant do
   attr :property, :map, required: true
 
   def list_item(assigns) do
+    assigns = assign(assigns, :name, "lease_#{assigns.property.id}_#{assigns.tenant.id}")
+
     ~H"""
     <div class={[
       "flex items-center gap-2 shadow-lg border border-gray-200 rounded-lg p-4 text-black font-semibold",
@@ -93,9 +95,10 @@ defmodule TenanteeWeb.Components.Tenant do
     ]}>
       <.input
         type="checkbox"
-        name={"lease_#{@property.id}_#{@tenant.id}"}
+        id={@name}
+        name={@name}
         value={is_tenant_in_property?(@tenant, @property)}
-        phx-click="toggle_lease"
+        phx-click={toggle_lease(@name, @property.id, @tenant.id)}
         phx-value-property={@property.id}
         phx-value-tenant={@tenant.id}
       />
@@ -104,6 +107,11 @@ defmodule TenanteeWeb.Components.Tenant do
       </p>
     </div>
     """
+  end
+
+  defp toggle_lease(name, property_id, tenant_id) do
+    JS.set_attribute({"disabled", true}, to: "[name='#{name}']")
+    |> JS.push("toggle_lease", value: %{"property" => property_id, "tenant" => tenant_id})
   end
 
   defp open_manage_rents_modal(tenant_id) do
