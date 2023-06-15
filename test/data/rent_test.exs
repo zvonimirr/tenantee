@@ -1,7 +1,8 @@
 defmodule Tenantee.Data.RentTest do
   use Tenantee.DataCase
-  alias Tenantee.Entity.Rent
+  alias Tenantee.Entity.{Rent, Tenant}
   import Tenantee.Test.Factory.{Property, Tenant}
+  import Tenantee.Jobs.Rent
 
   test "creates rent" do
     {:ok, tenant} = generate_tenant()
@@ -50,6 +51,15 @@ defmodule Tenantee.Data.RentTest do
 
     assert {:ok, updated_rent} = Rent.pay(rent.id)
     assert updated_rent.paid
+  end
+
+  test "generates rents" do
+    {:ok, tenant} = generate_tenant()
+    {:ok, property} = generate_property()
+    Tenant.add_to_property(tenant.id, property.id)
+    generate_rents()
+
+    assert 1 = Rent.total()
   end
 
   test "errors on getting rent by id" do
