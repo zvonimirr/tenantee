@@ -24,7 +24,7 @@ defmodule TenanteeWeb.PropertyLive.Add do
              name: name,
              description: description,
              address: address,
-             price: Money.new(price, currency)
+             price: Helper.handle_price(price, currency)
            }) do
       {:noreply, handle_success(socket, property.id, name)}
     else

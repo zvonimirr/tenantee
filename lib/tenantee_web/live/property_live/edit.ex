@@ -19,7 +19,7 @@ defmodule TenanteeWeb.PropertyLive.Edit do
              name: name,
              description: description,
              address: address,
-             price: Money.new(price, currency)
+             price: Helper.handle_price(price, currency)
            }),
          {:ok, property} <- Property.get(socket.assigns.id) do
       {:noreply, handle_success(socket, name, property)}
@@ -40,7 +40,7 @@ defmodule TenanteeWeb.PropertyLive.Edit do
     </a>
     <h1 class="text-3xl font-bold my-4">Edit <%= @name %></h1>
     <form
-      id="edit-property-form"
+      id="property-edit-form"
       phx-hook="FormHook"
       phx-submit="update"
       class="flex flex-col gap-4 max-w-xs"

@@ -70,4 +70,18 @@ defmodule TenanteeWeb.PropertyLive.Helper do
         put_flash(socket, :error, "Something went wrong, please try again.")
     end
   end
+
+  @doc """
+  Handles the price that we pass to the socket
+  """
+  @spec handle_price(String.t() | float(), String.t() | atom()) :: Money.t()
+  def handle_price(price, currency) when is_bitstring(price) do
+    Decimal.new(price)
+    |> Decimal.to_float()
+    |> handle_price(currency)
+  end
+
+  def handle_price(price, currency) when is_float(price) do
+    Money.from_float(price, currency)
+  end
 end
