@@ -2,11 +2,14 @@ defmodule TenanteeWeb.PropertyListLiveTest do
   use TenanteeWeb.ConnCase
   import Phoenix.LiveViewTest
   import Tenantee.Test.Factory.Property
+  import Tenantee.Test.Utils
   @endpoint TenanteeWeb.Endpoint
 
   test "renders list of properties", %{conn: conn} do
     {:ok, property} = generate_property()
     {:ok, _view, html} = live(conn, "/properties")
+
+    html = decode_html_entities(html)
 
     assert html =~ "Manage your properties"
 

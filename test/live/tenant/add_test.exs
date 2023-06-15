@@ -1,6 +1,7 @@
 defmodule TenanteeWeb.TenantAddLiveTest do
   use TenanteeWeb.ConnCase
   import Phoenix.LiveViewTest
+  import Tenantee.Test.Utils
   @endpoint TenanteeWeb.Endpoint
 
   test "renders", %{conn: conn} do
@@ -22,6 +23,8 @@ defmodule TenanteeWeb.TenantAddLiveTest do
       |> form("#tenant-add-form", %{first_name: first_name, last_name: last_name})
       |> render_submit()
       |> follow_redirect(conn)
+
+    html = decode_html_entities(html)
 
     assert html =~ "Edit #{first_name} #{last_name}"
   end
