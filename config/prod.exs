@@ -17,5 +17,9 @@ config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: Tenantee.Finch
 # Do not print debug messages in production
 config :logger, level: :info
 
+# Configure Redis
+config :tenantee,
+  redis_connection_url: "redis://:tenantee_redis@redis:6379"
+
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
