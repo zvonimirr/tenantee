@@ -1,0 +1,8 @@
+{
+  "name": "tenantee-assets",
+  "version": "1.0.0",
+  "description": "Tenantee assets",
+  "dependencies": {
+    "tippy.js": "^6.3.7"
+  }
+}

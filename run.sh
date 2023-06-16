@@ -4,46 +4,16 @@
 
 set -e
 
-# Ensure the app's dependencies are installed
-mix deps.get
-
-# Prepare Dialyzer if the project has Dialyxer set up
-if mix help dialyzer >/dev/null 2>&1
-  then
-    echo "\nFound Dialyxer: Setting up PLT..."
-    mix do deps.compile, dialyzer --plt
-  else
-    echo "\nNo Dialyxer config: Skipping setup..."
-fi
-
-# Analysis style code
-# Prepare Credo if the project has Credo start code analyze
-if mix help credo >/dev/null 2>&1
-  then
-    echo "\nFound Credo: analyzing..."
-    mix credo || true
-  else
-    echo "\nNo Credo config: Skipping code analyze..."
-fi
-
-# Set MIX_ENV to prod
-export MIX_ENV=prod
-
-# Set the secret
+# Set environment
 export SECRET_KEY_BASE=$(mix phx.gen.secret)
-
-# Export the PHX_HOST environment variable
 export PHX_HOST=localhost
+export MIX_ENV=prod
 
 echo "\nMigrating the database..."
 
 # Potentially Set up the database
 mix ecto.create
 mix ecto.migrate
-
-echo "\nGenerating SSL certificate..."
-# Generate a self-signed certificate if one doesn't exist
-mix phx.gen.cert
 
 echo "\nLaunching Phoenix web server..."
 # Start the phoenix web server
