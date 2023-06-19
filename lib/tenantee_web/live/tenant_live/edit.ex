@@ -43,8 +43,8 @@ defmodule TenanteeWeb.TenantLive.Edit do
   end
 
   def handle_event("delete_communication_channel", %{"id" => id}, socket) do
-    with :ok <- CommunicationChannel.delete(id),
-         {channel_id, ""} <- Integer.parse(id) do
+    with {channel_id, ""} <- Integer.parse(id),
+         :ok <- CommunicationChannel.delete(channel_id) do
       {:noreply, handle_success(socket, channel_id)}
     else
       _error ->
