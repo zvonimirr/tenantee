@@ -26,6 +26,13 @@ defmodule TenanteeWeb.PropertyListLiveTest do
            |> element("button", "Delete")
            |> render_click() =~ "Are you sure?"
 
+    view
+    |> render_click("cancel_delete")
+
+    view
+    |> element("button", "Delete")
+    |> render_click()
+
     assert view
            |> render_click("do_delete", %{id: property.id}) =~ "Property deleted successfully"
   end
