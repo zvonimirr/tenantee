@@ -2,7 +2,7 @@ defmodule Tenantee.Entity.Tenant do
   @moduledoc """
   Helper functions for tenants.
   """
-  alias Tenantee.Entity.Property
+  alias Tenantee.Entity.{Property, CommunicationChannel}
   alias Tenantee.Schema.Tenant, as: Schema
   alias Tenantee.Schema.Rent
   alias Tenantee.Repo
@@ -15,7 +15,7 @@ defmodule Tenantee.Entity.Tenant do
   def all() do
     Repo.all(Schema)
     |> Repo.preload([:properties])
-    |> Enum.map(&preload_rents/1)
+    |> Enum.map(&preload_tenant/1)
   end
 
   @doc """
@@ -28,7 +28,7 @@ defmodule Tenantee.Entity.Tenant do
         {:error, "Tenant not found."}
 
       tenant ->
-        {:ok, preload_rents(Repo.preload(tenant, [:properties]))}
+        {:ok, preload_tenant(tenant)}
     end
   end
 
@@ -103,15 +103,38 @@ defmodule Tenantee.Entity.Tenant do
     end
   end
 
+  @doc """
+  Add a communication channel to a tenant.
+
+  No need to create a remove function because that's
+  handled by the communication channel's delete function.
+  """
+  @spec add_communication_channel(integer(), map()) ::
+          :ok | {:error, Ecto.Changeset.t() | String.t()}
+  def add_communication_channel(id, attrs) do
+    with {:ok, tenant} <- get(id),
+         {:ok, channel} <- CommunicationChannel.create(attrs),
+         changeset <-
+           Schema.set_communication_channels(tenant, tenant.communication_channels ++ [channel]),
+         {:ok, _} <- Repo.update(changeset) do
+      :ok
+    end
+  end
+
   defp remove_property_from_list(properties, property_id) do
     Enum.filter(properties, fn property ->
       property.id != property_id
     end)
   end
 
-  defp preload_rents(tenant) do
-    Repo.preload(tenant,
-      rents: from(r in Rent, where: r.tenant_id == ^tenant.id, order_by: [desc: r.due_date])
+  defp preload_tenant(tenant) do
+    Repo.preload(
+      tenant,
+      [
+        :properties,
+        :communication_channels,
+        rents: from(r in Rent, where: r.tenant_id == ^tenant.id, order_by: [desc: r.due_date])
+      ]
     )
   end
 end
