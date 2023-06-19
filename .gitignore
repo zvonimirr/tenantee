@@ -41,3 +41,6 @@ npm-debug.log
 
 # Ignore certificate files.
 *.pem
+
+# Ignore build.sh
+build.sh
