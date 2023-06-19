@@ -14,10 +14,7 @@ services:
       - DB_USERNAME=tenantee
       - DB_PASSWORD=tenantee
       - DATABASE_URL=ecto://tenantee:tenantee@db/tenantee_dev
-    command: 
-      - "./run.sh"
     ports:
-      - "4000:4000"
       - "443:443"
     depends_on:
       - db
