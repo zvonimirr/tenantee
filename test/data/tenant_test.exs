@@ -55,6 +55,16 @@ defmodule Tenantee.Data.TenantTest do
     assert :ok = Tenant.remove_from_property(tenant.id, property.id)
   end
 
+  test "adds communication channel to tenant" do
+    {:ok, tenant} = generate_tenant()
+
+    assert :ok =
+             Tenant.add_communication_channel(
+               tenant.id,
+               %{type: "email", value: Faker.Internet.email()}
+             )
+  end
+
   test "errors when getting tenant by id" do
     assert {:error, "Tenant not found."} = Tenant.get(-1)
   end
