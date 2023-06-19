@@ -26,11 +26,45 @@ Your app should be running on [http://localhost:4000](http://localhost:4000)
 
 Deploying to production? Please make sure to set all the necessary environment variables and see [https://hexdocs.pm/phoenix/deployment.html](https://hexdocs.pm/phoenix/deployment.html)
 
-### Docker
-Running the application via Docker is simple and easy.
-1. Run `docker-compose up -d`
+### Docker Compose
+Running the application via Docker Compose is simple and easy.
+1. Run `docker-compose up db -d`
+2. Run `docker-compose up redis -d`
+3. Run `docker-compose build`
+3. Run `docker-compose up app -d`
 
-Your app should be running on [http://localhost:4000](http://localhost:4000)
+Your app should be running on [https://localhost](https://localhost)
+
+### Docker (without Compose)
+Running the application without Docker Compose requires a bit more config.
+For ease-of-use, create a `build.sh` file and paste:
+```sh
+#!/bin/bash
+
+export SECRET_KEY_BASE=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 64 ; echo '')
+export DATABASE_URL=<ecto connection string>
+export REDIS_URL=<redis connection string>
+export PHX_HOST=localhost
+
+docker build -t tenantee-app . \
+    --build-arg SECRET_KEY_BASE=$SECRET_KEY_BASE \
+    --build-arg DATABASE_URL=$DATABASE_URL \
+    --build-arg REDIS_URL=$REDIS_URL
+
+docker run -d \
+    --env SECRET_KEY_BASE=$SECRET_KEY_BASE \
+    --env DATABASE_URL=$DATABASE_URL \
+    --env PHX_HOST=$PHX_HOST \
+    --env REDIS_URL=$REDIS_URL \
+    -p 443:443 \
+    tenantee-app
+```
+
+Then run:
+1. `chmod +x build.sh`
+2. `./build.sh`
+
+Your app should be running on [https://localhost](https://localhost)
 
 ## Contributing
 If you wish to contribute to the project, please refer to the [contributing guide](./CONTRIBUTING.md) first.
