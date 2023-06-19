@@ -81,3 +81,22 @@ config :swoosh, :api_client, false
 # Configure Redis
 config :tenantee,
   redis_connection_url: "redis://:tenantee_redis@localhost:6379"
+
+# Configure Git Hooks
+config :git_hooks,
+  auto_install: true,
+  verbose: true,
+  hooks: [
+    pre_commit: [
+      tasks: [
+        {:cmd, "mix credo"},
+        {:cmd, "mix sobelow"}
+      ]
+    ],
+    pre_push: [
+      verbose: false,
+      tasks: [
+        {:cmd, "mix test"}
+      ]
+    ]
+  ]
