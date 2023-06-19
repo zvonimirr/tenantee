@@ -5,14 +5,16 @@ services:
     container_name: "tenantee_app"
     build: 
       context: ./
+      network: host
       dockerfile: Dockerfile
       args:
-        - PHOENIX_VERSION=1.7.2
-        - DATABASE_URL=ecto://tenantee:tenantee@db/tenantee_dev
-        - SECRET_KEY_BASE=pleasechangeme
+        - DATABASE_URL=ecto://tenantee:tenantee@localhost:5432/tenantee_dev
+        - SECRET_KEY_BASE=R76c9a0MiHVZszVrPmgYZ1BVxxElZXMkOtaNjjKdPhPfXOscuPjSBCjoTYCKdi9Q
+        - REDIS_URL=redis://:tenantee_redis@redis:6379
     environment:
       - DATABASE_URL=ecto://tenantee:tenantee@db/tenantee_dev
-      - SECRET_KEY_BASE=pleasechangeme
+      - SECRET_KEY_BASE=R76c9a0MiHVZszVrPmgYZ1BVxxElZXMkOtaNjjKdPhPfXOscuPjSBCjoTYCKdi9Q
+      - REDIS_URL=redis://:tenantee_redis@redis:6379
       - PHX_HOST=localhost
     ports:
       - "443:443"
