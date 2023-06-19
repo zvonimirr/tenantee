@@ -96,7 +96,7 @@ defmodule TenanteeWeb.TenantLive.Edit do
         <%= if @communication_channels != [] do %>
           <div class="flex flex-col gap-4">
             <%= for communication_channel <- @communication_channels do %>
-              <p class="text-gray-500">
+              <p class="text-gray-500 communication-channel">
                 <%= communication_channel.type %>
                 <span class="text-gray-400">
                   (<%= communication_channel.value %>)
