@@ -31,3 +31,7 @@ config :logger, level: :warning
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+# Configure Redis
+config :tenantee,
+  redis_connection_url: "redis://:tenantee_redis@localhost:6379"
