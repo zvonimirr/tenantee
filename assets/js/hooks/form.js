@@ -27,18 +27,18 @@ export const FormHook = {
     const checkMinMax = () => {
       const outOfRange = minMax.some((input) => {
         const value = parseFloat(input.value);
-        const min = parseInt(input.getAttribute("min"));
-        const max = parseInt(input.getAttribute("max"));
+        const min = parseFloat(input.getAttribute("min"));
+        const max = parseFloat(input.getAttribute("max"));
 
         if (isNaN(value)) {
           return true;
         }
 
-        if (!isNaN(min) && value <= min) {
+        if (!isNaN(min) && value < min) {
           return true;
         }
 
-        if (!isNaN(max) && value >= max) {
+        if (!isNaN(max) && value > max) {
           return true;
         }
       });
