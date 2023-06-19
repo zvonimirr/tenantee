@@ -43,7 +43,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/108657761?v=4",
       "profile": "https://github.com/lukaevet",
       "contributions": [
-        "code"
+        "code",
+        "infra"
       ]
     },
     {
@@ -80,5 +81,6 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "projectName": "tenantee",
-  "projectOwner": "zvonimirr"
+  "projectOwner": "zvonimirr",
+  "commitType": "docs"
 }
