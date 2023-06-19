@@ -64,7 +64,7 @@ defmodule TenanteeWeb.PropertyLive.Add do
       <.input
         type="number"
         name="price"
-        min="0"
+        min="0.1"
         step="0.1"
         value={@price}
         label={"Price (" <> @currency <> ")"}
