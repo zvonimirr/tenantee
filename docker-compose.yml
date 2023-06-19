@@ -8,12 +8,12 @@ services:
       dockerfile: Dockerfile
       args:
         - PHOENIX_VERSION=1.7.2
+        - DATABASE_URL=ecto://tenantee:tenantee@db/tenantee_dev
+        - SECRET_KEY_BASE=pleasechangeme
     environment:
-      - DB_PREFIX=tenantee_dev
-      - DB_HOST=db
-      - DB_USERNAME=tenantee
-      - DB_PASSWORD=tenantee
       - DATABASE_URL=ecto://tenantee:tenantee@db/tenantee_dev
+      - SECRET_KEY_BASE=pleasechangeme
+      - PHX_HOST=localhost
     ports:
       - "443:443"
     depends_on:
