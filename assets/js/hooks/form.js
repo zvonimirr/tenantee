@@ -53,7 +53,9 @@ export const FormHook = {
     // Check required fields on page load
     checkRequired();
     // Check min and max values on page load
-    checkMinMax();
+    if (minMax.length > 0) {
+      checkMinMax();
+    }
 
     // Check required fields on input change
     for (const field of required) {
