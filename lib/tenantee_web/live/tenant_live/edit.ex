@@ -123,12 +123,21 @@ defmodule TenanteeWeb.TenantLive.Edit do
           phx-hook="FormHook"
           phx-submit="add_communication_channel"
         >
-          <.input type="text" name="type" label="Type" value="" placeholder="Channel type" required />
+          <.input
+            type="text"
+            name="type"
+            label="Type"
+            value=""
+            placeholder="Channel type"
+            maxlength="255"
+            required
+          />
           <.input
             type="text"
             name="value"
             label="Value"
             value=""
+            maxlength="255"
             placeholder="Channel value"
             required
           />
