@@ -49,6 +49,7 @@ defmodule TenanteeWeb.PropertyLive.Edit do
         value={@name}
         label="Name"
         placeholder="Name of the property"
+        maxlength="255"
         required
       />
       <.input
@@ -57,12 +58,14 @@ defmodule TenanteeWeb.PropertyLive.Edit do
         value={@address}
         label="Address"
         placeholder="Address of the property"
+        maxlength="255"
         required
       />
       <.input
         type="number"
         name="price"
         min="0.1"
+        max="9999999999.9"
         step="0.1"
         value={@price}
         label={"Price (" <> @currency <> ")"}
@@ -74,6 +77,7 @@ defmodule TenanteeWeb.PropertyLive.Edit do
         name="description"
         value={@description}
         label="Description"
+        maxlength="255"
         placeholder="Description of the property"
       />
 
