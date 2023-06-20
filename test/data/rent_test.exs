@@ -1,5 +1,6 @@
 defmodule Tenantee.Data.RentTest do
   use Tenantee.DataCase
+  alias Tenantee.Schema.Rent, as: Schema
   alias Tenantee.Entity.{Rent, Tenant}
   import Tenantee.Test.Factory.{Property, Tenant}
   import Tenantee.Jobs.Rent
@@ -68,5 +69,17 @@ defmodule Tenantee.Data.RentTest do
 
   test "errors on paying rent" do
     assert {:error, "Rent not found"} = Rent.pay(-1)
+  end
+
+  test "errors on invalid price" do
+    changeset =
+      Schema.changeset(%Schema{}, %{
+        amount: Money.new(0, :USD),
+        due_date: Date.utc_today(),
+        paid: false,
+        tenant_id: 0
+      })
+
+    assert ["must be greater than 0"] = errors_on(changeset).amount
   end
 end
