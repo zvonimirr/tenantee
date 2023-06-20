@@ -23,8 +23,8 @@ defmodule TenanteeWeb.PropertyLive.Add do
            }) do
       {:noreply, handle_success(socket, property.id, name)}
     else
-      {:error, reason} ->
-        {:noreply, Helper.handle_errors(socket, reason)}
+      {:error, _reason} ->
+        {:noreply, put_flash(socket, :error, "Something went wrong, please try again.")}
     end
   end
 

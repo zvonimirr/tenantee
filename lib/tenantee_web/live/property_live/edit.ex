@@ -24,8 +24,8 @@ defmodule TenanteeWeb.PropertyLive.Edit do
          {:ok, property} <- Property.get(socket.assigns.id) do
       {:noreply, handle_success(socket, name, property)}
     else
-      {:error, reason} ->
-        {:noreply, Helper.handle_errors(socket, reason)}
+      {:error, _reason} ->
+        {:noreply, put_flash(socket, :error, "Something went wrong, please try again.")}
     end
   end
 

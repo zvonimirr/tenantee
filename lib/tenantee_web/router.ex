@@ -19,10 +19,6 @@ defmodule TenanteeWeb.Router do
     plug ForceConfig
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
-  end
-
   scope "/", TenanteeWeb do
     pipe_through :browser
 
