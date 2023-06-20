@@ -16,6 +16,16 @@ defmodule Tenantee.MixProject do
         "coveralls.html": :test,
         "coveralls.json": :test,
         "coveralls.github": :test
+      ],
+
+      # Docs
+      name: "Tenantee",
+      source_url: "https://github.com/zvonimirr/tenantee",
+      homepage_url: "http://github.com/zvonimirr/tenantee",
+      docs: [
+        # The main page in the docs
+        main: "readme",
+        extras: ["README.md"]
       ]
     ]
   end
@@ -66,9 +76,10 @@ defmodule Tenantee.MixProject do
       {:html_entities, "~> 0.5", only: :test},
       {:excoveralls, "~> 0.16.1", only: :test},
       {:mock, "~> 0.3.8", only: :test},
+      {:git_hooks, "~> 0.7.0", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.29.4", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:sobelow, "~> 0.12", only: [:dev, :test], runtime: false},
-      {:git_hooks, "~> 0.7.0", only: [:dev], runtime: false}
+      {:sobelow, "~> 0.12", only: [:dev, :test], runtime: false}
     ]
   end
 
