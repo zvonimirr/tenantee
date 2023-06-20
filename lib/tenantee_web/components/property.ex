@@ -11,6 +11,7 @@ defmodule TenanteeWeb.Components.Property do
   Renders a property card.
   """
   attr :property, :map, required: true
+  attr :tenant_count, :integer, required: true
 
   def card(assigns) do
     ~H"""
@@ -45,7 +46,7 @@ defmodule TenanteeWeb.Components.Property do
         <% end %>
       </p>
       <div class="flex gap-4">
-        <.button phx-click={open_manage_tenants_modal(@property.id)}>
+        <.button phx-click={open_manage_tenants_modal(@property.id)} disabled={@tenant_count == 0}>
           <.icon name="hero-user" class="w-4 h-4" /> Manage tenants
         </.button>
         <a href={"/properties/#{@property.id}"}>
