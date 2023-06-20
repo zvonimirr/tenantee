@@ -1,6 +1,7 @@
 defmodule TenanteeWeb.Router do
   use TenanteeWeb, :router
   alias TenanteeWeb.Csp
+  alias TenanteeWeb.Plugs.ForceConfig
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -14,6 +15,10 @@ defmodule TenanteeWeb.Router do
     }
   end
 
+  pipeline :config_required do
+    plug ForceConfig
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -24,12 +29,16 @@ defmodule TenanteeWeb.Router do
     live "/", HomeLive
 
     scope "/properties" do
+      pipe_through :config_required
+
       live "/", PropertyLive.List
       live "/new", PropertyLive.Add
       live "/:id", PropertyLive.Edit
     end
 
     scope "/tenants" do
+      pipe_through :config_required
+
       live "/", TenantLive.List
       live "/new", TenantLive.Add
       live "/:id", TenantLive.Edit
