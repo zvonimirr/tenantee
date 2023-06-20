@@ -74,6 +74,7 @@ defmodule TenanteeWeb.TenantLive.Edit do
             value={@first_name}
             label="First name"
             placeholder="Tenant's first name"
+            maxlength="255"
             required
           />
           <.input
@@ -82,6 +83,7 @@ defmodule TenanteeWeb.TenantLive.Edit do
             value={@last_name}
             label="Last name"
             placeholder="Tenant's last name"
+            maxlength="255"
             required
           />
 
