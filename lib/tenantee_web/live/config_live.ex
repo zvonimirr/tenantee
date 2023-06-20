@@ -35,7 +35,7 @@ defmodule TenanteeWeb.ConfigLive do
     ~H"""
     <h1 class="text-3xl font-bold">Configuration</h1>
     <form id="config-form" phx-hook="FormHook" phx-submit="save" class="flex flex-col gap-4 max-w-xs">
-      <.input name="name" value={@name} label="Name" placeholder="Your name..." />
+      <.input name="name" value={@name} label="Name" maxlength="255" placeholder="Your name..." />
       <.input
         type="select"
         name="currency"
