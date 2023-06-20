@@ -1,0 +1,89 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:REGION_NAME:ACCOUNT_ID:task-definition/tenantee-app:1",
+    "containerDefinitions": [
+        {
+            "name": "tenantee-app",
+            "image": "ACCOUNT_ID.dkr.ecr.eu-central-1.amazonaws.com/tenantee-app:latest",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "containerPort": 443,
+                    "hostPort": 443,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "PHX_HOST",
+                    "value": "LOADBALANCER_ENDPOINT"
+                },
+                {
+                    "name": "DATABASE_URL",
+                    "value": "ecto://DATABASE_USERNAME:DATABASE_PASSWORD@DATABASE_ENDPOINT:5432/tenantee"
+                },
+                {
+                    "name": "SECRET_KEY_BASE",
+                    "value": "SECRET_KEY_BASE_FROM_BUILD"
+                },
+                {
+                    "name": "REDIS_URL",
+                    "value": "REDIS_URL_WITH_CREDS"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "dockerLabels": {},
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "LOG_GROUP_NAME",
+                    "awslogs-region": "REGION_NAME",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ],
+    "family": "tenantee-app",
+    "executionRoleArn": "arn:aws:iam::ACCOUNT_ID:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "revision": 1,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "name": "ecs.capability.execution-role-awslogs"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "512",
+    "registeredAt": "2023-06-20T09:08:31.273Z",
+    "registeredBy": "arn:aws:iam::ACCOUNT_ID:user/ACCOUNT_NAME",
+    "tags": []
+}
