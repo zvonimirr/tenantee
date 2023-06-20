@@ -44,3 +44,10 @@ npm-debug.log
 
 # Ignore build.sh
 build.sh
+
+# Ignore releases (Fly.io will generate them)
+rel/
+release.ex
+
+# Ignore Fly.io deploy config
+fly.toml

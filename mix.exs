@@ -31,7 +31,8 @@ defmodule Tenantee.MixProject do
           "LICENSE.md",
           "CHANGELOG.md",
           "SECURITY.md",
-          "deployment/AWS/AWS.md"
+          "deployment/AWS/AWS.md",
+          "deployment/Fly.io/Fly.io.md"
         ]
       ]
     ]
