@@ -13,10 +13,12 @@ defmodule TenanteeWeb.Components.Rent do
   attr :rent, :map, required: true
 
   def list_item(assigns) do
-    class =
-      [
-        "disabled:opacity-50 disabled:cursor-not-allowed"
-      ] ++ if assigns.rent.paid, do: ["bg-green-500"], else: ["bg-red-500 hover:bg-red-500"]
+    bgcolor = if assigns.rent.paid, do: "bg-green-500", else: "bg-red-500 hover:bg-red-500"
+
+    class = [
+      bgcolor,
+      "disabled:opacity-50 disabled:cursor-not-allowed"
+    ]
 
     assigns = assign(assigns, class: class |> Enum.join(" "))
 
