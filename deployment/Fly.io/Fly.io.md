@@ -34,6 +34,7 @@ To deploy Tenantee on Fly.io follow these steps:
 4. When asked about the database, say yes
 5. When asked about Redis, say yes
 6. When asked to deploy now, don't do it (yet)
+7. Change the `force_https` key in `fly.toml` to false if experiencing issues.
 
 If Redis creation failed, go to the next section. If it didn't you can skip it.
 
