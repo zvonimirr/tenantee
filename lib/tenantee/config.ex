@@ -63,4 +63,17 @@ defmodule Tenantee.Config do
       {:error, _} -> :error
     end
   end
+
+  @doc """
+  Check if any of the required config values are missing.
+  """
+  @spec lacks_config?() :: boolean()
+  def lacks_config?() do
+    [
+      get(:name),
+      get(:currency)
+    ]
+    |> Enum.map(&elem(&1, 0))
+    |> Enum.any?(&(&1 == :error))
+  end
 end

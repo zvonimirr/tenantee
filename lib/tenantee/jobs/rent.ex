@@ -2,7 +2,7 @@ defmodule Tenantee.Jobs.Rent do
   @moduledoc """
   Helper functions to be executed by Quantum
   """
-  alias TenanteeWeb.Plugs.ForceConfig
+  alias Tenantee.Config
   alias Tenantee.Entity.{Tenant, Rent}
 
   @doc """
@@ -10,7 +10,7 @@ defmodule Tenantee.Jobs.Rent do
   """
   @spec generate_rents() :: :ok
   def generate_rents() do
-    if not ForceConfig.lacks_config?() do
+    if not Config.lacks_config?() do
       Tenant.all()
       |> Enum.filter(&(Enum.count(&1.properties) > 0))
       |> Enum.each(fn tenant ->

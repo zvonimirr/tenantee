@@ -65,6 +65,7 @@ defmodule Tenantee.MixProject do
       {:faker, "~> 0.17", only: :test},
       {:html_entities, "~> 0.5", only: :test},
       {:excoveralls, "~> 0.16.1", only: :test},
+      {:mock, "~> 0.3.8", only: :test},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.12", only: [:dev, :test], runtime: false},
       {:git_hooks, "~> 0.7.0", only: [:dev], runtime: false}
