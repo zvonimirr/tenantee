@@ -67,7 +67,6 @@ defmodule TenanteeWeb.TenantLive.Edit do
           phx-hook="FormHook"
           phx-submit="update"
           class="flex flex-col gap-4 max-w-xs"
-          data-required="first_name,last_name"
         >
           <.input
             type="text"
@@ -75,6 +74,7 @@ defmodule TenanteeWeb.TenantLive.Edit do
             value={@first_name}
             label="First name"
             placeholder="Tenant's first name"
+            maxlength="255"
             required
           />
           <.input
@@ -83,6 +83,7 @@ defmodule TenanteeWeb.TenantLive.Edit do
             value={@last_name}
             label="Last name"
             placeholder="Tenant's last name"
+            maxlength="255"
             required
           />
 
@@ -94,7 +95,7 @@ defmodule TenanteeWeb.TenantLive.Edit do
       <div class="col-span-2 md:col-span-1">
         <h1 class="text-3xl font-bold my-4">Communication channels</h1>
         <%= if @communication_channels != [] do %>
-          <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-4 max-w-xs">
             <%= for communication_channel <- @communication_channels do %>
               <p class="text-gray-500 communication-channel">
                 <%= communication_channel.type %>
@@ -121,14 +122,22 @@ defmodule TenanteeWeb.TenantLive.Edit do
           class="max-w-xs"
           phx-hook="FormHook"
           phx-submit="add_communication_channel"
-          data-required="type,value"
         >
-          <.input type="text" name="type" label="Type" value="" placeholder="Channel type" required />
+          <.input
+            type="text"
+            name="type"
+            label="Type"
+            value=""
+            placeholder="Channel type"
+            maxlength="255"
+            required
+          />
           <.input
             type="text"
             name="value"
             label="Value"
             value=""
+            maxlength="255"
             placeholder="Channel value"
             required
           />

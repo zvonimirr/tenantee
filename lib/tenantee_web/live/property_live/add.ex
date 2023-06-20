@@ -41,7 +41,6 @@ defmodule TenanteeWeb.PropertyLive.Add do
       phx-hook="FormHook"
       phx-submit="create"
       class="flex flex-col gap-4 max-w-xs"
-      data-required="name,address,price"
     >
       <.input
         type="text"
@@ -49,6 +48,7 @@ defmodule TenanteeWeb.PropertyLive.Add do
         value={@name}
         label="Name"
         placeholder="Name of the property"
+        maxlength="255"
         required
       />
       <.input
@@ -57,12 +57,14 @@ defmodule TenanteeWeb.PropertyLive.Add do
         value={@address}
         label="Address"
         placeholder="Address of the property"
+        maxlength="255"
         required
       />
       <.input
         type="number"
         name="price"
         min="0.1"
+        max="9999999999.9"
         step="0.1"
         value={@price}
         label={"Price (" <> @currency <> ")"}
@@ -74,6 +76,7 @@ defmodule TenanteeWeb.PropertyLive.Add do
         name="description"
         value={@description}
         label="Description"
+        maxlength="255"
         placeholder="Description of the property"
       />
 

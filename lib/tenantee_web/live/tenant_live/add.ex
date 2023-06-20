@@ -37,7 +37,6 @@ defmodule TenanteeWeb.TenantLive.Add do
       phx-hook="FormHook"
       phx-submit="create"
       class="flex flex-col gap-4 max-w-xs"
-      data-required="first_name,last_name"
     >
       <.input
         type="text"
@@ -45,6 +44,7 @@ defmodule TenanteeWeb.TenantLive.Add do
         value={@first_name}
         label="First name"
         placeholder="Tenant's first name"
+        maxlength="255"
         required
       />
       <.input
@@ -53,6 +53,7 @@ defmodule TenanteeWeb.TenantLive.Add do
         value={@last_name}
         label="Last name"
         placeholder="Tenant's last name"
+        maxlength="255"
         required
       />
 
