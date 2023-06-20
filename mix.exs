@@ -25,7 +25,14 @@ defmodule Tenantee.MixProject do
       docs: [
         # The main page in the docs
         main: "readme",
-        extras: ["README.md"]
+        extras: [
+          "README.md",
+          "CONTRIBUTING.md",
+          "LICENSE.md",
+          "CHANGELOG.md",
+          "SECURITY.md",
+          "deployment/AWS/AWS.md"
+        ]
       ]
     ]
   end
