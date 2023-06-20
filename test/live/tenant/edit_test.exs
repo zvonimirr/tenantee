@@ -25,12 +25,19 @@ defmodule TenanteeWeb.TenantEditLiveTest do
 
     html =
       view
-      |> element("#tenant-edit-form")
+      |> form("#tenant-edit-form")
       |> render_submit(%{first_name: first_name, last_name: last_name})
       |> decode_html_entities()
 
     assert html =~ "Edit #{first_name} #{last_name}"
     assert html =~ "#{first_name} #{last_name} was updated successfully"
+
+    assert view
+           |> form("#tenant-edit-form")
+           |> render_submit(%{
+             first_name: "",
+             last_name: ""
+           }) =~ "Something went wrong"
   end
 
   test "adds/removes a communication channel", %{conn: conn} do
@@ -53,5 +60,9 @@ defmodule TenanteeWeb.TenantEditLiveTest do
     assert view
            |> element(".communication-channel button")
            |> render_click() =~ "Communication channel was deleted successfully."
+
+    assert view
+           |> form("#communication-channel-add-form")
+           |> render_submit(%{type: "email", value: ""}) =~ "Something went wrong"
   end
 end

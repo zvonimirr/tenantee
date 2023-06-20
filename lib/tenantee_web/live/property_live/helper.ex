@@ -5,7 +5,6 @@ defmodule TenanteeWeb.PropertyLive.Helper do
   alias Tenantee.Config
   alias Tenantee.Entity.Property
   import Phoenix.Component, only: [assign: 3]
-  import Phoenix.LiveView, only: [put_flash: 3]
 
   @doc """
   Check if the submit button should be disabled
@@ -55,19 +54,6 @@ defmodule TenanteeWeb.PropertyLive.Helper do
       |> assign(:price, property.price.amount |> to_string())
       |> assign(:id, id)
       |> assign(:currency, currency)
-    end
-  end
-
-  @doc """
-  Handles the errors that might occur when dealing with properties
-  """
-  def handle_errors(socket, reason) do
-    case reason do
-      "key not found" ->
-        put_flash(socket, :error, "Please set your default currency in the settings.")
-
-      _reason ->
-        put_flash(socket, :error, "Something went wrong, please try again.")
     end
   end
 

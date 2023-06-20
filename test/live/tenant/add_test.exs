@@ -28,4 +28,12 @@ defmodule TenanteeWeb.TenantAddLiveTest do
 
     assert html =~ "Edit #{first_name} #{last_name}"
   end
+
+  test "handles errors", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/tenants/new")
+
+    assert view
+           |> form("#tenant-add-form", %{"first_name" => "", "last_name" => "Testic"})
+           |> render_submit() =~ "Something went wrong"
+  end
 end

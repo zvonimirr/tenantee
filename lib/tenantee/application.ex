@@ -8,8 +8,6 @@ defmodule Tenantee.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Start the Telemetry supervisor
-      TenanteeWeb.Telemetry,
       # Start the Ecto repository
       Tenantee.Repo,
       # Start the Redix cache

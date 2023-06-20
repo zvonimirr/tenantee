@@ -63,5 +63,26 @@ defmodule TenanteeWeb.PropertyListLiveTest do
            |> element("button", "Manage tenants")
            |> render_click()
            |> decode_html_entities() =~ "#{tenant.first_name} #{tenant.last_name}"
+
+    view
+    |> element("button", "Manage tenants")
+    |> render_click()
+
+    assert view
+           |> render_click("toggle_lease", %{property: -1, tenant: tenant.id}) =~
+             "Something went wrong"
+  end
+
+  test "handles errors", %{conn: conn} do
+    {:ok, view, _html} = live(conn, "/properties")
+
+    assert view
+           |> render_click("delete", %{id: -1}) =~ "Property not found"
+
+    assert view
+           |> render_click("do_delete", %{id: -1}) =~ "Property not found"
+
+    assert view
+           |> render_click("manage_tenants", %{id: -1}) =~ "Property not found"
   end
 end

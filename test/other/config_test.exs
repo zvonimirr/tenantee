@@ -1,8 +1,12 @@
 defmodule Tenantee.Other.ConfigTest do
   use Tenantee.DataCase
+  import Mock
+  alias Tenantee.Redis
   alias Tenantee.Config
 
   test "get" do
+    Config.delete(:test)
+
     assert Config.get(:test, "default") == "default"
     assert Config.get("test", "default") == "default"
 
@@ -13,16 +17,34 @@ defmodule Tenantee.Other.ConfigTest do
     assert Config.get("", "default") == "default"
   end
 
-  assert "set" do
+  test "get (with failure)" do
+    with_mock Redis, command: fn _cmd -> {:error, "error"} end do
+      assert Config.get(:test, "default") == "default"
+    end
+  end
+
+  test "set" do
     assert Config.set(:test, "value") == :ok
 
     assert Config.get("test") == {:ok, "value"}
   end
 
-  assert "delete" do
+  test "set (with failure)" do
+    with_mock Redis, command: fn _cmd -> {:error, "error"} end do
+      assert Config.set(:test, "value") == :error
+    end
+  end
+
+  test "delete" do
     Config.set(:test, "value")
     assert Config.delete(:test) == :ok
 
     assert Config.get("test") == {:error, "key not found"}
+  end
+
+  test "delete (with failure)" do
+    with_mock Redis, command: fn _cmd -> {:error, "error"} end do
+      assert Config.delete(:test) == :error
+    end
   end
 end
