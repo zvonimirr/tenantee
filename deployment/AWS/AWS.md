@@ -6,11 +6,11 @@ To deploy `tenantee-app` on the AWS platform follow these steps:
 2. We will use ECS with one service and one task.
 3. We will create an application loadbalancer which will route traffic and serve it through HTTPS (self-signed).
 
-## Build an image localy
+## Build an image locally
 
 Before starting, create a Postgres DB in AWS, as well as an Elastic Cache Redis database,
 
-To build the docker image on local machine, copy the `build.sh` script from the README.md in the project root and update the exports.
+To build the docker image on the local machine, copy the `build.sh` script from the README.md in the project root and update the exports.
 Run the script, and at the end of the build process you will receive the `SECRET_KEY_BASE` variable - save it somewhere.
 
 ## Push image to AWS ECR
