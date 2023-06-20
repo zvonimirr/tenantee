@@ -33,7 +33,7 @@ To deploy Tenantee on Fly.io follow these steps:
 3. Run `flyctl launch`
 4. When asked about the database, say yes
 5. When asked about Redis, say yes
-6. When asked to deploy now, don't do it
+6. When asked to deploy now, don't do it (yet)
 
 If Redis creation failed, go to the next section. If it didn't you can skip it.
 
