@@ -31,8 +31,6 @@ defmodule TenanteeWeb.PropertyLive.Add do
   def render(assigns) do
     assigns = assign(assigns, :disabled, Helper.is_submit_disabled?(assigns))
 
-    # TODO: Allow FormHook to handle min, max for number inputs
-
     ~H"""
     <a class="text-gray-500" href={~p"/properties"}>
       <.icon name="hero-arrow-left" /> Back to properties

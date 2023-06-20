@@ -32,4 +32,26 @@ defmodule TenanteeWeb.TenantEditLiveTest do
     assert html =~ "Edit #{first_name} #{last_name}"
     assert html =~ "#{first_name} #{last_name} was updated successfully"
   end
+
+  test "adds/removes a communication channel", %{conn: conn} do
+    email = Faker.Internet.email()
+
+    {:ok, tenant} = generate_tenant()
+
+    {:ok, view, html} = live(conn, "/tenants/#{tenant.id}")
+
+    assert html =~ "No communication channels found"
+
+    assert view
+           |> form("#communication-channel-add-form")
+           |> render_submit(%{type: "email", value: email}) =~
+             "Communication channel email was added successfully."
+
+    assert view
+           |> render() =~ email
+
+    assert view
+           |> element(".communication-channel button")
+           |> render_click() =~ "Communication channel was deleted successfully."
+  end
 end

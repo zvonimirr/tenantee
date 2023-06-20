@@ -34,6 +34,7 @@ defmodule TenanteeWeb.TenantLive.Helper do
       socket
       |> assign(:first_name, tenant.first_name)
       |> assign(:last_name, tenant.last_name)
+      |> assign(:communication_channels, tenant.communication_channels)
       |> assign(:id, id)
     end
   end
