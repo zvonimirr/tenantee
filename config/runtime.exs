@@ -29,15 +29,15 @@ if config_env() == :prod do
       """
 
   redis_connection_url =
-    System.get_env("REDIS_URL") ||\
-    raise """
-    environment variable REDIS_URL is missing.
-    For example: redis://USER:PASS@HOST/DATABASE
-    """
+    System.get_env("REDIS_URL") ||
+      raise """
+      environment variable REDIS_URL is missing.
+      For example: redis://USER:PASS@HOST/DATABASE
+      """
 
   # Configure Redis
   config :tenantee,
-  redis_connection_url: redis_connection_url
+    redis_connection_url: redis_connection_url
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 

@@ -41,7 +41,6 @@ defmodule TenanteeWeb.PropertyLive.Add do
       phx-hook="FormHook"
       phx-submit="create"
       class="flex flex-col gap-4 max-w-xs"
-      data-required="name,address,price"
     >
       <.input
         type="text"
