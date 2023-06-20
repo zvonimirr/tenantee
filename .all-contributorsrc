@@ -16,7 +16,8 @@
         "doc",
         "projectManagement",
         "test",
-        "code"
+        "code",
+        "infra"
       ]
     },
     {
