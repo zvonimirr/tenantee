@@ -24,8 +24,6 @@ Tenantee (pronounced "tenant-e") is a free and open-source management software a
 
 Your app should be running on [http://localhost:4000](http://localhost:4000)
 
-Deploying to production? Please make sure to set all the necessary environment variables and see [https://hexdocs.pm/phoenix/deployment.html](https://hexdocs.pm/phoenix/deployment.html)
-
 ### Docker Compose
 Running the application via Docker Compose is simple and easy.
 1. Run `docker-compose up db -d`
@@ -67,6 +65,11 @@ Then run:
 2. `./build.sh`
 
 Your app should be running on [https://localhost](https://localhost)
+
+## Production
+Deploying to production? Take a look at the guides [here](deployment).
+
+Not satisfied? Take a look: [https://hexdocs.pm/phoenix/deployment.html](https://hexdocs.pm/phoenix/deployment.html)
 
 ## Contributing
 If you wish to contribute to the project, please refer to the [contributing guide](./CONTRIBUTING.md) first.
