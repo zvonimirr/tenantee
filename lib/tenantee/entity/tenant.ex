@@ -79,7 +79,7 @@ defmodule Tenantee.Entity.Tenant do
   def add_to_property(id, property_id) do
     with {:ok, tenant} <- get(id),
          {:ok, property} <- Property.get(property_id),
-         changeset <- Schema.set_properties(tenant, tenant.properties ++ [property]),
+         changeset <- Schema.set_properties(tenant, [property | tenant.properties]),
          {:ok, _} <- Repo.update(changeset) do
       :ok
     end
@@ -115,7 +115,7 @@ defmodule Tenantee.Entity.Tenant do
     with {:ok, tenant} <- get(id),
          {:ok, channel} <- CommunicationChannel.create(attrs),
          changeset <-
-           Schema.set_communication_channels(tenant, tenant.communication_channels ++ [channel]),
+           Schema.set_communication_channels(tenant, [channel | tenant.communication_channels]),
          {:ok, _} <- Repo.update(changeset) do
       :ok
     end

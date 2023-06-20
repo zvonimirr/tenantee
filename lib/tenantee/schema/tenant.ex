@@ -7,6 +7,22 @@ defmodule Tenantee.Schema.Tenant do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @typedoc """
+  A tenant. Someone who rents a property.
+  By default, a tenant has no properties and no communication channels.
+  First name and last name are required.
+  """
+
+  @type t :: %__MODULE__{
+          id: integer(),
+          first_name: String.t(),
+          last_name: String.t(),
+          properties: [Property.t()],
+          communication_channels: [CommunicationChannel.t()],
+          inserted_at: DateTime.t(),
+          updated_at: DateTime.t()
+        }
+
   schema "tenants" do
     field :first_name, :string
     field :last_name, :string
