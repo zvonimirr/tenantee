@@ -9,7 +9,7 @@ defmodule TenanteeWeb.HomeLive do
 
   def render(assigns) do
     ~H"""
-    <%= if is_nil(@name) do %>
+    <%= if Config.lacks_config?() do %>
       <.modal id="initial-modal" show>
         <p class="text-3xl font-bold">Hey there!</p>
         <p class="text-gray-600">First time here? Let's get you started.</p>
@@ -45,7 +45,7 @@ defmodule TenanteeWeb.HomeLive do
         </p>
       <% else %>
         <p class="text-gray-600">
-          Looks, like you own <%= @property_count %> <%= if @property_count == 1,
+          Looks like you own <%= @property_count %> <%= if @property_count == 1,
             do: "property",
             else: "properties" %> and <%= @tenant_count %> <%= if @tenant_count == 1,
             do: "tenant",
