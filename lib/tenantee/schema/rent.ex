@@ -7,6 +7,22 @@ defmodule Tenantee.Schema.Rent do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @typedoc """
+  An amount of money that is due on a certain date.
+  Can be paid or unpaid, and belongs to a tenant.
+  """
+
+  @type t :: %__MODULE__{
+          id: integer(),
+          amount: Money.t(),
+          due_date: Date.t(),
+          paid: boolean(),
+          tenant: Tenant.t(),
+          tenant_id: integer(),
+          inserted_at: DateTime.t(),
+          updated_at: DateTime.t()
+        }
+
   schema "rents" do
     field :amount, Money.Ecto.Composite.Type
     field :due_date, :date
