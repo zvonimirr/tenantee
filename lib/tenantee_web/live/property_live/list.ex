@@ -115,7 +115,7 @@ defmodule TenanteeWeb.PropertyLive.List do
     <% else %>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <%= for property <- @properties do %>
-          <.card property={property} />
+          <.card property={property} tenant_count={@tenant_count} />
         <% end %>
       </div>
       <a href={~p"/properties/new"}>
@@ -131,6 +131,7 @@ defmodule TenanteeWeb.PropertyLive.List do
     socket
     |> assign(:properties, Property.all())
     |> assign(:property, nil)
+    |> assign(:tenant_count, Tenant.count())
     |> assign(:action, nil)
   end
 end

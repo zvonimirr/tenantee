@@ -39,6 +39,7 @@ defmodule TenanteeWeb.PropertyListLiveTest do
 
   test "opens lease modal", %{conn: conn} do
     {:ok, _property} = generate_property()
+    {:ok, _tenant} = generate_tenant()
 
     {:ok, view, _html} = live(conn, "/properties")
 
