@@ -58,6 +58,8 @@ docker run -d \
     --env REDIS_URL=$REDIS_URL \
     -p 443:443 \
     tenantee-app
+
+echo $SECRET_KEY_BASE
 ```
 
 Then run:
