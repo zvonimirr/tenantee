@@ -9,11 +9,13 @@ import tippy, { animateFill, roundArrow } from "tippy.js";
 // Import hooks
 import { FormHook } from "./hooks/form";
 import { ModalHook } from "./hooks/modal";
+import { CopyHook } from "./hooks/copy";
 
 // Define hooks
 const Hooks = {
   FormHook,
   ModalHook,
+  CopyHook,
 };
 
 const csrfToken = document

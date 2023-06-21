@@ -30,7 +30,7 @@ defmodule TenanteeWeb.TenantCommunicationChannelsLiveTest do
            |> render() =~ email
 
     assert view
-           |> element(".communication-channel button")
+           |> element(".communication-channel button.bg-red-500")
            |> render_click() =~ "Communication channel was deleted successfully."
 
     assert view

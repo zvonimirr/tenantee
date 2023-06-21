@@ -44,21 +44,36 @@ defmodule TenanteeWeb.TenantLive.CommunicationChannels do
         Communication channels for <%= @first_name %> <%= @last_name %>
       </h1>
       <%= if @communication_channels != [] do %>
-        <div class="flex flex-col gap-4 max-w-xs">
+        <div
+          id="communication-channels-container"
+          class="flex flex-col gap-4 max-w-xs"
+          phx-hook="CopyHook"
+        >
           <%= for communication_channel <- @communication_channels do %>
             <p class="text-gray-500 communication-channel">
               <%= communication_channel.type %>
               <span class="text-gray-400">
                 (<%= communication_channel.value %>)
               </span>
-              <.button
-                class="mx-4 bg-red-500 hover:bg-red-600 disabled:bg-red-500 disabled:cursor-not-allowed disabled:hover:bg-red-600"
-                phx-click="delete_communication_channel"
-                phx-value-id={communication_channel.id}
-                phx-disable-with="..."
-              >
-                <.icon name="hero-trash" />
-              </.button>
+              <span class="mx-4">
+                <.button
+                  id={"copy-#{communication_channel.id}"}
+                  data-copy
+                  data-value={communication_channel.value}
+                  data-tooltip="Copy"
+                >
+                  <.icon name="hero-clipboard" />
+                </.button>
+                <.button
+                  class="bg-red-500 hover:bg-red-600 disabled:bg-red-500 disabled:cursor-not-allowed disabled:hover:bg-red-600"
+                  phx-click="delete_communication_channel"
+                  phx-value-id={communication_channel.id}
+                  phx-disable-with="..."
+                  data-tooltip="Delete"
+                >
+                  <.icon name="hero-trash" />
+                </.button>
+              </span>
             </p>
           <% end %>
         </div>
