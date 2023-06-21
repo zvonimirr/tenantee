@@ -41,6 +41,7 @@ defmodule TenanteeWeb.Router do
       scope "/:id" do
         live "/", TenantLive.Edit
         live "/channels", TenantLive.CommunicationChannels
+        live "/rents", TenantLive.Rent
       end
     end
 
