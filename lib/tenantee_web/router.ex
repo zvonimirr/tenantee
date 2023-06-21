@@ -37,7 +37,11 @@ defmodule TenanteeWeb.Router do
 
       live "/", TenantLive.List
       live "/new", TenantLive.Add
-      live "/:id", TenantLive.Edit
+
+      scope "/:id" do
+        live "/", TenantLive.Edit
+        live "/channels", TenantLive.CommunicationChannels
+      end
     end
 
     live "/settings", ConfigLive

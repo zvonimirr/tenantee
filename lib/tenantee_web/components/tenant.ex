@@ -69,6 +69,11 @@ defmodule TenanteeWeb.Components.Tenant do
         <.button phx-click={open_manage_rents_modal(@tenant.id)} disabled={@tenant.properties == []}>
           <.icon name="hero-banknotes" class="w-4 h-4" /> Manage Rents
         </.button>
+        <a href={"/tenants/#{@tenant.id}/channels"}>
+          <.button>
+            <.icon name="hero-chat-bubble-bottom-center-text" class="w-4 h-4" /> Manage communication
+          </.button>
+        </a>
         <a href={"/tenants/#{@tenant.id}"}>
           <.button>
             <.icon name="hero-pencil" class="w-4 h-4" /> Edit
