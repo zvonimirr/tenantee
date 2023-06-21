@@ -1,26 +1,35 @@
 <header>
   <div class="flex items-center justify-between border-b border-zinc-100 px-6 py-3 text-sm">
     <div class="flex items-center gap-4">
-      <a class="text-2xl hover:text-green-500 transition-colors" href="/">
+      <.link class="text-2xl hover:text-green-500 transition-colors" navigate="/">
         Tenantee
-      </a>
+      </.link>
       <p class="bg-green-500 text-white rounded-full px-2 font-medium leading-6">
         v4.0.0
       </p>
     </div>
     <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
-      <a href={~p"/"} data-tooltip="Go to homepage">
+      <.link navigate={~p"/"} data-tooltip="Go to homepage">
         <.icon name="hero-home" class="hover:text-green-500 transition-colors" />
-      </a>
-      <a href={~p"/properties"} data-tooltip="Manage properties">
-        <.icon name="hero-home-modern" class="hover:text-green-500 transition-colors" />
-      </a>
-      <a href={~p"/tenants"} data-tooltip="Manage tenants">
-        <.icon name="hero-user-circle" class="hover:text-green-500 transition-colors" />
-      </a>
-      <a href={~p"/settings"} data-tooltip="Settings">
+      </.link>
+      <%= if Tenantee.Config.lacks_config?() do %>
+        <a href={~p"/properties"} data-tooltip="Manage properties">
+          <.icon name="hero-home-modern" class="hover:text-green-500 transition-colors" />
+        </a>
+        <a href={~p"/tenants"} data-tooltip="Manage tenants">
+          <.icon name="hero-user-circle" class="hover:text-green-500 transition-colors" />
+        </a>
+      <% else %>
+        <.link navigate={~p"/properties"} data-tooltip="Manage properties">
+          <.icon name="hero-home-modern" class="hover:text-green-500 transition-colors" />
+        </.link>
+        <.link navigate={~p"/tenants"} data-tooltip="Manage tenants">
+          <.icon name="hero-user-circle" class="hover:text-green-500 transition-colors" />
+        </.link>
+      <% end %>
+      <.link navigate={~p"/settings"} data-tooltip="Settings">
         <.icon name="hero-cog-6-tooth" class="hover:text-green-500 transition-colors" />
-      </a>
+      </.link>
       <a
         href="https://github.com/zvonimirr/tenantee"
         class="hover:text-green-500 transition-colors"

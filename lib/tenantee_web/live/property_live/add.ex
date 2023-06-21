@@ -32,9 +32,9 @@ defmodule TenanteeWeb.PropertyLive.Add do
     assigns = assign(assigns, :disabled, Helper.is_submit_disabled?(assigns))
 
     ~H"""
-    <a class="text-gray-500" href={~p"/properties"}>
+    <.link class="text-gray-500" navigate={~p"/properties"}>
       <.icon name="hero-arrow-left" /> Back to properties
-    </a>
+    </.link>
     <h1 class="text-3xl font-bold my-4">Create new property</h1>
     <form
       id="property-add-form"

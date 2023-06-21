@@ -49,11 +49,11 @@ defmodule TenanteeWeb.Components.Property do
         <.button phx-click={open_manage_tenants_modal(@property.id)} disabled={@tenant_count == 0}>
           <.icon name="hero-user" class="w-4 h-4" /> Manage tenants
         </.button>
-        <a href={"/properties/#{@property.id}"}>
+        <.link navigate={"/properties/#{@property.id}"}>
           <.button>
             <.icon name="hero-pencil" class="w-4 h-4" /> Edit
           </.button>
-        </a>
+        </.link>
       </div>
     </div>
     """

@@ -36,9 +36,9 @@ defmodule TenanteeWeb.TenantLive.CommunicationChannels do
 
   def render(assigns) do
     ~H"""
-    <a class="text-gray-500" href={~p"/tenants"}>
+    <.link class="text-gray-500" navigate={~p"/tenants"}>
       <.icon name="hero-arrow-left" /> Back to tenants
-    </a>
+    </.link>
     <div class="col-span-2 md:col-span-1">
       <h1 class="text-3xl font-bold my-4">
         Communication channels for <%= @first_name %> <%= @last_name %>

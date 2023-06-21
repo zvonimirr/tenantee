@@ -28,9 +28,9 @@ defmodule TenanteeWeb.TenantLive.Edit do
     assigns = assign(assigns, :disabled, Helper.is_submit_disabled?(assigns))
 
     ~H"""
-    <a class="text-gray-500" href={~p"/tenants"}>
+    <.link class="text-gray-500" navigate={~p"/tenants"}>
       <.icon name="hero-arrow-left" /> Back to tenants
-    </a>
+    </.link>
     <div class="col-span-2 md:col-span-1">
       <h1 class="text-3xl font-bold my-4">Edit <%= @first_name %> <%= @last_name %></h1>
       <form
