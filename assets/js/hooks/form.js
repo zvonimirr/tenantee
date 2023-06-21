@@ -28,7 +28,6 @@ export const FormHook = {
     validate();
 
     // Validate on input change
-
     elements.forEach((element) => {
       element.addEventListener("input", validate);
     });
