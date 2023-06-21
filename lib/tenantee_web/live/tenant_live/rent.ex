@@ -27,9 +27,9 @@ defmodule TenanteeWeb.TenantLive.Rent do
     assigns = assign(assigns, :rent_groups, group_rents(assigns.rents))
 
     ~H"""
-    <a class="text-gray-500" href={~p"/tenants"}>
+    <.link class="text-gray-500" navigate={~p"/tenants"}>
       <.icon name="hero-arrow-left" /> Back to tenants
-    </a>
+    </.link>
     <h1 class="text-2xl font-semibold">Rents for <%= @first_name %> <%= @last_name %></h1>
     <%= if @rents == [] do %>
       <p class="text-gray-500">No rents found.</p>

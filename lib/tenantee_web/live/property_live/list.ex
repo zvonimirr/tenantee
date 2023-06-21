@@ -109,20 +109,20 @@ defmodule TenanteeWeb.PropertyLive.List do
     <h1 class="text-3xl font-bold mb-4">Manage your properties</h1>
     <%= if @properties == [] do %>
       <p class="text-gray-500 mb-4">You don't have any properties yet.</p>
-      <a href={~p"/properties/new"}>
+      <.link navigate={~p"/properties/new"}>
         <.button>Why not add one?</.button>
-      </a>
+      </.link>
     <% else %>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <%= for property <- @properties do %>
           <.card property={property} tenant_count={@tenant_count} />
         <% end %>
       </div>
-      <a href={~p"/properties/new"}>
+      <.link navigate={~p"/properties/new"}>
         <.button class="mt-4">
           <.icon name="hero-home" /> Add another property
         </.button>
-      </a>
+      </.link>
     <% end %>
     """
   end

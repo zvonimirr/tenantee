@@ -28,9 +28,9 @@ defmodule TenanteeWeb.TenantLive.Add do
     assigns = assign(assigns, :disabled, Helper.is_submit_disabled?(assigns))
 
     ~H"""
-    <a class="text-gray-500" href={~p"/tenants"}>
+    <.link class="text-gray-500" navigate={~p"/tenants"}>
       <.icon name="hero-arrow-left" /> Back to tenants
-    </a>
+    </.link>
     <h1 class="text-3xl font-bold my-4">Create new tenant</h1>
     <form
       id="tenant-add-form"

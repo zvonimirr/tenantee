@@ -15,9 +15,12 @@ defmodule TenanteeWeb.HomeLive do
         <p class="text-gray-600">First time here? Let's get you started.</p>
         <p class="mt-3 text-gray-600">
           Please proceed to the
-          <a class="text-green-500 hover:text-green-700 transition-colors" href={~p"/settings"}>
+          <.link
+            class="text-green-500 hover:text-green-700 transition-colors"
+            navigate={~p"/settings"}
+          >
             configuration page
-          </a>
+          </.link>
           to set up your instance.
         </p>
       </.modal>
@@ -25,9 +28,9 @@ defmodule TenanteeWeb.HomeLive do
       <p class="text-gray-600">Looks like you haven't set up your instance yet.</p>
       <p class="mt-3 text-gray-600">
         Please proceed to the
-        <a class="text-green-500 hover:text-green-700 transition-colors" href={~p"/settings"}>
+        <.link class="text-green-500 hover:text-green-700 transition-colors" navigate={~p"/settings"}>
           configuration page
-        </a>
+        </.link>
         to set up your instance.
       </p>
     <% else %>
@@ -38,9 +41,12 @@ defmodule TenanteeWeb.HomeLive do
         <p class="text-gray-600">Looks like you haven't added any properties yet.</p>
         <p class="mt-3 text-gray-600">
           Why don't you head over to the
-          <a class="text-green-500 hover:text-green-700 transition-colors" href={~p"/properties"}>
+          <.link
+            class="text-green-500 hover:text-green-700 transition-colors"
+            navigate={~p"/properties"}
+          >
             properties page
-          </a>
+          </.link>
           and add your first property?
         </p>
       <% else %>
@@ -53,12 +59,18 @@ defmodule TenanteeWeb.HomeLive do
         </p>
         <p class="text-gray-600">
           You can manage them from the
-          <a class="text-green-500 hover:text-green-700 transition-colors" href={~p"/properties"}>
+          <.link
+            class="text-green-500 hover:text-green-700 transition-colors"
+            navigate={~p"/properties"}
+          >
             properties page
-          </a>
-          or the <a class="text-green-500 hover:text-green-700 transition-colors" href={~p"/tenants"}>
+          </.link>
+          or the <.link
+            class="text-green-500 hover:text-green-700 transition-colors"
+            navigate={~p"/tenants"}
+          >
           tenants page
-        </a>.
+        </.link>.
         </p>
       <% end %>
 
@@ -69,9 +81,9 @@ defmodule TenanteeWeb.HomeLive do
             else: "rents" %>.
         </p>
 
-        <a class="text-green-500 hover:text-green-700 transition-colors" href={~p"/tenants"}>
-          View your rents here
-        </a>
+        <.link class="text-green-500 hover:text-green-700 transition-colors" navigate={~p"/tenants"}>
+          View your tenants here
+        </.link>
       <% end %>
     <% end %>
     """

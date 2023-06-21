@@ -1,8 +1,7 @@
 defmodule TenanteeWeb.TenantLive.List do
-  alias Tenantee.Entity.{Rent, Tenant}
+  alias Tenantee.Entity.Tenant
   use TenanteeWeb, :live_view
   import TenanteeWeb.Components.Tenant, only: [card: 1]
-  import TenanteeWeb.Components.Rent, only: [list_item: 1]
 
   def mount(_params, _session, socket) do
     {:ok, default(socket)}
@@ -62,20 +61,20 @@ defmodule TenanteeWeb.TenantLive.List do
     <h1 class="text-3xl font-bold mb-4">Manage your tenants</h1>
     <%= if @tenants == [] do %>
       <p class="text-gray-500 mb-4">You don't have any tenants yet.</p>
-      <a href={~p"/tenants/new"}>
+      <.link navigate={~p"/tenants/new"}>
         <.button>Why not add one?</.button>
-      </a>
+      </.link>
     <% else %>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         <%= for tenant <- @tenants do %>
           <.card tenant={tenant} />
         <% end %>
       </div>
-      <a href={~p"/tenants/new"}>
+      <.link navigate={~p"/tenants/new"}>
         <.button class="mt-4">
           <.icon name="hero-home" /> Add another tenant
         </.button>
-      </a>
+      </.link>
     <% end %>
     """
   end
