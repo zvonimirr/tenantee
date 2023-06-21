@@ -39,7 +39,21 @@ defmodule TenanteeWeb.TenantListLiveTest do
            |> render_click("do_delete", %{id: tenant.id}) =~ "Tenant deleted successfully"
   end
 
-  test "pays rent through modal", %{conn: conn} do
+  test "manage communications redirest to new page", %{conn: conn} do
+    {:ok, _tenant} = generate_tenant()
+
+    {:ok, view, _html} = live(conn, "/tenants")
+
+    {:ok, _view, html} =
+      view
+      |> element("a", "Manage communication")
+      |> render_click()
+      |> follow_redirect(conn)
+
+    assert html =~ "Communication channels for"
+  end
+
+  test "manage rent redirects to new page", %{conn: conn} do
     {:ok, tenant} = generate_tenant()
     {:ok, property} = generate_property()
     Tenant.add_to_property(tenant.id, property.id)
@@ -51,14 +65,14 @@ defmodule TenanteeWeb.TenantListLiveTest do
 
     {:ok, view, _html} = live(conn, "/tenants")
 
-    assert view
-           |> render_click("manage_rents", %{id: tenant.id}) =~ "Manage rents"
+    {:ok, _view, html} =
+      view
+      |> element("a", "Manage rent")
+      |> render_click()
+      |> follow_redirect(conn)
 
-    assert view
-           |> render_click("pay_rent", %{rent: rent.id}) =~ "Rent paid successfully"
-
-    assert view
-           |> render_click("pay_rent", %{rent: -1}) =~ "Something went wrong"
+    assert html =~
+             "Rents for"
   end
 
   test "handles errors", %{conn: conn} do
@@ -69,8 +83,5 @@ defmodule TenanteeWeb.TenantListLiveTest do
 
     assert view
            |> render_click("do_delete", %{id: -1}) =~ "Tenant not found"
-
-    assert view
-           |> render_click("manage_rents", %{id: -1}) =~ "Tenant not found"
   end
 end

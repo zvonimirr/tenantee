@@ -35,6 +35,7 @@ defmodule TenanteeWeb.TenantLive.Helper do
       |> assign(:first_name, tenant.first_name)
       |> assign(:last_name, tenant.last_name)
       |> assign(:communication_channels, tenant.communication_channels)
+      |> assign(:rents, tenant.rents)
       |> assign(:id, id)
     end
   end

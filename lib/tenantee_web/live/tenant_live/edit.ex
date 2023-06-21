@@ -1,5 +1,4 @@
 defmodule TenanteeWeb.TenantLive.Edit do
-  alias Tenantee.Entity.CommunicationChannel
   alias TenanteeWeb.TenantLive.Helper
   alias Tenantee.Entity.Tenant
   use TenanteeWeb, :live_view

@@ -18,16 +18,6 @@ defmodule TenanteeWeb.TenantLive.List do
     end
   end
 
-  def handle_event("manage_rents", %{"id" => id}, socket) do
-    case Tenant.get(id) do
-      {:ok, tenant} ->
-        {:noreply, assign(socket, tenant: tenant, action: "manage_rents")}
-
-      {:error, _} ->
-        {:noreply, put_flash(socket, :error, "Tenant not found")}
-    end
-  end
-
   def handle_event("do_delete", %{"id" => id}, socket) do
     case Tenant.delete(id) do
       :ok ->
@@ -42,21 +32,6 @@ defmodule TenanteeWeb.TenantLive.List do
 
   def handle_event("cancel_delete", _, socket) do
     {:noreply, assign(socket, tenant: nil)}
-  end
-
-  def handle_event("pay_rent", %{"rent" => rent_id}, socket) do
-    with {:ok, _rent} <- Rent.pay(rent_id),
-         {:ok, tenant} <- Tenant.get(socket.assigns.tenant.id) do
-      {:noreply,
-       assign(socket, tenant: tenant, tenants: Tenant.all())
-       |> put_flash(:info, "Rent paid successfully")
-       |> push_event("phx:enable", %{id: "rent_#{rent_id}"})}
-    else
-      _error ->
-        {:noreply,
-         put_flash(socket, :error, "Something went wrong.")
-         |> push_event("phx:enable", %{id: "rent_#{rent_id}"})}
-    end
   end
 
   def render(assigns) do
@@ -81,22 +56,6 @@ defmodule TenanteeWeb.TenantLive.List do
             Delete
           </.button>
           <.button phx-click="cancel_delete">Cancel</.button>
-        </div>
-      </.modal>
-    <% end %>
-    <%= if @action == "manage_rents" and not is_nil(@tenant) do %>
-      <.modal id="manage-rents-modal" show>
-        <div phx-hook="ModalHook" id="manage-rents-modal-hook-container">
-          <p class="text-2xl mb-4 font-bold">Manage rents</p>
-          <div class="flex flex-col gap-4 mb-4 items-start">
-            <%= for rent <- @tenant.rents do %>
-              <.list_item rent={rent} />
-            <% end %>
-          </div>
-
-          <.button phx-click="cancel_delete" class="ml-2 bg-red-500 hover:bg-red-600">
-            Cancel
-          </.button>
         </div>
       </.modal>
     <% end %>

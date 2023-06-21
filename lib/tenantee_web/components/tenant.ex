@@ -66,19 +66,21 @@ defmodule TenanteeWeb.Components.Tenant do
         </div>
       <% end %>
       <div class="flex gap-4">
-        <.button phx-click={open_manage_rents_modal(@tenant.id)} disabled={@tenant.properties == []}>
-          <.icon name="hero-banknotes" class="w-4 h-4" /> Manage Rents
-        </.button>
-        <a href={"/tenants/#{@tenant.id}/channels"}>
+        <.link navigate={"/tenants/#{@tenant.id}/rents"}>
+          <.button>
+            <.icon name="hero-banknotes" class="w-4 h-4" /> Manage rent
+          </.button>
+        </.link>
+        <.link navigate={"/tenants/#{@tenant.id}/channels"}>
           <.button>
             <.icon name="hero-chat-bubble-bottom-center-text" class="w-4 h-4" /> Manage communication
           </.button>
-        </a>
-        <a href={"/tenants/#{@tenant.id}"}>
+        </.link>
+        <.link navigate={"/tenants/#{@tenant.id}"}>
           <.button>
             <.icon name="hero-pencil" class="w-4 h-4" /> Edit
           </.button>
-        </a>
+        </.link>
       </div>
     </div>
     """
@@ -117,10 +119,6 @@ defmodule TenanteeWeb.Components.Tenant do
   defp toggle_lease(name, property_id, tenant_id) do
     JS.set_attribute({"disabled", true}, to: "[name='#{name}']")
     |> JS.push("toggle_lease", value: %{"property" => property_id, "tenant" => tenant_id})
-  end
-
-  defp open_manage_rents_modal(tenant_id) do
-    show_modal(JS.push("manage_rents", value: %{"id" => tenant_id}), "manage-rents-modal")
   end
 
   defp is_tenant_in_property?(tenant, property) do
