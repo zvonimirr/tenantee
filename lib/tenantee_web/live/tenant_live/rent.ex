@@ -8,7 +8,7 @@ defmodule TenanteeWeb.TenantLive.Rent do
     {:ok, Helper.default(socket, params)}
   end
 
-  def handle_event("pay_rent", %{"rent" => rent_id}, socket) do
+  def handle_event("pay", %{"rent" => rent_id}, socket) do
     with {:ok, _rent} <- Rent.pay(rent_id),
          {:ok, tenant} <- Tenant.get(socket.assigns.id) do
       {:noreply,
@@ -61,11 +61,9 @@ defmodule TenanteeWeb.TenantLive.Rent do
                   <%= if not is_nil(get_group_status(group)) do %>
                     <.icon
                       name="hero-exclamation-triangle"
-                      class={[
-                        "w-8 h-8",
-                        get_group_status(group) == :unpaid && "text-yellow-500",
-                        get_group_status(group) == :overdue && "text-red-500"
-                      ]}
+                      class={
+                        "w-8 h-8 #{get_group_status(group) == :overdue && "text-red-500"} #{get_group_status(group) == :unpaid && "text-yellow-500"}"
+                      }
                     />
                   <% end %>
                   <span><%= group.property.name %></span>
@@ -90,7 +88,6 @@ defmodule TenanteeWeb.TenantLive.Rent do
     rents
     |> Enum.group_by(& &1.property_id)
     |> Enum.map(fn {property_id, rents} ->
-      rent = rents |> List.first()
       {:ok, property} = Property.get(property_id)
 
       %{property: property, rents: rents}
