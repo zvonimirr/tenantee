@@ -29,17 +29,22 @@ defmodule Tenantee.Schema.Tenant do
 
     has_many(:rents, Rent)
     many_to_many(:properties, Property, join_through: "leases", on_replace: :delete)
-    has_many(:communication_channels, CommunicationChannel)
+    has_many(:communication_channels, CommunicationChannel, on_replace: :delete)
 
     timestamps()
   end
 
   def changeset(tenant, attrs \\ %{}) do
     tenant
-    |> cast(attrs, [:first_name, :last_name])
-    |> validate_required([:first_name, :last_name])
+    |> edit_changeset(attrs)
     |> put_assoc(:properties, [])
     |> put_assoc(:communication_channels, [])
+  end
+
+  def edit_changeset(tenant, attrs \\ %{}) do
+    tenant
+    |> cast(attrs, [:first_name, :last_name])
+    |> validate_required([:first_name, :last_name])
   end
 
   def set_properties(%__MODULE__{} = tenant, properties) do
