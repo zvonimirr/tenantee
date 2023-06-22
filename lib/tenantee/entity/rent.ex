@@ -2,10 +2,32 @@ defmodule Tenantee.Entity.Rent do
   @moduledoc """
   Helper functions for rents.
   """
+  alias Tenantee.Config
   alias Tenantee.Schema.Rent, as: Schema
   alias Tenantee.Entity.{Tenant, Property}
   alias Tenantee.Repo
   import Ecto.Query, only: [from: 2]
+
+  @doc """
+  Gets all rents that were paid this month, sums them up and returns the total (after tax).
+  """
+  @spec get_income() :: {:ok, Money.t()} | {:error, String.t()}
+  def get_income() do
+    currency = Config.get(:currency, nil)
+
+    start_date = Date.utc_today() |> Date.beginning_of_month()
+    end_date = Date.utc_today() |> Date.end_of_month()
+
+    income =
+      from(r in Schema,
+        select: fragment("SUM(amount)"),
+        where:
+          fragment("? BETWEEN ? AND ?", r.due_date, ^start_date, ^end_date) and r.paid == true
+      )
+      |> Repo.one()
+
+    get_taxed_price(income, currency)
+  end
 
   @doc """
   Gets a rent by id.
@@ -97,4 +119,10 @@ defmodule Tenantee.Entity.Rent do
   def total() do
     Repo.aggregate(Schema, :count, :id)
   end
+
+  defp get_taxed_price(_, nil), do: {:error, "Currency not configured"}
+  defp get_taxed_price(nil, currency), do: {:ok, Money.new(0, currency)}
+
+  defp get_taxed_price({currency, income}, _),
+    do: Property.get_taxed_price(Money.new(income, currency))
 end

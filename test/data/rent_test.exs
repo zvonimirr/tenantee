@@ -1,9 +1,11 @@
 defmodule Tenantee.Data.RentTest do
   use Tenantee.DataCase
+  alias Tenantee.Config
   alias Tenantee.Schema.Rent, as: Schema
   alias Tenantee.Entity.{Rent, Tenant}
   import Tenantee.Test.Factory.{Property, Tenant}
   import Tenantee.Jobs.Rent
+  import Mock
 
   test "creates rent" do
     {:ok, tenant} = generate_tenant()
@@ -61,6 +63,24 @@ defmodule Tenantee.Data.RentTest do
     generate_rents()
 
     assert 1 = Rent.total()
+  end
+
+  test "gets total sum of paid rents this month" do
+    {:ok, tenant} = generate_tenant()
+    {:ok, property} = generate_property()
+    Tenant.add_to_property(tenant.id, property.id)
+    generate_rents()
+    {:ok, tenant} = Tenant.get(tenant.id)
+    [%{amount: rent, id: id}] = tenant.rents
+    Rent.pay(id)
+
+    with_mock Config,
+      get: fn k, _d -> if k == :tax, do: "0.00", else: :EUR end,
+      get: fn k -> if k == :tax, do: {:ok, "0.00"}, else: {:ok, :EUR} end do
+      {:ok, income} = Rent.get_income()
+
+      assert Money.equal?(income, rent)
+    end
   end
 
   test "errors on getting rent by id" do

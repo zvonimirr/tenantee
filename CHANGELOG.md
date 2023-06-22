@@ -8,6 +8,9 @@ be added again shortly. The core functionality was kept (manage properties, tena
 But, there are some other changes as well:
 - Preferences (now called configs) are stored in Redis ([@zvonimirr](https://github.com/zvonimirr))
 - Replaced Oban with Quantum for cron-jobs ([@zvonimirr](https://github.com/zvonimirr))
+- Rents and communication channels are managed from their own pages ([@zvonimirr](https://github.com/zvonimirr))
+- Configuration is forced before adding properties, tenants etc. ([@zvonimirr](https://github.com/zvonimirr))
+- Deployment guides for AWS and Fly.io ([@zvonimirr](https://github.com/zvonimirr) and [@lukaevet](https://github.com/lukaevet))
 
 ## 0.3.0
 ### API

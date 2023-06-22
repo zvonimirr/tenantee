@@ -22,7 +22,7 @@ defmodule TenanteeWeb.HomeLiveTest do
     name = Faker.Person.first_name()
 
     with_mock Tenantee.Config,
-      get: fn _key, _b -> name end,
+      get: fn k, _b -> if k == :name, do: name, else: :EUR end,
       lacks_config?: fn -> false end do
       {:ok, _view, html} = live(conn, "/")
 
@@ -33,8 +33,10 @@ defmodule TenanteeWeb.HomeLiveTest do
   test "renders when you have properties and tenants", %{conn: conn} do
     {:ok, _property} = generate_property()
 
+    name = Faker.Person.first_name()
+
     with_mock Tenantee.Config,
-      get: fn _key, _b -> "name" end,
+      get: fn k, _b -> if k == :name, do: name, else: :EUR end,
       lacks_config?: fn -> false end do
       {:ok, _view, html} = live(conn, "/")
 
@@ -49,7 +51,7 @@ defmodule TenanteeWeb.HomeLiveTest do
     Rent.generate_rents()
 
     with_mock Tenantee.Config,
-      get: fn _key, _b -> "name" end,
+      get: fn _key, _b -> "EUR" end,
       lacks_config?: fn -> false end do
       {:ok, _view, html} = live(conn, "/")
 

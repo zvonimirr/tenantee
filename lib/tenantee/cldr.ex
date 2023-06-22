@@ -13,4 +13,10 @@ defmodule Tenantee.Cldr do
       _error -> "Invalid date"
     end
   end
+
+  def format_price(price) do
+    with {:ok, formatted_price} <- Tenantee.Cldr.Money.to_string(price, symbol: true) do
+      formatted_price
+    end
+  end
 end
