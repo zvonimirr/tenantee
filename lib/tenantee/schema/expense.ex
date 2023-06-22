@@ -38,7 +38,7 @@ defmodule Tenantee.Schema.Expense do
 
   def changeset(expense, attrs \\ %{}) do
     expense
-    |> cast(attrs, [:name, :description, :amount, :property_id, :tenant_id])
+    |> cast(attrs, [:name, :description, :amount, :property_id, :tenant_id, :paid])
     |> validate_required([:name, :amount, :property_id])
     |> validate_change(:amount, fn :amount, amount ->
       min = Money.new(0, amount.currency)

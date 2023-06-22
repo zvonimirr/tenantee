@@ -15,6 +15,29 @@ defmodule Tenantee.Entity.Expense do
   end
 
   @doc """
+  Gets an expense by ID.
+  """
+  @spec get(integer()) :: {:ok, Schema.t()} | {:error, String.t()}
+  def get(id) do
+    case Repo.get(Schema, id) do
+      nil -> {:error, "Expense not found"}
+      expense -> {:ok, expense}
+    end
+  end
+
+  @doc """
+  Marks an expense as paid.
+  """
+  @spec pay(integer()) :: :ok | {:error, Ecto.Changeset.error()}
+  def pay(id) do
+    with {:ok, expense} <- get(id),
+         changeset <- Schema.changeset(expense, %{paid: true}),
+         {:ok, _} <- Repo.update(changeset) do
+      :ok
+    end
+  end
+
+  @doc """
   Updates an expense to set the payer.
   If the payer is nil, the expense is calculated as
   being paid by the landlord.
