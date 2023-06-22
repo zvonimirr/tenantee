@@ -46,7 +46,7 @@ defmodule TenanteeWeb.Components.Rent do
 
   defp pay_rent(id, rent_id) do
     JS.set_attribute({"disabled", true}, to: "##{id}")
-    |> JS.push("pay_rent", value: %{rent: rent_id})
+    |> JS.push("pay", value: %{rent: rent_id})
   end
 
   defp format_price(price) do
