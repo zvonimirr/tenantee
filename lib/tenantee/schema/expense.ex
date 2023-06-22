@@ -2,6 +2,7 @@ defmodule Tenantee.Schema.Expense do
   @moduledoc """
   Expense Ecto Schema.
   """
+  alias Tenantee.Cldr
   alias Tenantee.Schema.{Property, Tenant}
 
   use Ecto.Schema
@@ -40,14 +41,7 @@ defmodule Tenantee.Schema.Expense do
     expense
     |> cast(attrs, [:name, :description, :amount, :property_id, :tenant_id, :paid])
     |> validate_required([:name, :amount, :property_id])
-    |> validate_change(:amount, fn :amount, amount ->
-      min = Money.new(0, amount.currency)
-
-      case Money.compare(amount, min) do
-        :gt -> []
-        _ -> [amount: "must be greater than 0"]
-      end
-    end)
+    |> validate_change(:amount, Cldr.validate_amount(0))
     |> assoc_constraint(:property)
 
     # TODO: while the tenant is not required, we should validate that the tenant

@@ -3,6 +3,7 @@ defmodule Tenantee.Schema.Rent do
   Rent Ecto Schema.
   """
   alias Tenantee.Schema.{Tenant, Property}
+  alias Tenantee.Cldr
 
   use Ecto.Schema
   import Ecto.Changeset
@@ -40,14 +41,7 @@ defmodule Tenantee.Schema.Rent do
     rent
     |> cast(attrs, [:amount, :due_date, :paid, :tenant_id, :property_id])
     |> validate_required([:amount, :due_date, :tenant_id, :property_id])
-    |> validate_change(:amount, fn :amount, amount ->
-      min = Money.new(0, amount.currency)
-
-      case Money.compare(amount, min) do
-        :gt -> []
-        _ -> [amount: "must be greater than 0"]
-      end
-    end)
+    |> validate_change(:amount, Cldr.validate_amount(0))
     |> assoc_constraint(:tenant)
     |> assoc_constraint(:property)
   end

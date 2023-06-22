@@ -28,4 +28,15 @@ defmodule Tenantee.Cldr do
       plural
     end
   end
+
+  def validate_amount(min) do
+    fn :amount, amount ->
+      min_m = Money.new(min, amount.currency)
+
+      case Money.compare(amount, min_m) do
+        :gt -> []
+        _ -> [amount: "must be greater than #{min}"]
+      end
+    end
+  end
 end
