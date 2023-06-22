@@ -133,7 +133,7 @@ defmodule Tenantee.Entity.Tenant do
       [
         :properties,
         :communication_channels,
-        rents: from(r in Rent, where: r.tenant_id == ^tenant.id, order_by: [desc: r.due_date])
+        rents: from(r in Rent, where: r.tenant_id == ^tenant.id, order_by: [desc: r.id])
       ]
     )
   end
