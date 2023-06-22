@@ -7,24 +7,26 @@ defmodule TenanteeWeb.ConfigLive do
   def mount(_params, _session, socket) do
     with name <- Config.get(:name, ""),
          currency <- Config.get(:currency, ""),
+         tax <- Config.get(:tax, 0),
          property_count <- Property.count(),
          tenant_count <- Tenant.count() do
       {:ok,
-       assign_values(socket, name, currency)
+       assign_values(socket, %{name: name, currency: currency, tax: tax})
        |> assign(:count, property_count + tenant_count)}
     end
   end
 
-  def handle_event("save", %{"name" => name, "currency" => currency}, socket) do
+  def handle_event("save", %{"name" => name, "currency" => currency, "tax" => tax}, socket) do
     with :ok <- Config.set(:name, name),
-         :ok <- Config.set(:currency, currency) do
+         :ok <- Config.set(:currency, currency),
+         :ok <- Config.set(:tax, tax) do
       {:noreply,
-       assign_values(socket, name, currency)
+       assign_values(socket, %{name: name, currency: currency, tax: tax})
        |> put_flash(:info, "Configuration saved successfully!")}
     else
       :error ->
         {:noreply,
-         assign_values(socket, name, currency)
+         assign_values(socket, %{name: name, currency: currency, tax: tax})
          |> put_flash(:error, "Failed to save the configuration!")}
     end
   end
@@ -36,6 +38,15 @@ defmodule TenanteeWeb.ConfigLive do
     <h1 class="text-3xl font-bold">Configuration</h1>
     <form id="config-form" phx-hook="FormHook" phx-submit="save" class="flex flex-col gap-4 max-w-xs">
       <.input name="name" value={@name} label="Name" maxlength="255" placeholder="Your name..." />
+      <.input
+        name="tax"
+        value={@tax}
+        label="Tax percentage (%)"
+        type="number"
+        min="0.1"
+        step="0.1"
+        placeholder="Tax percentage..."
+      />
       <.input
         type="select"
         name="currency"
@@ -63,9 +74,10 @@ defmodule TenanteeWeb.ConfigLive do
     """
   end
 
-  defp assign_values(socket, name, currency) do
+  defp assign_values(socket, %{name: name, currency: currency, tax: tax}) do
     assign(socket, :name, name)
     |> assign(:currency, currency)
+    |> assign(:tax, tax)
   end
 
   defp is_disabled(assigns) do
@@ -73,7 +85,7 @@ defmodule TenanteeWeb.ConfigLive do
       assigns.name,
       assigns.currency
     ]
-    |> Enum.any?(&(String.length(&1) == 0))
+    |> Enum.any?(&(String.length(&1) == 0)) or assigns.tax <= 0
   end
 
   defp get_options() do

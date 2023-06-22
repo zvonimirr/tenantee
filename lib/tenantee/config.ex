@@ -71,7 +71,8 @@ defmodule Tenantee.Config do
   def lacks_config?() do
     [
       get(:name),
-      get(:currency)
+      get(:currency),
+      get(:tax)
     ]
     |> Enum.map(&elem(&1, 0))
     |> Enum.any?(&(&1 == :error))
