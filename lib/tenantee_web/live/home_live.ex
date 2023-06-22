@@ -104,7 +104,7 @@ defmodule TenanteeWeb.HomeLive do
   defp default(socket) do
     income =
       case Rent.get_income() do
-        {:ok, income} -> format_price(income)
+        {:ok, income} -> Cldr.format_price(income)
         {:error, _} -> :error
       end
 
@@ -116,11 +116,5 @@ defmodule TenanteeWeb.HomeLive do
       overdue: Rent.total_overdue(),
       income: income
     )
-  end
-
-  defp format_price(price) do
-    with {:ok, formatted_price} <- Cldr.Money.to_string(price, symbol: true) do
-      formatted_price
-    end
   end
 end

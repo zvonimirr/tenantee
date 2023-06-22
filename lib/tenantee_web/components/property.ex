@@ -36,7 +36,7 @@ defmodule TenanteeWeb.Components.Property do
       </p>
       <p class="text-gray-600">
         <span class="font-bold">Price:</span>
-        <%= format_price(@property.price) %> / <%= format_taxed_price(@property.price) %> (after taxes)
+        <%= Cldr.format_price(@property.price) %> / <%= format_taxed_price(@property.price) %> (after taxes)
       </p>
       <p class="text-gray-600">
         <span class="font-bold">Description:</span>
@@ -66,13 +66,7 @@ defmodule TenanteeWeb.Components.Property do
 
   defp format_taxed_price(price) do
     with {:ok, taxed_price} <- Property.get_taxed_price(price) do
-      format_price(taxed_price)
-    end
-  end
-
-  defp format_price(price) do
-    with {:ok, formatted_price} <- Cldr.Money.to_string(price, symbol: true) do
-      formatted_price
+      Cldr.format_price(taxed_price)
     end
   end
 end
