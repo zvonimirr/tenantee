@@ -46,7 +46,8 @@
       "contributions": [
         "code",
         "infra",
-        "doc"
+        "doc",
+        "bug"
       ]
     },
     {
