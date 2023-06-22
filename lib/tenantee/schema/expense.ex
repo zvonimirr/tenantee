@@ -16,6 +16,7 @@ defmodule Tenantee.Schema.Expense do
           id: integer(),
           name: String.t(),
           description: String.t(),
+          paid: boolean(),
           amount: Money.t(),
           property: Property.t(),
           tenant: Tenant.t() | nil,
@@ -26,6 +27,7 @@ defmodule Tenantee.Schema.Expense do
   schema "expenses" do
     field :name, :string
     field :description, :string, default: ""
+    field :paid, :boolean, default: false
     field :amount, Money.Ecto.Composite.Type
 
     belongs_to(:property, Property)
