@@ -1,4 +1,5 @@
 defmodule TenanteeWeb.HomeLive do
+  alias Tenantee.Cldr
   alias Tenantee.Entity.{Rent, Property, Tenant}
   alias Tenantee.Config
   use TenanteeWeb, :live_view
@@ -72,10 +73,21 @@ defmodule TenanteeWeb.HomeLive do
           tenants page
         </.link>.
         </p>
+        <hr class="my-5" />
+        <p class="text-xl">Monthly balance:</p>
+        <p class="text-gray-600">
+          <%= if @income == :error do %>
+            You have not set up your currency yet.
+          <% else %>
+            You have made <%= @income %> this month.
+          <% end %>
+        </p>
       <% end %>
 
       <%= if @unpaid > 0 or @overdue > 0 do %>
-        <p class="mt-3 text-gray-600">
+        <hr class="my-5" />
+        <p class="text-xl">Unpaid rents:</p>
+        <p class="text-gray-600">
           You have <%= @unpaid %> unpaid and <%= @overdue %> overdue <%= if @overdue == 1,
             do: "rent",
             else: "rents" %>.
@@ -90,18 +102,25 @@ defmodule TenanteeWeb.HomeLive do
   end
 
   defp default(socket) do
-    case Config.get(:name, nil) do
-      nil ->
-        assign(socket, name: nil, property_count: 0, tenant_count: 0, unpaid: 0, overdue: 0)
+    income =
+      case Rent.get_income() do
+        {:ok, income} -> format_price(income)
+        {:error, _} -> :error
+      end
 
-      name ->
-        assign(socket,
-          name: name,
-          property_count: Property.count(),
-          tenant_count: Tenant.count(),
-          unpaid: Rent.total_unpaid(),
-          overdue: Rent.total_overdue()
-        )
+    assign(socket,
+      name: Config.get(:name, nil),
+      property_count: Property.count(),
+      tenant_count: Tenant.count(),
+      unpaid: Rent.total_unpaid(),
+      overdue: Rent.total_overdue(),
+      income: income
+    )
+  end
+
+  defp format_price(price) do
+    with {:ok, formatted_price} <- Cldr.Money.to_string(price, symbol: true) do
+      formatted_price
     end
   end
 end
