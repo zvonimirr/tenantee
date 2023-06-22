@@ -2,6 +2,7 @@ defmodule TenanteeWeb.Components.Property do
   @moduledoc """
   Provides UI components for the Property context.
   """
+  alias Tenantee.Entity.Property
   alias Phoenix.LiveView.JS
   alias Tenantee.Cldr
   use Phoenix.Component
@@ -35,7 +36,7 @@ defmodule TenanteeWeb.Components.Property do
       </p>
       <p class="text-gray-600">
         <span class="font-bold">Price:</span>
-        <%= format_price(@property.price) %>
+        <%= format_price(@property.price) %> / <%= format_taxed_price(@property.price) %> (after taxes)
       </p>
       <p class="text-gray-600">
         <span class="font-bold">Description:</span>
@@ -61,6 +62,12 @@ defmodule TenanteeWeb.Components.Property do
 
   defp open_manage_tenants_modal(property_id) do
     show_modal(JS.push("manage_tenants", value: %{"id" => property_id}), "manage-tenants-modal")
+  end
+
+  defp format_taxed_price(price) do
+    with {:ok, taxed_price} <- Property.get_taxed_price(price) do
+      format_price(taxed_price)
+    end
   end
 
   defp format_price(price) do

@@ -2,6 +2,7 @@ defmodule Tenantee.Entity.Property do
   @moduledoc """
   Helper functions for properties.
   """
+  alias Tenantee.Config
   alias Tenantee.Entity.Tenant
   alias Tenantee.Schema.Property, as: Schema
   alias Tenantee.Repo
@@ -74,6 +75,21 @@ defmodule Tenantee.Entity.Property do
       Tenant.remove_from_property(tenant.id, property.id)
     else
       Tenant.add_to_property(tenant.id, property.id)
+    end
+  end
+
+  @doc """
+  Calculates the price of a property (with tax).
+  """
+  @spec get_taxed_price(Money.t()) :: {:ok, Money.t()} | {:error, String.t()}
+  def get_taxed_price(price) do
+    with {:ok, tax} <- Config.get(:tax),
+         {tax, ""} <- Float.parse(tax),
+         {:ok, sub} <- Money.mult(price, tax),
+         {:ok, total} <- Money.sub(price, sub) do
+      {:ok, total}
+    else
+      _error -> {:error, "Something went wrong"}
     end
   end
 
