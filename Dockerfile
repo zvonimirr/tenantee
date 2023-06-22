@@ -23,6 +23,7 @@ RUN mix local.hex --force
 RUN mix local.rebar --force
 RUN mix archive.install hex phx_new ${PHOENIX_VERSION}
 
+RUN mix deps.get
 RUN mix ecto.create && mix ecto.migrate
 RUN mix phx.gen.cert
 RUN mix assets.deploy

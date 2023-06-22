@@ -58,7 +58,7 @@ defmodule Tenantee.Entity.Tenant do
   @spec update(integer(), map()) :: :ok | {:error, Ecto.Changeset.t() | String.t()}
   def update(id, attrs) do
     with {:ok, tenant} <- get(id),
-         changeset <- Schema.changeset(tenant, attrs),
+         changeset <- Schema.edit_changeset(tenant, attrs),
          {:ok, _} <- Repo.update(changeset) do
       :ok
     end
@@ -133,7 +133,7 @@ defmodule Tenantee.Entity.Tenant do
       [
         :properties,
         :communication_channels,
-        rents: from(r in Rent, where: r.tenant_id == ^tenant.id, order_by: [desc: r.due_date])
+        rents: from(r in Rent, where: r.tenant_id == ^tenant.id, order_by: [desc: r.id])
       ]
     )
   end
