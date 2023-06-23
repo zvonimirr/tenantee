@@ -85,7 +85,7 @@ defmodule Tenantee.Entity.Property do
   def get_taxed_price(price) do
     with {:ok, tax} <- Config.get(:tax),
          {tax, ""} <- Float.parse(tax),
-         {:ok, sub} <- Money.mult(price, tax),
+         {:ok, sub} <- Money.mult(price, tax / 100),
          {:ok, total} <- Money.sub(price, sub) do
       {:ok, total}
     else
