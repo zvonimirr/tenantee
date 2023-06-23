@@ -1,7 +1,9 @@
 defmodule Tenantee.Data.PropertyTest do
   use Tenantee.DataCase
+  alias Tenantee.Config
   alias Tenantee.Entity.Property
   import Tenantee.Test.Factory.{Property, Tenant}
+  import Mock
 
   test "creates a property" do
     assert {:ok, _property} =
@@ -59,6 +61,14 @@ defmodule Tenantee.Data.PropertyTest do
                  Repo.preload(tenant, :properties)
                )
     end)
+  end
+
+  test "calculates tax properly" do
+    with_mock Config, get: fn :tax -> {:ok, "50.0"} end do
+      {:ok, price} = Property.get_taxed_price(Money.new(1000, :USD))
+
+      assert price == Money.new(Decimal.new("500.0"), :USD)
+    end
   end
 
   test "errors when getting property by id" do
