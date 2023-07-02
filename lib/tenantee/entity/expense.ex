@@ -100,10 +100,4 @@ defmodule Tenantee.Entity.Expense do
     Schema.changeset(expense, %{tenant_id: payer_id})
     |> Repo.update()
   end
-
-  defp get_taxed_price(_, nil), do: {:error, "Currency not configured"}
-  defp get_taxed_price(nil, currency), do: {:ok, Money.new(0, currency)}
-
-  defp get_taxed_price({currency, income}, _),
-    do: Property.get_taxed_price(Money.new(income, currency))
 end
