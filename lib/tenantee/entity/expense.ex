@@ -3,7 +3,6 @@ defmodule Tenantee.Entity.Expense do
   Helper functions for expenses.
   """
   alias Tenantee.Config
-  alias Tenantee.Entity.Property
   alias Tenantee.Repo
   alias Tenantee.Schema.Expense, as: Schema
   import Ecto.Query, only: [from: 2]
@@ -21,7 +20,7 @@ defmodule Tenantee.Entity.Expense do
     {:ok, end_date} =
       Date.utc_today() |> Date.end_of_month() |> DateTime.new(~T[23:59:59])
 
-    {_, amount} =
+    result =
       from(e in Schema,
         select: fragment("SUM(amount)"),
         where:
@@ -36,10 +35,7 @@ defmodule Tenantee.Entity.Expense do
       )
       |> Repo.one()
 
-    case Money.new(amount, currency) do
-      {:error, _reason} -> {:error, "Could not calculate loss"}
-      money -> {:ok, money}
-    end
+    do_get_loss(result, currency)
   end
 
   @doc """
@@ -100,4 +96,8 @@ defmodule Tenantee.Entity.Expense do
     Schema.changeset(expense, %{tenant_id: payer_id})
     |> Repo.update()
   end
+
+  defp do_get_loss(_, nil), do: {:error, "Could not calculate loss"}
+  defp do_get_loss(nil, currency), do: {:ok, Money.new(0, currency)}
+  defp do_get_loss({_currency, amount}, currency), do: {:ok, Money.new(amount, currency)}
 end
