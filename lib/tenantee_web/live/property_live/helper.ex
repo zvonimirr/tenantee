@@ -55,6 +55,7 @@ defmodule TenanteeWeb.PropertyLive.Helper do
       |> assign(:expenses, property.expenses)
       |> assign(:id, id)
       |> assign(:currency, currency)
+      |> assign(:expense, nil)
     end
   end
 

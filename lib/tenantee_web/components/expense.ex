@@ -15,7 +15,16 @@ defmodule TenanteeWeb.Components.Expense do
   def card(assigns) do
     ~H"""
     <div class="flex flex-col gap-2 border border-gray-200 rounded-md p-4 max-w-xs">
-      <span class="text-lg font-semibold"><%= @expense.name %></span>
+      <div class="flex justify-between">
+        <span class="text-lg font-semibold"><%= @expense.name %></span>
+        <.button
+          class="bg-red-500 text-white hover:bg-red-600"
+          data-tooltip="Delete expense"
+          phx-click={open_confirm_modal(@expense.id)}
+        >
+          <.icon name="hero-trash" />
+        </.button>
+      </div>
       <span class="text-sm text-gray-500"><%= @expense.description %></span>
       <span class="text-gray-500 text-sm">
         To be paid by

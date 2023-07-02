@@ -23,7 +23,29 @@ defmodule TenanteeWeb.PropertyLive.Expenses do
     end
   end
 
-  # TODO: allow deletion of expenses
+  def handle_event("delete", %{"id" => id}, socket) do
+    case Expense.get(id) do
+      {:ok, expense} -> {:noreply, assign(socket, expense: expense)}
+      {:error, _} -> {:noreply, put_flash(socket, :error, "Expense not found")}
+    end
+  end
+
+  def handle_event("do_delete", %{"id" => id}, socket) do
+    case Expense.delete(id) do
+      :ok ->
+        {:noreply,
+         Helper.default(socket, %{"id" => socket.assigns.id})
+         |> put_flash(:info, "Expense deleted successfully")}
+
+      _error ->
+        {:noreply, put_flash(socket, :error, "Something went wrong.")}
+    end
+  end
+
+  def handle_event("cancel_delete", _, socket) do
+    {:noreply, assign(socket, expense: nil)}
+  end
+
   # TODO  allow editing of expenses?
   # TODO: allow adding of expenses
 
@@ -34,6 +56,23 @@ defmodule TenanteeWeb.PropertyLive.Expenses do
     <.link class="text-gray-500" navigate={~p"/properties"}>
       <.icon name="hero-arrow-left" /> Back to properties
     </.link>
+    <%= if not is_nil(@expense) do %>
+      <.modal id="confirm-modal" show>
+        <p class="text-2xl mb-4 font-bold">Are you sure?</p>
+        <p class="text-gray-500">This action cannot be undone.</p>
+        <div class="flex gap-4 mt-4">
+          <.button
+            id="delete-expense"
+            phx-click={do_delete("delete-expense", @expense.id)}
+            phx-value-id={@expense.id}
+            class="ml-2 bg-red-500 hover:bg-red-600 disabled:hover:bg-red-600"
+          >
+            Delete
+          </.button>
+          <.button phx-click="cancel_delete">Cancel</.button>
+        </div>
+      </.modal>
+    <% end %>
     <div class="flex flex-col gap-4">
       <h1 class="text-2xl font-bold">Expenses</h1>
       <h2 class="text-xl font-bold">Unpaid</h2>

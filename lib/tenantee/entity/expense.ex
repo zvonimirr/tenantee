@@ -38,6 +38,17 @@ defmodule Tenantee.Entity.Expense do
   end
 
   @doc """
+  Deletes an expense by ID.
+  """
+  @spec delete(integer()) :: :ok | {:error, String.t()}
+  def delete(id) do
+    with {:ok, expense} <- get(id),
+         {:ok, _} <- Repo.delete(expense) do
+      :ok
+    end
+  end
+
+  @doc """
   Updates an expense to set the payer.
   If the payer is nil, the expense is calculated as
   being paid by the landlord.
