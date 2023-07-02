@@ -2,8 +2,45 @@ defmodule Tenantee.Entity.Expense do
   @moduledoc """
   Helper functions for expenses.
   """
+  alias Tenantee.Config
+  alias Tenantee.Entity.Property
   alias Tenantee.Repo
   alias Tenantee.Schema.Expense, as: Schema
+  import Ecto.Query, only: [from: 2]
+
+  @doc """
+  Gets all expenses that were paid this month by the landlord, sums them up and returns the total.
+  """
+  @spec get_loss() :: {:ok, Money.t()} | {:error, String.t()}
+  def get_loss() do
+    currency = Config.get(:currency, nil)
+
+    {:ok, start_date} =
+      Date.utc_today() |> Date.beginning_of_month() |> DateTime.new(~T[00:00:00])
+
+    {:ok, end_date} =
+      Date.utc_today() |> Date.end_of_month() |> DateTime.new(~T[23:59:59])
+
+    {_, amount} =
+      from(e in Schema,
+        select: fragment("SUM(amount)"),
+        where:
+          fragment(
+            "? BETWEEN ? AND ?",
+            e.updated_at,
+            type(^start_date, :utc_datetime_usec),
+            type(^end_date, :utc_datetime_usec)
+          ) and
+            is_nil(e.tenant_id) and
+            e.paid == true
+      )
+      |> Repo.one()
+
+    case Money.new(amount, currency) do
+      {:error, _reason} -> {:error, "Could not calculate loss"}
+      money -> {:ok, money}
+    end
+  end
 
   @doc """
   Creates a new expense.
@@ -63,4 +100,10 @@ defmodule Tenantee.Entity.Expense do
     Schema.changeset(expense, %{tenant_id: payer_id})
     |> Repo.update()
   end
+
+  defp get_taxed_price(_, nil), do: {:error, "Currency not configured"}
+  defp get_taxed_price(nil, currency), do: {:ok, Money.new(0, currency)}
+
+  defp get_taxed_price({currency, income}, _),
+    do: Property.get_taxed_price(Money.new(income, currency))
 end

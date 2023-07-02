@@ -1,4 +1,5 @@
 defmodule TenanteeWeb.HomeLive do
+  alias Tenantee.Entity.Expense
   alias Tenantee.Cldr
   alias Tenantee.Entity.{Rent, Property, Tenant}
   alias Tenantee.Config
@@ -76,10 +77,10 @@ defmodule TenanteeWeb.HomeLive do
         <hr class="my-5" />
         <p class="text-xl">Monthly balance:</p>
         <p class="text-gray-600">
-          <%= if @income == :error do %>
+          <%= if @income == :error or @loss == :error do %>
             You have not set up your currency yet.
           <% else %>
-            You have made <%= @income %> this month.
+            You have made <%= @income %> and lost <%= @loss %> this month.
           <% end %>
         </p>
       <% end %>
@@ -110,13 +111,20 @@ defmodule TenanteeWeb.HomeLive do
         {:error, _} -> :error
       end
 
+    loss =
+      case Expense.get_loss() do
+        {:ok, loss} -> Cldr.format_price(loss)
+        {:error, _} -> :error
+      end
+
     assign(socket,
       name: Config.get(:name, nil),
       property_count: Property.count(),
       tenant_count: Tenant.count(),
       unpaid: Rent.total_unpaid(),
       overdue: Rent.total_overdue(),
-      income: income
+      income: income,
+      loss: loss
     )
   end
 end
