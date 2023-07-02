@@ -60,6 +60,7 @@ defmodule TenanteeWeb.PropertyLive.Expenses do
       <.modal id="confirm-modal" show>
         <p class="text-2xl mb-4 font-bold">Are you sure?</p>
         <p class="text-gray-500">This action cannot be undone.</p>
+        <p class="text-gray-500"><%= @expense.name %> will be gone forever.</p>
         <div class="flex gap-4 mt-4">
           <.button
             id="delete-expense"
@@ -73,27 +74,35 @@ defmodule TenanteeWeb.PropertyLive.Expenses do
         </div>
       </.modal>
     <% end %>
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col mt-4 gap-4">
       <h1 class="text-2xl font-bold">Expenses</h1>
-      <h2 class="text-xl font-bold">Unpaid</h2>
-      <div
-        id="unpaid-expenses-container"
-        class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2"
-        phx-hook="ModalHook"
-      >
-        <%= for expense <- @expense_groups.unpaid do %>
-          <.card expense={expense} />
-        <% end %>
-      </div>
+      <details open>
+        <summary class="cursor-pointer">
+          <span class="text-xl font-bold">Unpaid</span>
+        </summary>
+        <div
+          id="unpaid-expenses-container"
+          class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2"
+          phx-hook="ModalHook"
+        >
+          <%= for expense <- @expense_groups.unpaid do %>
+            <.card expense={expense} />
+          <% end %>
+        </div>
+      </details>
 
-      <hr class="my-4" />
+      <hr class="my-2" />
 
-      <h2 class="text-xl font-bold">Paid</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
-        <%= for expense <- @expense_groups.paid do %>
-          <.card expense={expense} paid />
-        <% end %>
-      </div>
+      <details open>
+        <summary class="cursor-pointer">
+          <span class="text-xl font-bold">Paid</span>
+        </summary>
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
+          <%= for expense <- @expense_groups.paid do %>
+            <.card expense={expense} paid />
+          <% end %>
+        </div>
+      </details>
     </div>
     """
   end
