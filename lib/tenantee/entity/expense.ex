@@ -10,6 +10,11 @@ defmodule Tenantee.Entity.Expense do
   """
   @spec create(map()) :: {:ok, Schema.t()} | {:error, Ecto.Changeset.error()}
   def create(attrs) do
+    attrs =
+      Map.update(attrs, :tenant_id, "landlord", fn v ->
+        if v == "landlord", do: nil, else: v
+      end)
+
     Schema.changeset(%Schema{}, attrs)
     |> Repo.insert()
   end

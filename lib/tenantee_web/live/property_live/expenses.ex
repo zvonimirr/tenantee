@@ -1,4 +1,5 @@
 defmodule TenanteeWeb.PropertyLive.Expenses do
+  alias Tenantee.Config
   alias Tenantee.Entity.Expense
   alias TenanteeWeb.PropertyLive.Helper
   import TenanteeWeb.Components.Expense
@@ -46,8 +47,33 @@ defmodule TenanteeWeb.PropertyLive.Expenses do
     {:noreply, assign(socket, expense: nil)}
   end
 
-  # TODO  allow editing of expenses?
-  # TODO: allow adding of expenses
+  def handle_event(
+        "create",
+        %{
+          "name" => name,
+          "description" => description,
+          "amount" => amount,
+          "tenant_id" => payer_id
+        },
+        socket
+      ) do
+    with {:ok, currency} <- Config.get(:currency),
+         {:ok, _expense} <-
+           Expense.create(%{
+             name: name,
+             description: description,
+             amount: Helper.handle_price(amount, currency),
+             property_id: socket.assigns.id,
+             tenant_id: payer_id
+           }) do
+      {:noreply,
+       Helper.default(socket, %{"id" => socket.assigns.id})
+       |> put_flash(:info, "Expense created successfully")}
+    else
+      _error ->
+        {:noreply, put_flash(socket, :error, "Something went wrong.")}
+    end
+  end
 
   def render(assigns) do
     assigns = assign(assigns, :expense_groups, group_expenses(assigns.expenses))
@@ -56,6 +82,53 @@ defmodule TenanteeWeb.PropertyLive.Expenses do
     <.link class="text-gray-500" navigate={~p"/properties"}>
       <.icon name="hero-arrow-left" /> Back to properties
     </.link>
+
+    <details class="mt-4">
+      <summary class="cursor-pointer">
+        <span class="text-xl font-bold">Add new expense</span>
+      </summary>
+      <form
+        id="expense-add-form"
+        phx-hook="FormHook"
+        class="flex flex-col gap-2 max-w-xs"
+        phx-submit="create"
+      >
+        <.input type="text" name="name" label="Name" placeholder="Name" value="" required />
+        <.input
+          type="textarea"
+          name="description"
+          label="Description"
+          placeholder="Description"
+          value=""
+        />
+
+        <.input
+          type="number"
+          name="amount"
+          min="0.1"
+          max="9999999999.9"
+          step="0.1"
+          value="0.1"
+          label="Price"
+          placeholder="Price of the expense"
+          required
+        />
+
+        <.input
+          type="select"
+          name="tenant_id"
+          label="Payer"
+          value=""
+          required
+          options={get_payer_options(@tenants)}
+        />
+
+        <.button type="submit" phx-disable-with="Creating...">
+          Create
+        </.button>
+      </form>
+    </details>
+
     <%= if not is_nil(@expense) do %>
       <.modal id="confirm-modal" show>
         <p class="text-2xl mb-4 font-bold">Are you sure?</p>
@@ -110,5 +183,13 @@ defmodule TenanteeWeb.PropertyLive.Expenses do
   defp group_expenses(expenses) do
     expenses
     |> Enum.group_by(&if &1.paid, do: :paid, else: :unpaid)
+  end
+
+  defp get_payer_options(tenants) do
+    opts =
+      tenants
+      |> Enum.map(&{&1.first_name, &1.id})
+
+    [{"You", "landlord"} | opts]
   end
 end
