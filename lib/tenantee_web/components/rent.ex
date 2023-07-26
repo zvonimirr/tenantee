@@ -29,7 +29,7 @@ defmodule TenanteeWeb.Components.Rent do
       not @rent.paid && "bg-red-100"
     ]}>
       <p class={[@rent.paid && "line-through"]}>
-        <%= Cldr.format_date(@rent.due_date) %> (<%= format_price(@rent.amount) %>)
+        <%= Cldr.format_date(@rent.due_date) %> (<%= Cldr.format_price(@rent.amount) %>)
       </p>
       <.button
         id={"rent_#{@rent.id}"}
@@ -47,11 +47,5 @@ defmodule TenanteeWeb.Components.Rent do
   defp pay_rent(id, rent_id) do
     JS.set_attribute({"disabled", true}, to: "##{id}")
     |> JS.push("pay", value: %{rent: rent_id})
-  end
-
-  defp format_price(price) do
-    with {:ok, formatted_price} <- Cldr.Money.to_string(price, symbol: true) do
-      formatted_price
-    end
   end
 end
