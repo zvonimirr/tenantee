@@ -52,11 +52,11 @@ defmodule TenanteeWeb.HomeLive do
         </p>
       <% else %>
         <p class="text-gray-600">
-          Looks like you own <%= @property_count %> <%= if @property_count == 1,
-            do: "property",
-            else: "properties" %> and <%= @tenant_count %> <%= if @tenant_count == 1,
-            do: "tenant",
-            else: "tenants" %>.
+          Looks like you own <%= @property_count %> <%= Cldr.pluralize(
+            "property",
+            "properties",
+            @property_count
+          ) %> and <%= @tenant_count %> <%= Cldr.pluralize("tenant", "tenants", @tenant_count) %>.
         </p>
         <p class="text-gray-600">
           You can manage them from the
@@ -88,9 +88,11 @@ defmodule TenanteeWeb.HomeLive do
         <hr class="my-5" />
         <p class="text-xl">Unpaid rents:</p>
         <p class="text-gray-600">
-          You have <%= @unpaid %> unpaid and <%= @overdue %> overdue <%= if @overdue == 1,
-            do: "rent",
-            else: "rents" %>.
+          You have <%= @unpaid %> unpaid and <%= @overdue %> overdue <%= Cldr.pluralize(
+            "rent",
+            "rents",
+            @overdue
+          ) %>.
         </p>
 
         <.link class="text-green-500 hover:text-green-700 transition-colors" navigate={~p"/tenants"}>
