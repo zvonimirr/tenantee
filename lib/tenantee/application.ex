@@ -30,9 +30,12 @@ defmodule Tenantee.Application do
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
+  # coveralls-ignore-start
   @impl true
   def config_change(changed, _new, removed) do
     TenanteeWeb.Endpoint.config_change(changed, removed)
     :ok
   end
+
+  # coveralls-ignore-end
 end

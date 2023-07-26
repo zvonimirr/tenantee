@@ -15,7 +15,8 @@ defmodule Tenantee.Cldr do
   end
 
   def format_price(price) do
-    with {:ok, formatted_price} <- Tenantee.Cldr.Money.to_string(price, symbol: true) do
+    with {:ok, formatted_price} <-
+           Tenantee.Cldr.Money.to_string(price, symbol: true, no_fraction_if_integer: true) do
       formatted_price
     end
   end
