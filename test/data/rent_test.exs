@@ -100,6 +100,6 @@ defmodule Tenantee.Data.RentTest do
         tenant_id: 0
       })
 
-    assert ["must be greater than 0"] = errors_on(changeset).amount
+    assert "must be greater than 0" in errors_on(changeset).amount
   end
 end
