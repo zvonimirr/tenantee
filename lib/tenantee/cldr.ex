@@ -20,4 +20,12 @@ defmodule Tenantee.Cldr do
       formatted_price
     end
   end
+
+  def pluralize(singular, plural, count) do
+    if count == 1 do
+      singular
+    else
+      plural
+    end
+  end
 end

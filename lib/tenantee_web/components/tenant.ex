@@ -2,6 +2,7 @@ defmodule TenanteeWeb.Components.Tenant do
   @moduledoc """
   Provides UI components for the Tenant context.
   """
+  alias Tenantee.Cldr
   alias Phoenix.LiveView.JS
   alias Tenantee.Entity.Rent
   use Phoenix.Component
@@ -35,7 +36,7 @@ defmodule TenanteeWeb.Components.Tenant do
         class="text-gray-600 underline decoration-dotted hover:cursor-default w-fit"
         data-tooltip={get_properties_names(@tenant)}
       >
-        Currently occupying <%= @count %> <%= if @count == 1, do: "property", else: "properties" %>.
+        Currently occupying <%= @count %> <%= Cldr.pluralize("property", "properties", @count) %>.
       </p>
       <%= if @count > 0 do %>
         <div>
@@ -43,12 +44,12 @@ defmodule TenanteeWeb.Components.Tenant do
             @unpaid_rents > 0 && "text-yellow-500",
             @unpaid_rents == 0 && "text-green-500"
           ]}>
-            Has <%= @unpaid_rents %> unpaid <%= if @unpaid_rents == 1, do: "rent", else: "rents" %>.
+            Has <%= @unpaid_rents %> unpaid <%= Cldr.pluralize("rent", "rents", @unpaid_rents) %>.
           </p>
           <%= if @unpaid_rents > 0 do %>
             <%= if @overdue_rents > 0 do %>
               <p class="text-red-500">
-                <%= @overdue_rents %> of them <%= if @overdue_rents == 1, do: "is", else: "are" %> overdue.
+                <%= @overdue_rents %> of them <%= Cldr.pluralize("is", "are", @overdue_rents) %> overdue.
               </p>
             <% else %>
               <p class="text-yellow-500">
