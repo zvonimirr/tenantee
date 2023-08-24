@@ -169,7 +169,7 @@ defmodule TenanteeWeb.PropertyLive.Expenses do
 
       <hr class="my-2" />
 
-      <%= if Map.has_key?(@expense_groups, :unpaid) do %>
+      <%= if Map.has_key?(@expense_groups, :paid) do %>
         <details open>
           <summary class="cursor-pointer">
             <span class="text-xl font-bold">Paid</span>
