@@ -149,33 +149,38 @@ defmodule TenanteeWeb.PropertyLive.Expenses do
     <% end %>
     <div class="flex flex-col mt-4 gap-4">
       <h1 class="text-2xl font-bold">Expenses</h1>
-      <details open>
-        <summary class="cursor-pointer">
-          <span class="text-xl font-bold">Unpaid</span>
-        </summary>
-        <div
-          id="unpaid-expenses-container"
-          class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2"
-          phx-hook="ModalHook"
-        >
-          <%= for expense <- @expense_groups.unpaid do %>
-            <.card expense={expense} />
-          <% end %>
-        </div>
-      </details>
+
+      <%= if Map.has_key?(@expense_groups, :unpaid) do %>
+        <details open>
+          <summary class="cursor-pointer">
+            <span class="text-xl font-bold">Unpaid</span>
+          </summary>
+          <div
+            id="unpaid-expenses-container"
+            class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2"
+            phx-hook="ModalHook"
+          >
+            <%= for expense <- @expense_groups.unpaid do %>
+              <.card expense={expense} />
+            <% end %>
+          </div>
+        </details>
+      <% end %>
 
       <hr class="my-2" />
 
-      <details open>
-        <summary class="cursor-pointer">
-          <span class="text-xl font-bold">Paid</span>
-        </summary>
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
-          <%= for expense <- @expense_groups.paid do %>
-            <.card expense={expense} paid />
-          <% end %>
-        </div>
-      </details>
+      <%= if Map.has_key?(@expense_groups, :unpaid) do %>
+        <details open>
+          <summary class="cursor-pointer">
+            <span class="text-xl font-bold">Paid</span>
+          </summary>
+          <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2">
+            <%= for expense <- @expense_groups.paid do %>
+              <.card expense={expense} paid />
+            <% end %>
+          </div>
+        </details>
+      <% end %>
     </div>
     """
   end
