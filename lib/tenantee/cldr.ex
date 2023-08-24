@@ -39,23 +39,4 @@ defmodule Tenantee.Cldr do
       end
     end
   end
-
-  def pluralize(singular, plural, count) do
-    if count == 1 do
-      singular
-    else
-      plural
-    end
-  end
-
-  def validate_amount(min) do
-    fn :amount, amount ->
-      min_m = Money.new(min, amount.currency)
-
-      case Money.compare(amount, min_m) do
-        :gt -> []
-        _ -> [amount: "must be greater than #{min}"]
-      end
-    end
-  end
 end
