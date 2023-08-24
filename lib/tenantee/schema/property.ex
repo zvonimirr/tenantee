@@ -45,10 +45,4 @@ defmodule Tenantee.Schema.Property do
     |> cast(attrs, [:name, :description, :address, :price])
     |> validate_required([:name, :address, :price])
   end
-
-  def set_expenses(%__MODULE__{} = property, expenses) do
-    property
-    |> change()
-    |> put_assoc(:expenses, expenses)
-  end
 end
