@@ -18,6 +18,7 @@ defmodule TenanteeWeb.Components.Expense do
       <div class="flex justify-between">
         <span class="text-lg font-semibold"><%= @expense.name %></span>
         <.button
+          id={"delete_expense_#{@expense.id}"}
           class="bg-red-500 text-white hover:bg-red-600"
           data-tooltip="Delete expense"
           phx-click={open_confirm_modal(@expense.id)}
