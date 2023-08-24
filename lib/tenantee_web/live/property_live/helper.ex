@@ -52,8 +52,11 @@ defmodule TenanteeWeb.PropertyLive.Helper do
       |> assign(:address, property.address)
       |> assign(:description, property.description)
       |> assign(:price, property.price.amount |> to_string())
+      |> assign(:expenses, property.expenses)
+      |> assign(:tenants, property.tenants)
       |> assign(:id, id)
       |> assign(:currency, currency)
+      |> assign(:expense, nil)
     end
   end
 

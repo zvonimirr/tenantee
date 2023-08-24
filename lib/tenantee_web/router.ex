@@ -29,7 +29,11 @@ defmodule TenanteeWeb.Router do
 
       live "/", PropertyLive.List
       live "/new", PropertyLive.Add
-      live "/:id", PropertyLive.Edit
+
+      scope "/:id" do
+        live "/", PropertyLive.Edit
+        live "/expenses", PropertyLive.Expenses
+      end
     end
 
     scope "/tenants" do

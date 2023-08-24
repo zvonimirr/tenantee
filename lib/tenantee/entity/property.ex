@@ -22,7 +22,7 @@ defmodule Tenantee.Entity.Property do
   def get(id) do
     case Repo.get(Schema, id) do
       nil -> {:error, "Property not found"}
-      property -> {:ok, Repo.preload(property, :tenants)}
+      property -> {:ok, preload(property)}
     end
   end
 
@@ -96,5 +96,13 @@ defmodule Tenantee.Entity.Property do
   defp get_tenant_ids(property) do
     property.tenants
     |> Enum.map(& &1.id)
+  end
+
+  defp preload(property) do
+    Repo.preload(property, [
+      :tenants,
+      :expenses,
+      expenses: [:tenant]
+    ])
   end
 end
