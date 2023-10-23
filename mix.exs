@@ -82,7 +82,7 @@ defmodule Tenantee.MixProject do
       {:quantum, "~> 3.5"},
       {:faker, "~> 0.17", only: :test},
       {:html_entities, "~> 0.5", only: :test},
-      {:excoveralls, "~> 0.17.0", only: :test},
+      {:excoveralls, "~> 0.18.0", only: :test},
       {:mock, "~> 0.3.8", only: :test},
       {:git_hooks, "~> 0.7.0", only: :dev, runtime: false},
       {:ex_doc, "~> 0.30.1", only: :dev, runtime: false},
