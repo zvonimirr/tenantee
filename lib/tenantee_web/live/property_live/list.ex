@@ -123,6 +123,16 @@ defmodule TenanteeWeb.PropertyLive.List do
           <.icon name="hero-home" /> Add another property
         </.button>
       </.link>
+      <!-- New button for generating rental agreement -->
+      <div class="flex justify-end gap-4 mt-4">
+        <.button
+          phx-click={generate_rental_agreement("generate_rental_agreement", @property.id)}
+          phx-value-id={@property.id}
+          class="bg-blue-500 hover:bg-blue-600"
+        >
+          Generate Rental Agreement
+        </.button>
+      </div>
     <% end %>
     """
   end
