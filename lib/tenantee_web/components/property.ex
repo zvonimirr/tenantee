@@ -52,7 +52,7 @@ defmodule TenanteeWeb.Components.Property do
         </.button>
         <.link navigate={"/properties/#{@property.id}/expenses"}>
           <.button>
-            <.icon name="hero-banknotes" class="w-4 h-4" /> Manage expenses
+            <.icon name="hero-banknotes" class="w-4 h-4" /> Manage Expenses
           </.button>
         </.link>
         <.link navigate={"/properties/#{@property.id}"}>
