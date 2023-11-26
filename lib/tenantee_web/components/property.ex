@@ -50,6 +50,9 @@ defmodule TenanteeWeb.Components.Property do
         <.button phx-click={open_manage_tenants_modal(@property.id)} disabled={@tenant_count == 0}>
           <.icon name="hero-user" class="w-4 h-4" /> Manage tenants
         </.button>
+        <.button phx-click={open_manage_tenants_modal(@property.id)} disabled={@tenant_count == 0}>
+          <.icon name="hero-user" class="w-4 h-4" /> Generate Agreement
+        </.button>
         <.link navigate={"/properties/#{@property.id}/expenses"}>
           <.button>
             <.icon name="hero-banknotes" class="w-4 h-4" /> Manage Expenses
