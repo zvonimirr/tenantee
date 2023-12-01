@@ -31,6 +31,9 @@ defmodule TenanteeWeb.Router do
       live "/new", PropertyLive.Add
 
       scope "/:id" do
+        live "/agreement", PropertyLive.Agreement
+        live "/edit_agreement", PropertyLive.EditAgreement
+        live "/view_agreement", PropertyLive.ViewAgreement
         live "/", PropertyLive.Edit
         live "/expenses", PropertyLive.Expenses
       end
