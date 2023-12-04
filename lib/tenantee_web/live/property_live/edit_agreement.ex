@@ -138,4 +138,10 @@ defmodule TenanteeWeb.PropertyLive.EditAgreement do
   end
 
 
+  def handle_success(socket, property_address, property) do
+    socket
+    |> assign(:agreement_params, property.agreement_params)
+    |> put_flash(:info, "#{property_address} agreement was updated successfully.")
+    |> push_navigate(to: ~p"/properties/#{property.id}/view_agreement")
+  end
 end
