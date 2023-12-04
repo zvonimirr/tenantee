@@ -47,6 +47,19 @@ defmodule Tenantee.Entity.Property do
   end
 
   @doc """
+    Creates or updates an agreement for a property.
+  """
+  @spec create_agreement(integer(), map()) :: :ok | {:error, Ecto.Changeset.t() | String.t()}
+  def create_agreement(id, new_agreement_params) do
+    with {:ok, property} <- get(id),
+        agreement_params <- Map.merge(property.agreement_params || %{}, new_agreement_params),
+        changeset <- Schema.changeset(property, %{agreement_params: agreement_params, has_agreement: true}),
+        {:ok, _} <- Repo.update(changeset) do
+      :ok
+    end
+  end
+  
+  @doc """
   Updates a property by id.
   """
   @spec update(integer(), map()) :: :ok | {:error, Ecto.Changeset.t() | String.t()}

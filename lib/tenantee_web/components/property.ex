@@ -50,14 +50,27 @@ defmodule TenanteeWeb.Components.Property do
         <.button phx-click={open_manage_tenants_modal(@property.id)} disabled={@tenant_count == 0}>
           <.icon name="hero-user" class="w-4 h-4" /> Manage tenants
         </.button>
+        <%= if @property.has_agreement == false do %>
+          <.link navigate={"/properties/#{@property.id}/agreement"}>
+            <.button>
+              <.icon name="hero-clipboard" class="w-4 h-4" /> Generate Agreement
+            </.button>
+          </.link>
+        <% else %>
+          <.link navigate={"/properties/#{@property.id}/view_agreement"}>
+            <.button>
+              <.icon name="hero-clipboard" class="w-4 h-4" /> View/Edit Agreement
+            </.button>
+          </.link>
+        <% end %>
         <.link navigate={"/properties/#{@property.id}/expenses"}>
           <.button>
-            <.icon name="hero-banknotes" class="w-4 h-4" /> Manage expenses
+            <.icon name="hero-banknotes" class="w-4 h-4" /> Manage Expenses
           </.button>
         </.link>
         <.link navigate={"/properties/#{@property.id}"}>
-          <.button>
-            <.icon name="hero-pencil" class="w-4 h-4" /> Edit
+          <.button style="width: 70px; height: 75px; display: flex; flex-direction: column; align-items: center;">
+            <.icon name="hero-pencil" class="w-4 h-4" /> Edit Property
           </.button>
         </.link>
       </div>

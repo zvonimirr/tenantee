@@ -22,8 +22,10 @@ defmodule Tenantee.Schema.Property do
           description: String.t(),
           address: String.t(),
           price: Money.t(),
+          agreement_params: map(),  # Add this line
           tenants: [Tenant.t()],
           expenses: [Expense.t()],
+          has_agreement: boolean(),
           inserted_at: DateTime.t(),
           updated_at: DateTime.t()
         }
@@ -33,6 +35,8 @@ defmodule Tenantee.Schema.Property do
     field :description, :string, default: ""
     field :address, :string
     field :price, Money.Ecto.Composite.Type
+    field :agreement_params, :map, default: %{}  # Add this line
+    field :has_agreement, :boolean, default: false
 
     many_to_many(:tenants, Tenant, join_through: "leases", on_replace: :delete)
     has_many(:expenses, Expense, on_delete: :delete_all)
@@ -42,7 +46,7 @@ defmodule Tenantee.Schema.Property do
 
   def changeset(property, attrs \\ %{}) do
     property
-    |> cast(attrs, [:name, :description, :address, :price])
+    |> cast(attrs, [:name, :description, :address, :price, :agreement_params, :has_agreement])  # Add :agreement_params here
     |> validate_required([:name, :address, :price])
   end
 end
