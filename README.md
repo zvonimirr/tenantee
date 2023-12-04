@@ -5,7 +5,7 @@
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/zvonimirr/tenantee/dev)
 ![GitHub](https://img.shields.io/github/license/zvonimirr/tenantee)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Tenantee (pronounced "tenant-e") is a free and open-source management software aimed at landlords.
@@ -91,6 +91,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/MilaFazekas"><img src="https://avatars.githubusercontent.com/u/79193172?v=4?s=100" width="100px;" alt="Milly"/><br /><sub><b>Milly</b></sub></a><br /><a href="https://github.com/zvonimirr/tenantee/issues?q=author%3AMilaFazekas" title="Bug reports">🐛</a> <a href="https://github.com/zvonimirr/tenantee/commits?author=MilaFazekas" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://mithin.hashnode.dev"><img src="https://avatars.githubusercontent.com/u/109973775?v=4?s=100" width="100px;" alt="MITHIN DEV "/><br /><sub><b>MITHIN DEV </b></sub></a><br /><a href="https://github.com/zvonimirr/tenantee/commits?author=mithindev" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://akosszarvak.com/"><img src="https://avatars.githubusercontent.com/u/43302360?v=4?s=100" width="100px;" alt="Szarvák Ákos"/><br /><sub><b>Szarvák Ákos</b></sub></a><br /><a href="https://github.com/zvonimirr/tenantee/commits?author=akosszarvak" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mrahmatu"><img src="https://avatars.githubusercontent.com/u/122431690?v=4?s=100" width="100px;" alt="mrahmatu"/><br /><sub><b>mrahmatu</b></sub></a><br /><a href="https://github.com/zvonimirr/tenantee/commits?author=mrahmatu" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
