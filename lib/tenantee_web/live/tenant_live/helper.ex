@@ -8,8 +8,8 @@ defmodule TenanteeWeb.TenantLive.Helper do
   @doc """
   Check if submit button should be disabled
   """
-  @spec is_submit_disabled?(map()) :: boolean
-  def is_submit_disabled?(assigns) do
+  @spec submit_disabled?(map()) :: boolean
+  def submit_disabled?(assigns) do
     [assigns.first_name, assigns.last_name]
     |> Enum.any?(&(&1 == ""))
   end
