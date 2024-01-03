@@ -32,7 +32,7 @@ defmodule TenanteeWeb.ConfigLive do
   end
 
   def render(assigns) do
-    assigns = assign(assigns, :disabled, disabled(assigns))
+    assigns = assign(assigns, :disabled, disabled?(assigns))
 
     ~H"""
     <h1 class="text-3xl font-bold">Configuration</h1>
@@ -80,7 +80,7 @@ defmodule TenanteeWeb.ConfigLive do
     |> assign(:tax, tax)
   end
 
-  defp disabled(assigns) do
+  defp disabled?(assigns) do
     [
       assigns.name,
       assigns.currency
