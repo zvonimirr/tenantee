@@ -6,6 +6,7 @@ Reasons for that are explained in [#391](https://github.com/zvonimirr/tenantee/p
 be added again shortly. The core functionality was kept (manage properties, tenants and rents).
 
 But, there are some other changes as well:
+- Rental agreements can be generated for properties ([@mrahmatu](https://github.com/mrahmatu))
 - Preferences (now called configs) are stored in Redis ([@zvonimirr](https://github.com/zvonimirr))
 - Replaced Oban with Quantum for cron-jobs ([@zvonimirr](https://github.com/zvonimirr))
 - Rents and communication channels are managed from their own pages ([@zvonimirr](https://github.com/zvonimirr))
