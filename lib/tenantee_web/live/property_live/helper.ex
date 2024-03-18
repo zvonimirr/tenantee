@@ -9,8 +9,8 @@ defmodule TenanteeWeb.PropertyLive.Helper do
   @doc """
   Check if the submit button should be disabled
   """
-  @spec is_submit_disabled?(map()) :: boolean
-  def is_submit_disabled?(assigns) do
+  @spec submit_disabled?(map()) :: boolean
+  def submit_disabled?(assigns) do
     case Float.parse(assigns.price) do
       {price, ""} when price > 0 ->
         [

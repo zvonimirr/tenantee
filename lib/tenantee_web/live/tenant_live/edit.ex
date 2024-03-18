@@ -25,7 +25,7 @@ defmodule TenanteeWeb.TenantLive.Edit do
   end
 
   def render(assigns) do
-    assigns = assign(assigns, :disabled, Helper.is_submit_disabled?(assigns))
+    assigns = assign(assigns, :disabled, Helper.submit_disabled?(assigns))
 
     ~H"""
     <.link class="text-gray-500" navigate={~p"/tenants"}>

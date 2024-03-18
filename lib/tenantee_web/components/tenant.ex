@@ -99,13 +99,13 @@ defmodule TenanteeWeb.Components.Tenant do
     ~H"""
     <div class={[
       "flex items-center gap-2 shadow-lg border border-gray-200 rounded-lg p-4 text-black font-semibold",
-      is_tenant_in_property?(@tenant, @property) && "bg-green-300"
+      tenant_in_property?(@tenant, @property) && "bg-green-300"
     ]}>
       <.input
         type="checkbox"
         id={@name}
         name={@name}
-        value={is_tenant_in_property?(@tenant, @property)}
+        value={tenant_in_property?(@tenant, @property)}
         phx-click={toggle_lease(@name, @property.id, @tenant.id)}
         phx-value-property={@property.id}
         phx-value-tenant={@tenant.id}
@@ -122,7 +122,7 @@ defmodule TenanteeWeb.Components.Tenant do
     |> JS.push("toggle_lease", value: %{"property" => property_id, "tenant" => tenant_id})
   end
 
-  defp is_tenant_in_property?(tenant, property) do
+  defp tenant_in_property?(tenant, property) do
     property.tenants
     |> Enum.map(& &1.id)
     |> Enum.member?(tenant.id)
