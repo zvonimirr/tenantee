@@ -58,7 +58,7 @@ defmodule TenanteeWeb.PropertyLive.ViewAgreement do
 
       <br />
 
-      <.button onclick="downloadPDF()">
+      <.button phx-click={JS.dispatch("tenantee:print-pdf")}>
         <.icon name="hero-clipboard" class="w-4 h-4" /> Download PDF
       </.button>
 
@@ -68,21 +68,6 @@ defmodule TenanteeWeb.PropertyLive.ViewAgreement do
         <.icon name="hero-arrow-left" /> Edit Agreement
       </.link>
     </div>
-
-    <script>
-      // JavaScript function to generate and download PDF
-      function downloadPDF() {
-        // Open a new window for printing
-        var printWindow = window.open('', '_blank');
-
-        // Inject the HTML content into the new window
-        printWindow.document.write(document.getElementById('pdf-content').outerHTML);
-
-        // Execute the print function in the new window
-        printWindow.document.close();
-        printWindow.print();
-      }
-    </script>
     """
   end
 end
