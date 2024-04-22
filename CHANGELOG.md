@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.12
+- Fix agreement warnings ([@zvonimirr](https://github.com/zvonimirr))
+- Add dependabot for npm ([@zvonimirr](https://github.com/zvonimirr))
+
 ## 0.4.0
 `0.4.0` is a complete rewrite that ditches React and focuses solely on Phoenix. 
 Reasons for that are explained in [#391](https://github.com/zvonimirr/tenantee/pull/391), and some features were cut for the time being, but will likely
