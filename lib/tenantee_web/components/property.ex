@@ -22,12 +22,14 @@ defmodule TenanteeWeb.Components.Property do
           <.icon name="hero-home" class="w-8 h-8" />
           <%= @property.name %>
         </h1>
-        <.button
-          class="bg-red-500 text-white hover:bg-red-600"
-          phx-click={open_confirm_modal(@property.id)}
-        >
-          <.icon name="hero-trash" class="w-4 h-4" /> Delete
-        </.button>
+        <abbr title="Delete Property">
+          <.button
+            class="bg-red-500 text-white hover:bg-red-600"
+            phx-click={open_confirm_modal(@property.id)}
+          >
+            <.icon name="hero-trash" class="w-4 h-4" />
+          </.button>
+        </abbr>
       </div>
       <hr class="border border-gray-200 w-full" />
       <p class="text-gray-600">

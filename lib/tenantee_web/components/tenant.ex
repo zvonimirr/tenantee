@@ -25,12 +25,14 @@ defmodule TenanteeWeb.Components.Tenant do
           <.icon name="hero-user" class="w-8 h-8" />
           <%= @tenant.first_name %> <%= @tenant.last_name %>
         </h1>
-        <.button
-          class="bg-red-500 text-white hover:bg-red-600"
-          phx-click={open_confirm_modal(@tenant.id)}
-        >
-          <.icon name="hero-trash" class="w-4 h-4" /> Delete
-        </.button>
+        <abbr title="Delete tenant">
+          <.button
+            class="bg-red-500 text-white hover:bg-red-600"
+            phx-click={open_confirm_modal(@tenant.id)}
+          >
+            <.icon name="hero-trash" class="w-4 h-4" />
+          </.button>
+        </abbr>
       </div>
       <p
         class="text-gray-600 underline decoration-dotted hover:cursor-default w-fit"
@@ -68,19 +70,25 @@ defmodule TenanteeWeb.Components.Tenant do
       <% end %>
       <div class="flex gap-4">
         <.link navigate={"/tenants/#{@tenant.id}/rents"}>
-          <.button>
-            <.icon name="hero-banknotes" class="w-4 h-4" /> Manage rent
-          </.button>
+          <abbr title="Manage rent">
+            <.button>
+              <.icon name="hero-banknotes" class="w-4 h-4" />
+            </.button>
+          </abbr>
         </.link>
         <.link navigate={"/tenants/#{@tenant.id}/channels"}>
-          <.button>
-            <.icon name="hero-chat-bubble-bottom-center-text" class="w-4 h-4" /> Manage communication
-          </.button>
+          <abbr title="Manage communication">
+            <.button>
+              <.icon name="hero-chat-bubble-bottom-center-text" class="w-4 h-4" />
+            </.button>
+          </abbr>
         </.link>
         <.link navigate={"/tenants/#{@tenant.id}"}>
-          <.button>
-            <.icon name="hero-pencil" class="w-4 h-4" /> Edit
-          </.button>
+          <abbr title="Edit tenant">
+            <.button>
+              <.icon name="hero-pencil" class="w-4 h-4" />
+            </.button>
+          </abbr>
         </.link>
       </div>
     </div>
