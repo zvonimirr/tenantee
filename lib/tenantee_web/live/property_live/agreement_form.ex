@@ -46,7 +46,7 @@ defmodule TenanteeWeb.PropertyLive.Agreement do
 
     ~H"""
     <.link class="text-gray-500" navigate={~p"/properties"}>
-      <.icon name="hero-arrow-left" /> Back to property card
+      <.icon name="hero-arrow-left" /> Back to properties
     </.link>
 
     <h1 class="text-3xl font-bold my-4">Create new agreement</h1>

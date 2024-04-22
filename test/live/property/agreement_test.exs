@@ -100,4 +100,37 @@ defmodule TenanteeWeb.PropertyAgreementTest do
 
     assert html =~ "agreement was updated successfully"
   end
+
+  test "goes back to properties", %{conn: conn} do
+    {:ok, tenant} = generate_tenant()
+    {:ok, property} = generate_property()
+    Tenant.add_to_property(tenant.id, property.id)
+    {:ok, view, _html} = live(conn, "/properties")
+
+    {:ok, view, _html} =
+      view
+      |> element("abbr[title='Generate Agreement'] a")
+      |> render_click()
+      |> follow_redirect(conn)
+
+    {:ok, view, _html} =
+      view
+      |> form("#agreement-form", %{
+        tenant_name: "None",
+        rent_amount: 1000,
+        lease_term: 12,
+        start_date: "2022-01-01",
+        end_date: "2022-12-31",
+        security_deposit: 1000,
+        additional_terms: "No pets allowed"
+      })
+      |> render_submit()
+      |> follow_redirect(conn)
+
+    {:ok, _view, _html} =
+      view
+      |> element("a", "Back to properties")
+      |> render_click()
+      |> follow_redirect(conn)
+  end
 end

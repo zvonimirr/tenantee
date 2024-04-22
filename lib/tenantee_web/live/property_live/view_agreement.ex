@@ -14,7 +14,7 @@ defmodule TenanteeWeb.PropertyLive.ViewAgreement do
     ~H"""
     <div>
       <.link class="text-gray-500" navigate={~p"/properties"}>
-        <.icon name="hero-arrow-left" /> Back to property card
+        <.icon name="hero-arrow-left" /> Back to properties
       </.link>
 
       <div id="pdf-content">
