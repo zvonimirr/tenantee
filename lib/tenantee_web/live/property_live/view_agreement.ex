@@ -55,19 +55,29 @@ defmodule TenanteeWeb.PropertyLive.ViewAgreement do
           <h2 style="font-weight: bold;">Additional Terms:</h2>
           <p><%= @agreement_params["additional_terms"] %> -</p>
         <% end %>
+
+        <p>
+          -------------------------------------------------------------------------------------------
+        </p>
+        <p class="mt-4">
+          Signed by the Landlord: __________________________
+        </p>
+        <p class="mt-4">
+          Signed by the Tenant: __________________________
+        </p>
       </div>
 
-      <br />
+      <div class="my-4">
+        <.button phx-click={JS.dispatch("tenantee:print-pdf")}>
+          <.icon name="hero-clipboard" class="w-4 h-4" /> Download PDF
+        </.button>
+      </div>
 
-      <.button phx-click={JS.dispatch("tenantee:print-pdf")}>
-        <.icon name="hero-clipboard" class="w-4 h-4" /> Download PDF
-      </.button>
-
-      <br />
-
-      <.link class="text-gray-500" navigate={~p"/properties/#{assigns.id}/edit_agreement"}>
-        <.icon name="hero-arrow-left" /> Edit Agreement
-      </.link>
+      <div class="my-4">
+        <.link class="text-gray-500" navigate={~p"/properties/#{assigns.id}/edit_agreement"}>
+          <.icon name="hero-arrow-left" /> Edit Agreement
+        </.link>
+      </div>
     </div>
     """
   end
