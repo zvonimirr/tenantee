@@ -8,7 +8,8 @@ defmodule TenanteeWeb.PropertyLive.ViewAgreement do
   end
 
   def render(assigns) do
-    assigns = assign(assigns, :landlord_name, Config.get(:name, nil))
+    assigns = assign(assigns, :landlord_name, Config.get(:name, "Landlord"))
+    assigns = assign(assigns, :currency, Config.get(:currency, "USD"))
 
     ~H"""
     <div>
@@ -47,8 +48,8 @@ defmodule TenanteeWeb.PropertyLive.ViewAgreement do
         </p>
 
         <h2 style="font-weight: bold;">Rental Details:</h2>
-        <p>Monthly Rent Amount: <%= @agreement_params["rent_amount"] %></p>
-        <p>Security Deposit: <%= @agreement_params["security_deposit"] %></p>
+        <p>Monthly Rent Amount (<%= @currency %>): <%= @agreement_params["rent_amount"] %></p>
+        <p>Security Deposit (<%= @currency %>): <%= @agreement_params["security_deposit"] %></p>
 
         <%= if @agreement_params["additional_terms"] != "" do %>
           <h2 style="font-weight: bold;">Additional Terms:</h2>

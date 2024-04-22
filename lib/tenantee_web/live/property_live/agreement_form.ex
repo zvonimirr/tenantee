@@ -1,6 +1,7 @@
 defmodule TenanteeWeb.PropertyLive.Agreement do
   alias TenanteeWeb.PropertyLive.Helper
   alias Tenantee.Entity.Property
+  alias Tenantee.Config
   use TenanteeWeb, :live_view
 
   def mount(params, _session, socket) do
@@ -41,6 +42,7 @@ defmodule TenanteeWeb.PropertyLive.Agreement do
   def render(assigns) do
     assigns = assign(assigns, :disabled, Helper.submit_disabled?(assigns))
     assigns = assign(assigns, :options, Helper.get_dropdown_options(assigns.tenants))
+    assigns = assign(assigns, :currency, Config.get(:currency, "USD"))
 
     ~H"""
     <.link class="text-gray-500" navigate={~p"/properties"}>
@@ -70,7 +72,7 @@ defmodule TenanteeWeb.PropertyLive.Agreement do
         id="rent_amount"
         name="rent_amount"
         value=""
-        label="Monthly Rent Amount:"
+        label={"Monthly Rent Amount (#{@currency}):"}
         placeholder=""
         maxlength=""
         required
@@ -114,7 +116,7 @@ defmodule TenanteeWeb.PropertyLive.Agreement do
         id="security_deposit"
         name="security_deposit"
         value=""
-        label="Security Deposit:"
+        label={"Security Deposit (#{@currency}):"}
         placeholder=""
         maxlength=""
         required
