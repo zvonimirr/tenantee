@@ -55,21 +55,21 @@ defmodule TenanteeWeb.Components.Property do
           </.button>
         </abbr>
         <%= if @property.has_agreement  do %>
-          <.link navigate={"/properties/#{@property.id}/view_agreement"}>
-            <abbr title="View Agreement">
+          <abbr title="View Agreement">
+            <.link navigate={"/properties/#{@property.id}/view_agreement"}>
               <.button>
                 <.icon name="hero-clipboard" class="w-4 h-4" />
               </.button>
-            </abbr>
-          </.link>
+            </.link>
+          </abbr>
         <% else %>
-          <.link navigate={"/properties/#{@property.id}/agreement"}>
-            <abbr title="Generate Agreement">
+          <abbr title="Generate Agreement">
+            <.link navigate={"/properties/#{@property.id}/agreement"}>
               <.button>
                 <.icon name="hero-clipboard" class="w-4 h-4" />
               </.button>
-            </abbr>
-          </.link>
+            </.link>
+          </abbr>
         <% end %>
         <.link navigate={"/properties/#{@property.id}/expenses"}>
           <abbr title="Manage Expenses">
