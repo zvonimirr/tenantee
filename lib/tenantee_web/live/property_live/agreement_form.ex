@@ -1,6 +1,5 @@
 defmodule TenanteeWeb.PropertyLive.Agreement do
   alias TenanteeWeb.PropertyLive.Helper
-  alias Tenantee.Config
   alias Tenantee.Entity.Property
   use TenanteeWeb, :live_view
 
@@ -32,7 +31,7 @@ defmodule TenanteeWeb.PropertyLive.Agreement do
              "additional_terms" => additional_terms
            }),
          {:ok, property} <- Property.get(socket.assigns.id) do
-      {:noreply, handle_success(socket, property.name, property)}
+      {:noreply, handle_success(socket, property)}
     else
       {:error, _reason} ->
         {:noreply, put_flash(socket, :error, "Something went wrong, please try again.")}
@@ -41,17 +40,7 @@ defmodule TenanteeWeb.PropertyLive.Agreement do
 
   def render(assigns) do
     assigns = assign(assigns, :disabled, Helper.submit_disabled?(assigns))
-
-    # getting the list of tenants
-    options =
-      for tenant <- assigns.tenants do
-        "#{tenant.first_name} #{tenant.last_name}"
-      end
-
-    options = options ++ ["None"]
-
-    # assigning to assigns
-    assigns = assign(assigns, :options, options)
+    assigns = assign(assigns, :options, Helper.get_dropdown_options(assigns.tenants))
 
     ~H"""
     <.link class="text-gray-500" navigate={~p"/properties"}>
@@ -146,7 +135,7 @@ defmodule TenanteeWeb.PropertyLive.Agreement do
     """
   end
 
-  def handle_success(socket, property_address, property) do
+  def handle_success(socket, property) do
     socket
     |> put_flash(:info, "#{property.name} agreement was created successfully.")
     |> push_navigate(to: ~p"/properties/#{property.id}/view_agreement")
