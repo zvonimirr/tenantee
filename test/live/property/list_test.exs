@@ -23,14 +23,14 @@ defmodule TenanteeWeb.PropertyListLiveTest do
     {:ok, view, _html} = live(conn, "/properties")
 
     assert view
-           |> element("button", "Delete")
+           |> element("abbr[title='Delete Property'] button")
            |> render_click() =~ "Are you sure?"
 
     view
     |> render_click("cancel_delete")
 
     view
-    |> element("button", "Delete")
+    |> element("abbr[title='Delete Property'] button")
     |> render_click()
 
     assert view
@@ -44,7 +44,7 @@ defmodule TenanteeWeb.PropertyListLiveTest do
     {:ok, view, _html} = live(conn, "/properties")
 
     assert view
-           |> element("button", "Manage tenants")
+           |> element("abbr[title='Manage Tenants'] button")
            |> render_click() =~
              "Toggling the checkbox will add or remove the tenant from the property."
   end
@@ -60,12 +60,12 @@ defmodule TenanteeWeb.PropertyListLiveTest do
              "Lease updated successfully"
 
     assert view
-           |> element("button", "Manage tenants")
+           |> element("abbr[title='Manage Tenants'] button")
            |> render_click()
            |> decode_html_entities() =~ "#{tenant.first_name} #{tenant.last_name}"
 
     view
-    |> element("button", "Manage tenants")
+    |> element("abbr[title='Manage Tenants'] button")
     |> render_click()
 
     assert view
