@@ -47,33 +47,45 @@ defmodule TenanteeWeb.Components.Property do
         <% end %>
       </p>
       <div class="flex gap-4">
-        <.button phx-click={open_manage_tenants_modal(@property.id)} disabled={@tenant_count == 0}>
-          <.icon name="hero-user" class="w-4 h-4" /> Manage tenants
-        </.button>
-        <%= if @property.has_agreement == false do %>
-          <.link navigate={"/properties/#{@property.id}/agreement"}>
-            <.button>
-              <.icon name="hero-clipboard" class="w-4 h-4" /> Generate Agreement
-            </.button>
+        <abbr title="Manage Tenants">
+          <.button phx-click={open_manage_tenants_modal(@property.id)} disabled={@tenant_count == 0}>
+            <.icon name="hero-user" class="w-4 h-4" />
+          </.button>
+        </abbr>
+        <%= if @property.has_agreement  do %>
+          <.link navigate={"/properties/#{@property.id}/view_agreement"}>
+            <abbr title="View Agreement">
+              <.button>
+                <.icon name="hero-clipboard" class="w-4 h-4" />
+              </.button>
+            </abbr>
           </.link>
         <% else %>
-          <.link navigate={"/properties/#{@property.id}/view_agreement"}>
-            <.button>
-              <.icon name="hero-clipboard" class="w-4 h-4" /> View/Edit Agreement
-            </.button>
+          <.link navigate={"/properties/#{@property.id}/agreement"}>
+            <abbr title="Generate Agreement">
+              <.button>
+                <.icon name="hero-clipboard" class="w-4 h-4" />
+              </.button>
+            </abbr>
           </.link>
         <% end %>
         <.link navigate={"/properties/#{@property.id}/expenses"}>
-          <.button>
-            <.icon name="hero-banknotes" class="w-4 h-4" /> Manage Expenses
-          </.button>
+          <abbr title="Manage Expenses">
+            <.button>
+              <.icon name="hero-banknotes" class="w-4 h-4" />
+            </.button>
+          </abbr>
         </.link>
         <.link navigate={"/properties/#{@property.id}"}>
-          <.button style="width: 70px; height: 75px; display: flex; flex-direction: column; align-items: center;">
-            <.icon name="hero-pencil" class="w-4 h-4" /> Edit Property
-          </.button>
+          <abbr title="Edit Property">
+            <.button>
+              <.icon name="hero-pencil" class="w-4 h-4" />
+            </.button>
+          </abbr>
         </.link>
       </div>
+
+      <div class="flex gap-4"></div>
     </div>
     """
   end
