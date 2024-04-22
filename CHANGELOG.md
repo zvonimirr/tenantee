@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.12
+## 0.4.1
 - Fix agreement warnings ([@zvonimirr](https://github.com/zvonimirr))
 - Add dependabot for npm ([@zvonimirr](https://github.com/zvonimirr))
 
