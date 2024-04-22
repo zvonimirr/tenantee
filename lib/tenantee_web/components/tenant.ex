@@ -69,20 +69,20 @@ defmodule TenanteeWeb.Components.Tenant do
         </div>
       <% end %>
       <div class="flex gap-4">
-        <.link navigate={"/tenants/#{@tenant.id}/rents"}>
-          <abbr title="Manage rent">
+        <abbr title="Manage rent">
+          <.link navigate={"/tenants/#{@tenant.id}/rents"}>
             <.button>
               <.icon name="hero-banknotes" class="w-4 h-4" />
             </.button>
-          </abbr>
-        </.link>
-        <.link navigate={"/tenants/#{@tenant.id}/channels"}>
-          <abbr title="Manage communication">
+          </.link>
+        </abbr>
+        <abbr title="Manage communication">
+          <.link navigate={"/tenants/#{@tenant.id}/channels"}>
             <.button>
               <.icon name="hero-chat-bubble-bottom-center-text" class="w-4 h-4" />
             </.button>
-          </abbr>
-        </.link>
+          </.link>
+        </abbr>
         <.link navigate={"/tenants/#{@tenant.id}"}>
           <abbr title="Edit tenant">
             <.button>
