@@ -65,6 +65,9 @@ defmodule TenanteeWeb.PropertyLive.ViewAgreement do
         <p class="mt-4">
           Signed by the Tenant: __________________________
         </p>
+        <p class="mt-4">
+          Sign Date: __________________________
+        </p>
       </div>
 
       <div class="my-4">
