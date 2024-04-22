@@ -22,12 +22,14 @@ defmodule TenanteeWeb.Components.Property do
           <.icon name="hero-home" class="w-8 h-8" />
           <%= @property.name %>
         </h1>
-        <.button
-          class="bg-red-500 text-white hover:bg-red-600"
-          phx-click={open_confirm_modal(@property.id)}
-        >
-          <.icon name="hero-trash" class="w-4 h-4" /> Delete
-        </.button>
+        <abbr title="Delete Property">
+          <.button
+            class="bg-red-500 text-white hover:bg-red-600"
+            phx-click={open_confirm_modal(@property.id)}
+          >
+            <.icon name="hero-trash" class="w-4 h-4" />
+          </.button>
+        </abbr>
       </div>
       <hr class="border border-gray-200 w-full" />
       <p class="text-gray-600">
@@ -47,33 +49,45 @@ defmodule TenanteeWeb.Components.Property do
         <% end %>
       </p>
       <div class="flex gap-4">
-        <.button phx-click={open_manage_tenants_modal(@property.id)} disabled={@tenant_count == 0}>
-          <.icon name="hero-user" class="w-4 h-4" /> Manage tenants
-        </.button>
-        <%= if @property.has_agreement == false do %>
-          <.link navigate={"/properties/#{@property.id}/agreement"}>
-            <.button>
-              <.icon name="hero-clipboard" class="w-4 h-4" /> Generate Agreement
-            </.button>
-          </.link>
+        <abbr title="Manage Tenants">
+          <.button phx-click={open_manage_tenants_modal(@property.id)} disabled={@tenant_count == 0}>
+            <.icon name="hero-user" class="w-4 h-4" />
+          </.button>
+        </abbr>
+        <%= if @property.has_agreement  do %>
+          <abbr title="View Agreement">
+            <.link navigate={"/properties/#{@property.id}/view_agreement"}>
+              <.button>
+                <.icon name="hero-clipboard" class="w-4 h-4" />
+              </.button>
+            </.link>
+          </abbr>
         <% else %>
-          <.link navigate={"/properties/#{@property.id}/view_agreement"}>
-            <.button>
-              <.icon name="hero-clipboard" class="w-4 h-4" /> View/Edit Agreement
-            </.button>
-          </.link>
+          <abbr title="Generate Agreement">
+            <.link navigate={"/properties/#{@property.id}/agreement"}>
+              <.button>
+                <.icon name="hero-clipboard" class="w-4 h-4" />
+              </.button>
+            </.link>
+          </abbr>
         <% end %>
         <.link navigate={"/properties/#{@property.id}/expenses"}>
-          <.button>
-            <.icon name="hero-banknotes" class="w-4 h-4" /> Manage Expenses
-          </.button>
+          <abbr title="Manage Expenses">
+            <.button>
+              <.icon name="hero-banknotes" class="w-4 h-4" />
+            </.button>
+          </abbr>
         </.link>
         <.link navigate={"/properties/#{@property.id}"}>
-          <.button style="width: 70px; height: 75px; display: flex; flex-direction: column; align-items: center;">
-            <.icon name="hero-pencil" class="w-4 h-4" /> Edit Property
-          </.button>
+          <abbr title="Edit Property">
+            <.button>
+              <.icon name="hero-pencil" class="w-4 h-4" />
+            </.button>
+          </abbr>
         </.link>
       </div>
+
+      <div class="flex gap-4"></div>
     </div>
     """
   end

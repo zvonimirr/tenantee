@@ -25,14 +25,14 @@ defmodule TenanteeWeb.TenantListLiveTest do
     {:ok, view, _html} = live(conn, "/tenants")
 
     assert view
-           |> element("button", "Delete")
+           |> element("abbr[title='Delete tenant'] button")
            |> render_click() =~ "Are you sure?"
 
     view
     |> render_click("cancel_delete")
 
     view
-    |> element("button", "Delete")
+    |> element("abbr[title='Delete tenant'] button")
     |> render_click()
 
     assert view
@@ -46,7 +46,7 @@ defmodule TenanteeWeb.TenantListLiveTest do
 
     {:ok, _view, html} =
       view
-      |> element("a", "Manage communication")
+      |> element("abbr[title='Manage communication'] a")
       |> render_click()
       |> follow_redirect(conn)
 
@@ -67,7 +67,7 @@ defmodule TenanteeWeb.TenantListLiveTest do
 
     {:ok, _view, html} =
       view
-      |> element("a", "Manage rent")
+      |> element("abbr[title='Manage rent'] a")
       |> render_click()
       |> follow_redirect(conn)
 

@@ -9,8 +9,8 @@ defmodule TenanteeWeb.PropertyLive.Helper do
   @doc """
   Check if the submit button should be disabled
   """
-  @spec is_submit_disabled?(map()) :: boolean
-  def is_submit_disabled?(assigns) do
+  @spec submit_disabled?(map()) :: boolean
+  def submit_disabled?(assigns) do
     case Float.parse(assigns.price) do
       {price, ""} when price > 0 ->
         [
@@ -73,5 +73,15 @@ defmodule TenanteeWeb.PropertyLive.Helper do
 
   def handle_price(price, currency) when is_float(price) do
     Money.from_float(price, currency)
+  end
+
+  @doc """
+  Get a list of options for the tenant dropdown
+  """
+  @spec get_dropdown_options([Tenant.t()]) :: [String.t()]
+  def get_dropdown_options(tenants) do
+    Enum.map(tenants, &"#{&1.first_name} #{&1.last_name}")
+    |> Kernel.++(["None"])
+    |> Enum.reverse()
   end
 end

@@ -1,7 +1,7 @@
 defmodule TenanteeWeb.PropertyLive.EditAgreement do
   alias TenanteeWeb.PropertyLive.Helper
-  alias Tenantee.Config
   alias Tenantee.Entity.Property
+  alias Tenantee.Config
   use TenanteeWeb, :live_view
 
   def mount(params, _session, socket) do
@@ -21,15 +21,16 @@ defmodule TenanteeWeb.PropertyLive.EditAgreement do
         },
         socket
       ) do
-    with :ok <- Property.create_agreement(socket.assigns.id, %{
-                "tenant_name" => tenant_name,
-                "rent_amount" => to_string(rent_amount),
-                "lease_term" => to_string(lease_term),
-                "start_date" => to_string(start_date),
-                "end_date" => to_string(end_date),
-                "security_deposit" => to_string(security_deposit),
-                "additional_terms" => additional_terms
-              }),
+    with :ok <-
+           Property.create_agreement(socket.assigns.id, %{
+             "tenant_name" => tenant_name,
+             "rent_amount" => to_string(rent_amount),
+             "lease_term" => to_string(lease_term),
+             "start_date" => to_string(start_date),
+             "end_date" => to_string(end_date),
+             "security_deposit" => to_string(security_deposit),
+             "additional_terms" => additional_terms
+           }),
          {:ok, property} <- Property.get(socket.assigns.id) do
       {:noreply, handle_success(socket, property.name, property)}
     else
@@ -39,31 +40,28 @@ defmodule TenanteeWeb.PropertyLive.EditAgreement do
   end
 
   def render(assigns) do
-    options = for tenant <- assigns.tenants do
-      "#{tenant.first_name} #{tenant.last_name}"
-    end
-    options = options ++ ["None"]
+    assigns = assign(assigns, :options, Helper.get_dropdown_options(assigns.tenants))
+    assigns = assign(assigns, :currency, Config.get(:currency, "USD"))
 
-      ~H"""
-      <.link class="text-gray-500" navigate={~p"/properties"}>
-        <.icon name="hero-arrow-left" /> Back to property card
-      </.link>
-      <h1 class="text-3xl font-bold my-4">Edit agreement</h1>
-      <form
-        id="edit-agreement-form"
-        phx-hook="FormHook"
-        phx-submit="edit-agreement"
-        class="flex flex-col gap-4 max-w-xs"
-      >
-
+    ~H"""
+    <.link class="text-gray-500" navigate={~p"/properties"}>
+      <.icon name="hero-arrow-left" /> Back to properties
+    </.link>
+    <h1 class="text-3xl font-bold my-4">Edit agreement</h1>
+    <form
+      id="edit-agreement-form"
+      phx-hook="FormHook"
+      phx-submit="edit-agreement"
+      class="flex flex-col gap-4 max-w-xs"
+    >
       <.input
         type="select"
-        id = "tenant_name"
+        id="tenant_name"
         name="tenant_name"
         value={@agreement_params["tenant_name"]}
-        options={options}
+        options={@options}
         label="Tenant:"
-        prompt="Tenant.."
+        prompt="Tenant..."
       />
 
       <.input
@@ -71,7 +69,7 @@ defmodule TenanteeWeb.PropertyLive.EditAgreement do
         id="rent_amount"
         name="rent_amount"
         value={@agreement_params["rent_amount"]}
-        label="Monthly Rent Amount:"
+        label={"Monthly Rent Amount (#{@currency}):"}
         placeholder=""
         maxlength=""
         required
@@ -115,7 +113,7 @@ defmodule TenanteeWeb.PropertyLive.EditAgreement do
         id="security_deposit"
         name="security_deposit"
         value={@agreement_params["security_deposit"]}
-        label="Security Deposit:"
+        label={"Security Deposit (#{@currency}):"}
         placeholder=""
         maxlength=""
         required
@@ -132,11 +130,9 @@ defmodule TenanteeWeb.PropertyLive.EditAgreement do
       />
 
       <.button type="submit">Submit</.button>
-
-      </form>
-      """
+    </form>
+    """
   end
-
 
   def handle_success(socket, property_address, property) do
     socket
