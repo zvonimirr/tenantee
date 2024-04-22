@@ -6,6 +6,8 @@ import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
 // Include Tippy.js for tooltips
 import tippy, { animateFill, roundArrow } from "tippy.js";
+// Include jsPDF for PDF generation
+import jsPDF from "jspdf";
 // Import hooks
 import { FormHook } from "./hooks/form";
 import { ModalHook } from "./hooks/modal";
@@ -50,6 +52,9 @@ window.addEventListener("phx:page-loading-stop", () => {
   });
 });
 
+// Custom PHX events
+window.addEventListener("tenantee:print-pdf", printPdf);
+
 // connect if there are any LiveViews on the page
 liveSocket.connect();
 
@@ -58,3 +63,22 @@ liveSocket.connect();
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket;
+
+// Custom JS
+// JavaScript function to generate and download PDF
+function printPdf() {
+  if (confirm("Are you sure you want to download the PDF?")) {
+    const content = document.getElementById("pdf-content").outerHTML;
+    const pdf = new jsPDF({
+      orientation: "landscape",
+      unit: "in",
+      format: [4, 2],
+    });
+
+    pdf.html(content, {
+      callback: function (pdf) {
+        pdf.save("Lease Agreement.pdf");
+      },
+    });
+  }
+}
