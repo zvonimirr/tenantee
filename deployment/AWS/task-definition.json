@@ -27,8 +27,8 @@
                     "value": "SECRET_KEY_BASE_FROM_BUILD"
                 },
                 {
-                    "name": "REDIS_URL",
-                    "value": "REDIS_URL_WITH_CREDS"
+                    "name": "VALKEY_URL",
+                    "value": "VALKEY_URL_WITH_CREDS"
                 }
             ],
             "mountPoints": [],

@@ -10,21 +10,21 @@ services:
       args:
         - DATABASE_URL=ecto://tenantee:tenantee@localhost:5432/tenantee_dev
         - SECRET_KEY_BASE=R76c9a0MiHVZszVrPmgYZ1BVxxElZXMkOtaNjjKdPhPfXOscuPjSBCjoTYCKdi9Q
-        - REDIS_URL=redis://:tenantee_redis@redis:6379
+        - VALKEY_URL=valkey://:tenantee_valkey@valkey:6379
     environment:
       - DATABASE_URL=ecto://tenantee:tenantee@db/tenantee_dev
       - SECRET_KEY_BASE=R76c9a0MiHVZszVrPmgYZ1BVxxElZXMkOtaNjjKdPhPfXOscuPjSBCjoTYCKdi9Q
-      - REDIS_URL=redis://:tenantee_redis@redis:6379
+      - VALKEY_URL=valkey://:tenantee_valkey@valkey:6379
       - PHX_HOST=localhost
     ports:
       - "443:443"
     depends_on:
       - db
 
-  redis:
-    image: redis:7.0.11
-    container_name: "tenantee_redis"
-    command: /bin/sh -c "redis-server --requirepass tenantee_redis"
+  valkey:
+    image: valkey/valkey:7.2
+    container_name: "tenantee_valkey"
+    command: /bin/sh -c "valkey-server --requirepass tenantee_valkey"
     ports:
       - "6379:6379"
 

@@ -1,10 +1,10 @@
-defmodule Tenantee.Redis do
+defmodule Tenantee.Valkey do
   @moduledoc """
-  Redis client for Tenantee, using Redix.
+  Valkey client for Tenantee, using Redix.
   """
 
   @doc """
-  Sends commands to Redis, utilizing the already configured Redix app.
+  Sends commands to Valkey, utilizing the already configured Redix app.
   """
   @spec command([String.t()], [term]) :: {:ok, term} | {:error, term}
   def command(command, args \\ []) do

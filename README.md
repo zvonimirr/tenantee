@@ -13,7 +13,7 @@ Tenantee (pronounced "tenant-e") is a free and open-source management software a
 ## Requirements
 - Elixir
 - PostgreSQL
-- Redis
+- Valkey 
 
 ## Running the application
 1. Run `mix deps.get`
@@ -27,7 +27,7 @@ Your app should be running on [http://localhost:4000](http://localhost:4000)
 ### Docker Compose
 Running the application via Docker Compose is simple and easy.
 1. Run `docker-compose up db -d`
-2. Run `docker-compose up redis -d`
+2. Run `docker-compose up valkey -d`
 3. Run `docker-compose build`
 3. Run `docker-compose up app -d`
 
@@ -41,19 +41,19 @@ For ease-of-use, create a `build.sh` file and paste:
 
 export SECRET_KEY_BASE=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 64 ; echo '')
 export DATABASE_URL=<ecto connection string>
-export REDIS_URL=<redis connection string>
+export VALKEY_URL=<valkey connection string>
 export PHX_HOST=localhost
 
 docker build -t tenantee-app . \
     --build-arg SECRET_KEY_BASE=$SECRET_KEY_BASE \
     --build-arg DATABASE_URL=$DATABASE_URL \
-    --build-arg REDIS_URL=$REDIS_URL
+    --build-arg VALKEY_URL=$VALKEY_URL
 
 docker run -d \
     --env SECRET_KEY_BASE=$SECRET_KEY_BASE \
     --env DATABASE_URL=$DATABASE_URL \
     --env PHX_HOST=$PHX_HOST \
-    --env REDIS_URL=$REDIS_URL \
+    --env VALKEY_URL=$VALKEY_URL \
     -p 443:443 \
     tenantee-app
 

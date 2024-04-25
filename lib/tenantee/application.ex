@@ -11,7 +11,7 @@ defmodule Tenantee.Application do
       # Start the Ecto repository
       Tenantee.Repo,
       # Start the Redix cache
-      {Redix, {Application.get_env(:tenantee, :redis_connection_url), [name: :redix]}},
+      {Redix, {Application.get_env(:tenantee, :valkey_connection_url), [name: :redix]}},
       # Start the Quantum cron scheduler
       Tenantee.Scheduler,
       # Start the PubSub system
