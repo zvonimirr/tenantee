@@ -2,7 +2,7 @@ defmodule Tenantee.Config do
   @moduledoc """
   A helper module for managing the configuration of the application.
   """
-  alias Tenantee.Redis
+  alias Tenantee.Valkey
 
   @doc """
   Returns the configuration for the application.
@@ -13,7 +13,7 @@ defmodule Tenantee.Config do
   end
 
   def get(key, default) when is_bitstring(key) do
-    case Redis.command(["GET", key]) do
+    case Valkey.command(["GET", key]) do
       {:ok, value} -> if is_nil(value), do: default, else: value
       {:error, _} -> default
     end
@@ -43,7 +43,7 @@ defmodule Tenantee.Config do
   end
 
   def set(key, value) when is_bitstring(key) do
-    case Redis.command(["SET", key, value]) do
+    case Valkey.command(["SET", key, value]) do
       {:ok, _} -> :ok
       {:error, _} -> :error
     end
@@ -58,7 +58,7 @@ defmodule Tenantee.Config do
   end
 
   def delete(key) when is_bitstring(key) do
-    case Redis.command(["DEL", key]) do
+    case Valkey.command(["DEL", key]) do
       {:ok, _} -> :ok
       {:error, _} -> :error
     end

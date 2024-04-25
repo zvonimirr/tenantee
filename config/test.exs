@@ -32,6 +32,6 @@ config :logger, level: :warning
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
 
-# Configure Redis
+# Configure Valkey
 config :tenantee,
-  redis_connection_url: "redis://:tenantee_redis@localhost:6379"
+  valkey_connection_url: "valkey://:tenantee_valkey@localhost:6379"

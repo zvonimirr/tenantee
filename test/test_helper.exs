@@ -1,4 +1,4 @@
-# TODO: Redis is not sandboxed yet. Only override the config if
+# TODO: Valkey is not sandboxed yet. Only override the config if
 # it doesn't exist.
 if is_nil(Tenantee.Config.get(:currency, nil)) do
   Tenantee.Config.set(:currency, :USD)

@@ -75,7 +75,7 @@ defmodule Tenantee.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:redix, "~> 1.2"},
+      {:redix, git: "https://github.com/zvonimirr/redix.git" },
       {:ex_money, "~> 5.13"},
       {:ex_money_sql, "~> 1.9"},
       {:ex_cldr_dates_times, "~> 2.13"},

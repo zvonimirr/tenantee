@@ -28,16 +28,16 @@ if config_env() == :prod do
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 
-  redis_connection_url =
-    System.get_env("REDIS_URL") ||
+  valkey_connection_url =
+    System.get_env("VALKEY_URL") ||
       raise """
-      environment variable REDIS_URL is missing.
-      For example: redis://USER:PASS@HOST/DATABASE
+      environment variable VALKEY_URL is missing.
+      For example: valkey://USER:PASS@HOST/DATABASE
       """
 
-  # Configure Redis
+  # Configure Valkey
   config :tenantee,
-    redis_connection_url: redis_connection_url
+    valkey_connection_url: valkey_connection_url
 
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 

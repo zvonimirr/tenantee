@@ -32,19 +32,19 @@ To deploy Tenantee on Fly.io follow these steps:
 2. Rename Dockerfile.fly to Dockerfile
 3. Run `flyctl launch`
 4. When asked about the database, say yes
-5. When asked about Redis, say yes
+5. When asked about Valkey, say yes
 6. When asked to deploy now, don't do it (yet)
 7. Change the `force_https` key in `fly.toml` to false if experiencing issues.
 
-If Redis creation failed, go to the next section. If it didn't you can skip it.
+If Valkey creation failed, go to the next section. If it didn't you can skip it.
 
-## Redis
+## Valkey 
 
-Sometimes Redis creation may fail. 
+Sometimes Valkey creation may fail. 
 
-You can get one from the Fly.io dashboard or RedisLabs (recommended) just remember to set it as a secret:
+You can get one from the Fly.io dashboard or from somehwere else just remember to set it as a secret:
 
-`fly secrets set REDIS_URL=...`
+`fly secrets set VALKEY_URL=...`
 
 ## Final step
 

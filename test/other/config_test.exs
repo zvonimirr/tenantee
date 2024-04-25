@@ -1,7 +1,7 @@
 defmodule Tenantee.Other.ConfigTest do
   use Tenantee.DataCase
   import Mock
-  alias Tenantee.Redis
+  alias Tenantee.Valkey
   alias Tenantee.Config
 
   test "get" do
@@ -18,7 +18,7 @@ defmodule Tenantee.Other.ConfigTest do
   end
 
   test "get (with failure)" do
-    with_mock Redis, command: fn _cmd -> {:error, "error"} end do
+    with_mock Valkey, command: fn _cmd -> {:error, "error"} end do
       assert Config.get(:test, "default") == "default"
     end
   end
@@ -30,7 +30,7 @@ defmodule Tenantee.Other.ConfigTest do
   end
 
   test "set (with failure)" do
-    with_mock Redis, command: fn _cmd -> {:error, "error"} end do
+    with_mock Valkey, command: fn _cmd -> {:error, "error"} end do
       assert Config.set(:test, "value") == :error
     end
   end
@@ -43,7 +43,7 @@ defmodule Tenantee.Other.ConfigTest do
   end
 
   test "delete (with failure)" do
-    with_mock Redis, command: fn _cmd -> {:error, "error"} end do
+    with_mock Valkey, command: fn _cmd -> {:error, "error"} end do
       assert Config.delete(:test) == :error
     end
   end

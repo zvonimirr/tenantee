@@ -3,6 +3,7 @@
 ## 0.4.1
 - Fix agreement warnings ([@zvonimirr](https://github.com/zvonimirr))
 - Add dependabot for npm ([@zvonimirr](https://github.com/zvonimirr))
+- Switch from Redis to Valkey ([@zvonimirr](https://github.com/zvonimirr))
 
 ## 0.4.0
 `0.4.0` is a complete rewrite that ditches React and focuses solely on Phoenix. 

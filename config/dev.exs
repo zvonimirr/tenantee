@@ -78,9 +78,9 @@ config :phoenix, :plug_init_mode, :runtime
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
 
-# Configure Redis
+# Configure Valkey
 config :tenantee,
-  redis_connection_url: "redis://:tenantee_redis@localhost:6379"
+  valkey_connection_url: "valkey://:tenantee_valkey@localhost:6379"
 
 # Configure Git Hooks
 config :git_hooks,
