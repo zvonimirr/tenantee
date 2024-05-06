@@ -47,4 +47,4 @@ jobs:
       - run: MIX_ENV=dev mix credo
       - run: MIX_ENV=dev mix sobelow
       - run: MIX_ENV=test mix ecto.create && mix ecto.migrate
-      - run: MIX_ENV=test mix coveralls.github
+      - run: MIX_ENV=test VALKEY_URL=redis://:tenantee_redis@localhost:6379 mix coveralls.github

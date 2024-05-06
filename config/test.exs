@@ -34,4 +34,4 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Configure Valkey
 config :tenantee,
-  valkey_connection_url: "valkey://:tenantee_valkey@localhost:6379"
+  valkey_connection_url: System.get_env("VALKEY_URL", "valkey://:tenantee_valkey@localhost:6379")
