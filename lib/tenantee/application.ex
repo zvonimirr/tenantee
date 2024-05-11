@@ -7,11 +7,12 @@ defmodule Tenantee.Application do
 
   @impl true
   def start(_type, _args) do
+    # Get the Valkey connection URL from the environment
     children = [
       # Start the Ecto repository
       Tenantee.Repo,
       # Start the Redix cache
-      {Redix, {Application.get_env(:tenantee, :valkey_connection_url), [name: :redix]}},
+      {Redix, {get_valkey_connection_url(), [name: :redix]}},
       # Start the Quantum cron scheduler
       Tenantee.Scheduler,
       # Start the PubSub system
@@ -35,6 +36,21 @@ defmodule Tenantee.Application do
   def config_change(changed, _new, removed) do
     TenanteeWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp get_valkey_connection_url() do
+    if Mix.env() == :test do
+      Testcontainers.start_link()
+
+      config = %Testcontainers.Container{image: "valkey/valkey:7.2"}
+
+      {:ok, container} =
+        Testcontainers.start_container(Testcontainers.Container.with_exposed_port(config, 6379))
+
+      "valkey://localhost:#{Testcontainers.Container.mapped_port(container, 6379)}/"
+    else
+      Application.get_env(:tenantee, :valkey_connection_url)
+    end
   end
 
   # coveralls-ignore-end
