@@ -43,4 +43,4 @@ jobs:
       - run: mix credo
       - run: mix sobelow
       - run: mix ecto.create && mix ecto.migrate
-      - run: mix coveralls.github
+      - run: MIX_ENV=test mix coveralls.github
