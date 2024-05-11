@@ -42,7 +42,7 @@ defmodule Tenantee.Application do
     if Mix.env() == :test do
       Testcontainers.start_link()
 
-      config = %Testcontainers.Container{image: "valkey/valkey:7.2"}
+      config = Testcontainers.Container.new("valkey/valkey:7.2")
 
       {:ok, container} =
         Testcontainers.start_container(Testcontainers.Container.with_exposed_port(config, 6379))
