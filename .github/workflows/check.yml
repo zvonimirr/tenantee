@@ -39,8 +39,8 @@ jobs:
         with:
           otp-version: ${{matrix.otp}}
           elixir-version: ${{matrix.elixir}}
-      - run: MIX_ENV=dev mix deps.get
-      - run: MIX_ENV=dev mix credo
-      - run: MIX_ENV=dev mix sobelow
-      - run: MIX_ENV=test mix ecto.create && mix ecto.migrate
-      - run: MIX_ENV=test mix coveralls.github
+      - run: mix deps.get
+      - run: mix credo
+      - run: mix sobelow
+      - run: mix ecto.create && mix ecto.migrate
+      - run: mix coveralls.github
