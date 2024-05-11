@@ -92,13 +92,13 @@ defmodule Tenantee.Data.ExpenseTest do
         name: "Expense",
         description: "Expense description",
         paid: true,
-        amount: ~M[100.00]EUR,
+        amount: ~M[100.00]USD,
         property_id: property.id,
         tenant_id: nil
       })
 
     assert {:ok, amount} = Expense.get_loss()
-    assert amount == ~M[100.00]EUR
+    assert amount == ~M[100.00]USD
   end
 
   test "errors when getting expense by id" do
