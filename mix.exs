@@ -85,7 +85,7 @@ defmodule Tenantee.MixProject do
       {:excoveralls, "~> 0.18.0", only: :test},
       {:mock, "~> 0.3.8", only: :test},
       {:git_hooks, "~> 0.7.0", only: :dev, runtime: false},
-      {:ex_doc, "~> 0.32.1", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.34.0", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:sobelow, "~> 0.12", only: [:dev, :test], runtime: false}
     ]
