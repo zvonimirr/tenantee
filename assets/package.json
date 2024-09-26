@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Tenantee assets",
   "dependencies": {
-    "jspdf": "^2.5.1",
+    "jspdf": "^2.5.2",
     "tippy.js": "^6.3.7"
   }
 }
